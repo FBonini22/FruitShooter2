@@ -2,8 +2,11 @@
 
 package view;
 
+import java.util.*;
+
 import org.newdawn.slick.*;
 
+import entities.Entity;
 import entities.FruitType;
 import entities.Player;
 
@@ -13,10 +16,16 @@ public class Engine extends BasicGame{
 	private final float MOVE_CONST = 2.0f;
 	private final int FRAME_RATE = 30;		//Frame rate in fps
 	
+	//Instance Variables
 	public float x = 100f;
 	public float y = 400f;
 	public float x1 = (x+16);
 	public float y1 = (y);
+	
+	
+	private List<Entity> entities = new ArrayList<Entity>();	//List of drawable entities
+
+	
 	// Add comments
 
 	//TESTING
@@ -43,6 +52,13 @@ public class Engine extends BasicGame{
 		gc.setMaximumLogicUpdateInterval(FRAME_RATE);
 		gc.setVSync(true);
 		gc.setShowFPS(false);
+		
+		
+		
+		//ADD ENTITIES TO LIST
+		entities.add(p1);
+		
+		
 		/*Music openingMenuMusic = new Music(""); //TODO Need to find and insert suitable music
     		openingMenuMusic.loop(); */
 		
@@ -58,7 +74,10 @@ public class Engine extends BasicGame{
 		Seed.draw(x1,y1);
 		Watermelon.draw(x,y);
 		
-		p1.render(gc, g);
+		//Loop to render each entity
+		for(Entity e : entities){
+			e.render(gc, g);
+		}
 		
 		
 	}
@@ -66,7 +85,15 @@ public class Engine extends BasicGame{
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
 		
-		p1.update(gc, delta);
+		for(Entity e : entities){
+			e.update(gc, delta);
+			
+		}
+		
+	}
+	
+	private void AddPlayer(){
+		
 	}
 	
 	

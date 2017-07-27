@@ -6,6 +6,11 @@ import view.GameWindow;
 
 public abstract class Entity extends HitBox{
 	
+	//Constants
+	
+	//Instance Variables
+	
+	
 	public Image _entityImg;
 	
 	
@@ -20,6 +25,12 @@ public abstract class Entity extends HitBox{
 	public abstract void update(GameContainer gc, int delta);
 	
 	public abstract void render(GameContainer gc, Graphics g);
+	
+	/**
+	 * To override. Determines whether 
+	 * @return
+	 */
+	public abstract boolean isDangerous();
 	
 	
 	
