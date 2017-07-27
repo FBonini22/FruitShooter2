@@ -34,6 +34,7 @@ public class Player extends Entity{
 	private double _health = 0d;
 	
 	
+	
 	public Player(FruitType selectedFruit, int pNum){
 
 		//Instantiate instance variables

@@ -34,12 +34,12 @@ public abstract class Entity extends HitBox{
 	
 	/**
 	 * Method for moving an entity by a distance
-	 * @param posX x values to translate entity by
+	 * @param posX x value to translate entity by
 	 * @param posY y value to translate entity by
 	 */
 	public void moveBy(float posX, float posY){
-		this.x = posX;
-		this.y = posY;
+		this.x += posX;
+		this.y += posY;
 	}
 	
 	
