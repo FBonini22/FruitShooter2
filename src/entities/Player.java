@@ -35,6 +35,7 @@ public class Player extends Entity{
 	
 	
 	
+	
 	public Player(FruitType selectedFruit, int pNum){
 
 		//Instantiate instance variables
@@ -123,17 +124,17 @@ public class Player extends Entity{
 	private void checkForUserInput(){
 
 		if(input.isKeyDown(UP_CONTROL)){
-			this.moveBy(x, y - MOVEMENT_SPEED);
+			this.moveBy(0, -MOVEMENT_SPEED);
 		}
 		else if(input.isKeyDown(DOWN_CONTROL)){
-			this.moveBy(x, y + MOVEMENT_SPEED);
+			this.moveBy(0, MOVEMENT_SPEED);
 		}
 		
 		if(input.isKeyDown(LEFT_CONTROL)){
-			this.moveBy(x - MOVEMENT_SPEED, y);
+			this.moveBy(-MOVEMENT_SPEED, 0);
 		}
 		else if(input.isKeyDown(RIGHT_CONTROL)){
-			this.moveBy(x + MOVEMENT_SPEED, y);
+			this.moveBy(MOVEMENT_SPEED, 0);
 		}
 	}
 
