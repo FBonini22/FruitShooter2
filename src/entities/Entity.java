@@ -24,10 +24,10 @@ public abstract class Entity extends HitBox{
 	
 	public abstract void update(GameContainer gc, int delta);
 	
-	public abstract void render(GameContainer gc, Graphics g);
+	public abstract void render(GameContainer gc, Graphics g) throws SlickException;
 	
 	/**
-	 * To override. Determines whether 
+	 * To override. Determines whether the entity will cause harm to the player
 	 * @return
 	 */
 	public abstract boolean isDangerous();

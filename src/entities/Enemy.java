@@ -107,6 +107,14 @@ public class Enemy extends Entity{
 		
 	}
 
+
+
+	@Override
+	public boolean isDangerous() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	
 	
 
