@@ -2,7 +2,14 @@ package entities;
 
 import org.newdawn.slick.*;
 
+import view.GameWindow;
+
 public abstract class Entity extends HitBox{
+	
+	//Constants
+	
+	//Instance Variables
+	
 	
 	public Image _entityImg;
 	
@@ -17,7 +24,13 @@ public abstract class Entity extends HitBox{
 	
 	public abstract void update(GameContainer gc, int delta);
 	
-	public abstract void render(GameContainer gc, Graphics g) throws SlickException;
+	public abstract void render(GameContainer gc, Graphics g);
+	
+	/**
+	 * To override. Determines whether 
+	 * @return
+	 */
+	public abstract boolean isDangerous();
 	
 	
 	
@@ -27,17 +40,28 @@ public abstract class Entity extends HitBox{
 	 * @param posY y Coordinate on screen to move to
 	 */
 	public void moveTo(float posX, float posY){
-		this.x = posX;
-		this.y = posY;
+		this.x = (posX < 0)
+				? 0
+				: (posX > GameWindow.SCREEN_WIDTH)
+						? GameWindow.SCREEN_WIDTH
+						: posX;
+		this.y = (posY < 0)
+				? 0
+				: (posY > GameWindow.SCREEN_HEIGHT)
+						? GameWindow.SCREEN_HEIGHT
+						: posY;
 	}
+	
+	
 	/**
 	 * Method for moving an entity by a distance
-	 * @param posX x values to translate entity by
+	 * @param posX x value to translate entity by
 	 * @param posY y value to translate entity by
 	 */
 	public void moveBy(float posX, float posY){
-		this.x = this.x+posX;
-		this.y = this.y+posY;
+
+		this.x += posX;
+		this.y += posY;
 	}
 	
 	

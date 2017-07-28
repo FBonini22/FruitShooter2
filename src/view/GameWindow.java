@@ -1,6 +1,10 @@
 package view;
 
-//Comment
+/**
+ * Class for the Game's window. Constants and container attributes should go here
+ * @author Frank
+ *
+ */
 public class GameWindow {
 	
 	//Constants

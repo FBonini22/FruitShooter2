@@ -4,6 +4,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 
 import Utilities.D;
@@ -47,11 +48,26 @@ public class Player extends Entity{
 		
 		InitializePlayerAttributes();
 		InitializeControls();
-	}
 
 		
 
+//		try {
+//			p.initControllers();
+//		} catch (SlickException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		p.resume();
+//		
+//		try {
+//			this._entityImg = new Image("img/test.png");
+//			_entityImg.draw(100,100);
+//		} catch (SlickException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
+	}
 	
 
 	/**
@@ -119,6 +135,24 @@ public class Player extends Entity{
 		}
 		else if(input.isKeyDown(RIGHT_CONTROL)){
 			this.moveBy(MOVEMENT_SPEED, 0);
+		}
+	}
+
+
+	@Override
+	public boolean isDangerous() {
+
+		return false;
+	}
+	
+	public void onCollide(Entity collidedWith){
+		
+		D.BUG(collidedWith.toString());
+		switch(collidedWith.getClass().toString()){
+		
+		case "Entity":
+			break;
+		
 		}
 	}
 
