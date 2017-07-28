@@ -45,11 +45,6 @@ public abstract class HitBox {
 		return (y + getHalfHeight());
 	}
 	
-	/**
-	 * Determines whether two hitboxes are overlapping/colliding. This hitbox class is compared with the paramater
-	 * @param b The hitbox to compare to this instance
-	 * @return TRUE for collision. FALSE for no collision
-	 */
 	public boolean hitTest(HitBox b) {
 		return (b.getEndX() >= x && b.getEndY() >= y && getEndX() >= b.x && getEndY() >= b.y);
 	}
