@@ -2,7 +2,7 @@ package view;
 
 import org.newdawn.slick.*;
 
-public class RunGameTest {
+public class Demo {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -15,7 +15,7 @@ public class RunGameTest {
 		
 		try { 
 		    AppGameContainer container = new AppGameContainer(game); 
-		    container.setDisplayMode(800,600,false);	//boolean is for fullscreen 
+		    container.setDisplayMode(GameWindow.SCREEN_WIDTH,GameWindow.SCREEN_HEIGHT,false);	//boolean is for fullscreen 
 		    container.start(); 
 		} catch (SlickException e) { 
 		    e.printStackTrace(); 
