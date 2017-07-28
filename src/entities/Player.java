@@ -19,9 +19,14 @@ public class Player extends Entity{
 	private int RIGHT_CONTROL = Input.KEY_RIGHT;
 	
 	//Constants
-	private final float startingX = (float)(GameWindow.SCREEN_WIDTH) / 2f;
+	private final float startingX = (float)(GameWindow.SCREEN_WIDTH) / 2f;			//Player starts in the middle of the screen, horizontally
 	private final float startingY = (float)(GameWindow.SCREEN_HEIGHT) * 0.90f;		//Player starts 10% up the screen
 	private final float MOVEMENT_SPEED = 10f;
+	private final double STARTING_HEALTH = 100f;									//Default starting player health
+	private final int	HIT_COOLDOWN = 1000;										//Milliseconds before player can be hit again
+	private final int	HIT_ANIM_FLASH = 200;										//Milliseconds between each flash of the player hit animation
+	private final float PLAYER_HEIGHT = 48f;
+	private final float PLAYER_WIDTH = 48f;
 	
 	
 	//Instance Variables
@@ -31,50 +36,44 @@ public class Player extends Entity{
 	
 	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Player instance
 	
-	private double _health = 0d;
+	private double _health;						//Player health
+	
+	private boolean hitCoolingDown = false;		//Boolean to keep track of whether the player is in a cooling down state
+	private int timeSinceLastHit = 0;			//Used to keep track of time since last collision with player
+	private int timeSinceLastFlash = 0;			//Used for hit animation flashing
+	private boolean isTransparent = false;
 	
 	
 	
-	
+	/**
+	 * Main constructor for the Player Class.
+	 * @param selectedFruit The fruit that the player has selected. This will be used to determine attributes for the 
+	 * current player
+	 * @param pNum Player Number. 1 or 2 ONLY
+	 */
 	public Player(FruitType selectedFruit, int pNum){
 
 		//Instantiate instance variables
 		_currentFruit = selectedFruit;
 		_playerNum = pNum;		
-		input = new Input(pNum);		//Instantiate input. Unknown function of integer. CHECK JAVADOC
+		//input = new Input(pNum);		//Instantiate input. Unknown function of integer. CHECK JAVADOC
 		
 		this.x = startingX;
 		this.y = startingY;
+		this.height = PLAYER_HEIGHT;
+		this.width = PLAYER_WIDTH;
 		
 		InitializePlayerAttributes();
 		InitializeControls();
-
-		
-
-//		try {
-//			p.initControllers();
-//		} catch (SlickException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//		p.resume();
-//		
-//		try {
-//			this._entityImg = new Image("img/test.png");
-//			_entityImg.draw(100,100);
-//		} catch (SlickException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
 	}
 	
 
 	/**
-	 * Method for initializing player controls. SHOULD ONLY BE CALLED ONCE AND ONLY AFTER VARIABLE INSTANTIATION!
+	 * Method for initializing player controls. SHOULD BE CALLED ONCE AND ONLY AFTER VARIABLE INSTANTIATION!
 	 */
 	private void InitializeControls(){
 		D.BUG("Initializing player controls...");
+		
 		//TO DO: Initialize controls here
 		if(_playerNum == 2){
 			//Change the controls. Otherwise do nothing
@@ -88,10 +87,17 @@ public class Player extends Entity{
 		//All attributes will be those of watermelon for the time being.
 		switch(_currentFruit){
 		case Apple:
+//			imgPath = "img/Apple.png";
+//			break;
 		case Banana:
+//			imgPath = "img/Banana.png";
+//			break;
 		case Lemon:
+//			imgPath = "img/Lemon.png";
+//			break;
 		case Watermelon:
 			imgPath = "img/Watermelon.png";
+			_health = STARTING_HEALTH;
 			break;
 		}
 		
@@ -99,28 +105,55 @@ public class Player extends Entity{
 	}
 	
 	@Override
-	public void update(GameContainer gc, int delta) {
-		checkForUserInput();
+	public void init(GameContainer gc) throws SlickException {
+		_entityImg = new Image(imgPath);
 	}
+
 
 	@Override
 	public void render(GameContainer gc, Graphics g){
-
-		//Fix this. We need to minimize try/catch statements. Their bulk will add up quickly
-		try {
-			this._entityImg = new Image(imgPath);
-		} catch (SlickException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		//Draw the player at the default starting coordinates
-		_entityImg.draw(x,y);
 		
+		if(hitCoolingDown){
+			hitAnim();
+		}
+		g.drawImage(_entityImg, x, y);	
 		
+		//TO DO: Make the player's health displayed as a health bar
+		//Draw the player's health
+		g.drawString(String.format("Player Health: %1$s", String.valueOf((float)_health)), 16, 32);
+		
+
 	}
 
 	
+	@Override
+	public void update(GameContainer gc, int delta) {
+		input = gc.getInput();
+		checkForUserInput();
+		
+		
+		//If the player was just hit, alter graphics and enter cooldown check
+		if(hitCoolingDown){
+			timeSinceLastHit += delta;
+			timeSinceLastFlash += delta;
+			if(timeSinceLastHit >= HIT_COOLDOWN){
+				hitCoolingDown = false;
+				timeSinceLastHit = 0;
+				timeSinceLastFlash = 0;
+				isTransparent = false;
+			}
+			//D.BUG(String.valueOf(timeSinceLastHit));
+		}
+
+
+	}
+	
+	
+	/**
+	 * Method to check for user input
+	 */
 	private void checkForUserInput(){
 
 		if(input.isKeyDown(UP_CONTROL)){
@@ -145,16 +178,76 @@ public class Player extends Entity{
 		return false;
 	}
 	
+	/**
+	 * Method to handle collisions with the player
+	 * @param collidedWith The entity that has collided with this player instance
+	 */
 	public void onCollide(Entity collidedWith){
 		
-		D.BUG(collidedWith.toString());
-		switch(collidedWith.getClass().toString()){
+		//Handle collisions
 		
-		case "Entity":
-			break;
+		//Figure out what kind of collision
+		//Subtract health
+		//Play a sound
 		
+		
+		
+		//If the player wasn't just previously hit
+		if(!hitCoolingDown){
+			String collisionType = collidedWith.getClass().getSimpleName();
+			D.BUG("Player collided with: " + collisionType);
+			
+			switch(collisionType){
+			
+			case "Enemy":
+				
+				Enemy e = (Enemy)collidedWith;
+				
+				switch(e.getEnemyType()){
+					case Squirrel:
+						_health -= 5d;
+						break;
+					case JumboSquirrel:
+						break;
+				}			
+				break;
+			case "Bullet":
+				break;
+			
+			}
+			
+			hitCoolingDown = true;
+			timeSinceLastHit = 0;
 		}
 	}
+
+	
+
+	//ANIMATIONS
+	
+	/**
+	 * Method to call for a hit animation to be executed when the player is hit. Changes 
+	 * opacity of player image, alternating. Call this only in the render() method
+	 */
+	public void hitAnim(){
+		
+		if(timeSinceLastFlash >= HIT_ANIM_FLASH){
+			isTransparent = !isTransparent;
+			timeSinceLastFlash = 0;
+		}
+		
+		if(isTransparent){
+			_entityImg.setAlpha(0.3f);
+		}
+		else{
+			_entityImg.setAlpha(1.0f);
+		}
+		
+	}
+	
+	
+
+
 
 
 }

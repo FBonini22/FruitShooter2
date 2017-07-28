@@ -99,10 +99,11 @@ public class Enemy extends Entity{
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException {
 
-		this._entityImg = new Image(imgPath);
+		
 		
 		//Draw the player at the default starting coordinates
-		_entityImg.draw(x,y);
+		//_entityImg.draw(x,y);
+		g.drawImage(_entityImg, x, y);
 		
 		
 	}
@@ -111,10 +112,24 @@ public class Enemy extends Entity{
 
 	@Override
 	public boolean isDangerous() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
+
+
+	@Override
+	public void init(GameContainer gc) throws SlickException {
+		// TODO Auto-generated method stub
+		this._entityImg = new Image(imgPath);
+	}
+
+	/**
+	 * 
+	 * @return The enum type of this Enemy instance
+	 */
+	public EnemyType getEnemyType(){
+		return _currentEnemy;
+	}
 	
 	
 

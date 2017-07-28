@@ -15,7 +15,7 @@ public class RunGameTest {
 		
 		try { 
 		    AppGameContainer container = new AppGameContainer(game); 
-		    container.setDisplayMode(800,600,false);	//boolean is for fullscreen 
+		    container.setDisplayMode(GameWindow.SCREEN_WIDTH,GameWindow.SCREEN_HEIGHT,false);	//boolean is for fullscreen 
 		    container.start(); 
 		} catch (SlickException e) { 
 		    e.printStackTrace(); 

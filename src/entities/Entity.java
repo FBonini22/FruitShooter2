@@ -13,7 +13,7 @@ public abstract class Entity extends HitBox{
 	
 	public Image _entityImg;
 	
-	
+	//TO-DO Implement acceleration
 	//protected float _speedX = 0f;
 	//protected float _speedY = 0f;
 
@@ -21,14 +21,16 @@ public abstract class Entity extends HitBox{
 		
 	}
 	
-	
-	public abstract void update(GameContainer gc, int delta);
+	public abstract void init(GameContainer gc) throws SlickException;
 	
 	public abstract void render(GameContainer gc, Graphics g) throws SlickException;
 	
+	public abstract void update(GameContainer gc, int delta);
+	
+	
 	/**
 	 * To override. Determines whether the entity will cause harm to the player
-	 * @return
+	 * @return TRUE for dangerous. FALSE for harmless.
 	 */
 	public abstract boolean isDangerous();
 	
@@ -41,27 +43,38 @@ public abstract class Entity extends HitBox{
 	 */
 	public void moveTo(float posX, float posY){
 		this.x = (posX < 0)
-				? 0
+				? 1
 				: (posX > GameWindow.SCREEN_WIDTH)
-						? GameWindow.SCREEN_WIDTH
+						? GameWindow.SCREEN_WIDTH - 1
 						: posX;
 		this.y = (posY < 0)
-				? 0
+				? 1
 				: (posY > GameWindow.SCREEN_HEIGHT)
-						? GameWindow.SCREEN_HEIGHT
+						? GameWindow.SCREEN_HEIGHT - 1
 						: posY;
 	}
 	
 	
 	/**
-	 * Method for moving an entity by a distance
-	 * @param posX x value to translate entity by
-	 * @param posY y value to translate entity by
+	 * Method for moving an entity by a distance. Check for World bounds here
+	 * @param transX x value to translate entity by
+	 * @param transY y value to translate entity by
 	 */
-	public void moveBy(float posX, float posY){
+	public void moveBy(float transX, float transY){
 
-		this.x += posX;
-		this.y += posY;
+		//Sets the x-bounds for all entities
+		this.x = (this.getEndX() + transX > GameWindow.SCREEN_WIDTH)
+					? x
+					: (x + transX < 0)
+						? x
+						: x + transX;
+		
+		//Sets the y-bounds for all entities
+		this.y = (this.getEndY() + transY> GameWindow.SCREEN_HEIGHT)
+				? y
+				: (y + transY < 0)
+					? y
+					: y + transY;
 	}
 	
 	
