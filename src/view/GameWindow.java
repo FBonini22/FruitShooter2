@@ -1,5 +1,6 @@
 package view;
 
+//Comment
 public class GameWindow {
 	
 	//Constants
