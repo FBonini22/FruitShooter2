@@ -9,10 +9,12 @@ import org.newdawn.slick.*;
 
 import entities.Bullet;
 import entities.Enemy;
+import entities.EnemyBullet;
 import entities.EnemyType;
 import entities.Entity;
 import entities.FruitType;
 import entities.Player;
+import entities.PlayerBullet;
 
 public class Engine extends BasicGame{
 
