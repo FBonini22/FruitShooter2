@@ -28,7 +28,7 @@ public class Player extends Entity{
 	private final int	HIT_ANIM_FLASH = 200;										//Milliseconds between each flash of the player hit animation
 	private final float PLAYER_HEIGHT = 48f;
 	private final float PLAYER_WIDTH = 48f;
-	private final int	DEFAULT_FIRE_COOLDOWN = 50;								//Milliseconds for the default time between each firing
+	private final int	DEFAULT_FIRE_COOLDOWN = 250;								//Milliseconds for the default time between each firing
 	
 	
 	//Instance Variables
@@ -295,3 +295,5 @@ public class Player extends Entity{
 
 
 }
+
+
