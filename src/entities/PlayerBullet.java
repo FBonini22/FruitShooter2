@@ -40,4 +40,5 @@ public class PlayerBullet extends Bullet{
 	@Override
 	public void onCollide(Entity collidedWith) {		
 	}
+
 }
