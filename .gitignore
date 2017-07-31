@@ -1,0 +1,5 @@
+#IGNORE THESE FILES
+bin/
+libraries/
+.classpath
+.project
