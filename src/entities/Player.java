@@ -17,7 +17,7 @@ public class Player extends Entity{
 	private int DOWN_CONTROL = Input.KEY_DOWN;
 	private int LEFT_CONTROL = Input.KEY_LEFT;
 	private int RIGHT_CONTROL = Input.KEY_RIGHT;
-	private int SPACE_CONTROL = Input.KEY_SPACE;
+	private int FIRE_CONTROL = Input.KEY_SPACE;
 	
 	//Constants
 	private final float startingX = (float)(GameWindow.SCREEN_WIDTH) / 2f;			//Player starts in the middle of the screen, horizontally
@@ -28,6 +28,7 @@ public class Player extends Entity{
 	private final int	HIT_ANIM_FLASH = 200;										//Milliseconds between each flash of the player hit animation
 	private final float PLAYER_HEIGHT = 48f;
 	private final float PLAYER_WIDTH = 48f;
+	private final int	DEFAULT_FIRE_COOLDOWN = 750;								//Milliseconds for the default time between each firing
 	
 	
 	//Instance Variables
@@ -37,15 +38,18 @@ public class Player extends Entity{
 	
 	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Player instance
 	
-	private double _health;						//Player health
+	private double _health;								//Player health
 	
-	private boolean hitCoolingDown = false;		//Boolean to keep track of whether the player is in a cooling down state
-	private int timeSinceLastHit = 0;			//Used to keep track of time since last collision with player
-	private int timeSinceLastFlash = 0;			//Used for hit animation flashing
+	private boolean hitCoolingDown = false;				//Boolean to keep track of whether the player is in a cooling down state
+	private int timeSinceLastHit = 0;					//Used to keep track of time since last collision with player
+	private int timeSinceLastFlash = 0;					//Used for hit animation flashing
 	private boolean isTransparent = false;
 	
 	private boolean firing = false;
+	private boolean isInFiringCooldown = false;
+	private int timeSinceLastFire = 0;
 	
+	private int _fireCooldown = DEFAULT_FIRE_COOLDOWN;
 	
 	
 	/**
@@ -90,6 +94,9 @@ public class Player extends Entity{
 		//All attributes will be those of watermelon for the time being.
 		switch(_currentFruit){
 		case Apple:
+			
+			_fireCooldown = 750;
+			
 //			imgPath = "img/Apple.png";
 //			break;
 		case Banana:
@@ -149,6 +156,15 @@ public class Player extends Entity{
 			}
 			//D.BUG(String.valueOf(timeSinceLastHit));
 		}
+		
+		//Manage firing cooldown
+		if(isInFiringCooldown){
+			timeSinceLastFire += delta;
+			if(timeSinceLastFire >= _fireCooldown){
+				timeSinceLastFire = 0;
+				isInFiringCooldown = false;
+			}
+		}
 
 
 	}
@@ -173,18 +189,28 @@ public class Player extends Entity{
 			this.moveBy(MOVEMENT_SPEED, 0);
 		}
 		
-		if(input.isKeyDown(SPACE_CONTROL)){
-			firing = true;
+		if(input.isKeyDown(FIRE_CONTROL)){
+			fireBullet();
+		}
+		else{
+			firing = false;
 		}
 	}
 	
 	public boolean getFiring(){
-		return firing;
-	}
-	public void setFiring(boolean state){
-		firing = state;
+		return firing && !isInFiringCooldown;
 	}
 
+	private void fireBullet(){
+		firing = true;
+		if(!isInFiringCooldown){
+			timeSinceLastFire = 0;
+			isInFiringCooldown = true;
+		}
+		
+		
+		
+	}
 
 	@Override
 	public boolean isDangerous() {
@@ -225,7 +251,9 @@ public class Player extends Entity{
 						break;
 				}			
 				break;
-			case "Bullet":
+			case "EnemyBullet":
+				
+				_health -= 5d;
 				break;
 			
 			}

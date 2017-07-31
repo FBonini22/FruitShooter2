@@ -7,7 +7,7 @@ public class RunGameTest {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		Engine game = new Engine("FruitShooter0.1a");
+		Engine game = Engine.instance;
 		
 
 		
