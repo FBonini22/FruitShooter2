@@ -169,14 +169,15 @@ public class Engine extends BasicGame{
 						if(e.hitTest(b)){
 							D.BUG("Bullet collided!");
 							e.onCollide(b);
-							toRemove.add(e);
+							toRemove.add(e);	//Adds entities to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
 						}
 					}
 				}
 				
 				for (Entity e : toRemove) {
 					entities.remove(e);
-				}
+				}	
+				toRemove.clear();				//Clears the eraser arraylist to streamline for next iteration of code
 			}
 		}
 		
