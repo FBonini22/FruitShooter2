@@ -39,6 +39,7 @@ public class Player extends Entity{
 	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Player instance
 	
 	private double _health;								//Player health
+	private int powerLevel = 3;
 	
 	private boolean hitCoolingDown = false;				//Boolean to keep track of whether the player is in a cooling down state
 	private int timeSinceLastHit = 0;					//Used to keep track of time since last collision with player
@@ -108,10 +109,18 @@ public class Player extends Entity{
 		case Watermelon:
 			imgPath = "img/Watermelon.png";
 			_health = STARTING_HEALTH;
+			_fireCooldown = 325;
 			break;
 		}
-		
-
+	}
+	
+	//Gets the Player Power Level
+	public int getPowerLevel(){
+		return powerLevel;
+	}
+	//Gets the Player Fruit Type
+	public FruitType getFruitType(){
+		return _currentFruit;
 	}
 	
 	@Override

@@ -123,16 +123,37 @@ public class Engine extends BasicGame{
 		//CHECK FOR PLAYER FIRING
 		for(Player p : players){
 			if(p.getFiring()){
-				bullets.add(new PlayerBullet(p.x, p.y, 0, -20, 1, 1));
-				for(Bullet e : bullets){
-					e.init(gc);
+				bullets.add(new PlayerBullet(p.x + 16, p.y, 0, -20, 1, 1));
+				switch(p.getFruitType()){
+				case Apple:
+
+//					break;
+				case Banana:
+					
+//					break;
+				case Lemon:
+					
+//					break;
+				case Watermelon:
+					if (p.getPowerLevel() >= 2){
+						bullets.add(new PlayerBullet(p.x + 16, p.y, -5, -20, 1, 1));
+						bullets.add(new PlayerBullet(p.x + 16, p.y, 5, -20, 1, 1));
+					}
+					if (p.getPowerLevel() >= 3){
+						bullets.add(new PlayerBullet(p.x + 16, p.y, -15, -20, 1, 1));
+						bullets.add(new PlayerBullet(p.x + 16, p.y, 15, -20, 1, 1));
+					}
+					break;
 				}
+			}
+			for(Bullet e : bullets){
+				e.init(gc);
 			}
 		}
 
 		//BULLET GARBAGE COLLECTION
 		for(int i = 0; i < bullets.size(); i++){
-			if(bullets.get(i).y <= 10){
+			if(bullets.get(i).y <= 10 || bullets.get(i).x < 20 || bullets.get(i).x > 780){
 				bullets.remove(i);
 			}
 		}
