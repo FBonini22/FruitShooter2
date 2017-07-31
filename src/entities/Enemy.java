@@ -31,7 +31,7 @@ public class Enemy extends Entity{
 	
 	public Enemy(EnemyType selectedFruit, int pNum){
 		
-		super(startingX, startingY, 48,48);
+		super(0, 0, 48,48);
 
 		//Instantiate instance variables
 		_currentEnemy = selectedFruit;
