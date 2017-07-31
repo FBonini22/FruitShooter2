@@ -8,13 +8,13 @@ import java.util.List;
 import org.newdawn.slick.*;
 
 import entities.Bullet;
+import entities.PlayerBullet;
+import entities.EnemyBullet;
 import entities.Enemy;
 import entities.EnemyType;
 import entities.Entity;
 import entities.FruitType;
 import entities.Player;
-import entities.PlayerBullet;
-
 
 public class Engine extends BasicGame{
 
@@ -117,6 +117,7 @@ public class Engine extends BasicGame{
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
 		
+		//Firing bullets. Need to add cool down to firing rate.
 		if (p1.getFiring() == true){
 			bullets.add(new PlayerBullet(p1.x, p1.y, 0, -20, 1, 1));
 			for(Bullet e : bullets){

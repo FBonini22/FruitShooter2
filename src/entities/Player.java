@@ -178,6 +178,7 @@ public class Player extends Entity{
 		}
 	}
 	
+	//Get Set for Player Firing State
 	public boolean getFiring(){
 		return firing;
 	}
