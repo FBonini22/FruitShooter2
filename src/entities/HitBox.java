@@ -7,8 +7,7 @@ public abstract class HitBox {
 	public float width;
 	public float height;
 	
-	public HitBox() {
-	}
+
 	
 	public HitBox(float x, float y, float width, float height) {
 		this.x = x;

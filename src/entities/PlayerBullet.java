@@ -34,13 +34,10 @@ public class PlayerBullet extends Bullet{
 
 	@Override
 	public boolean isDangerous() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void onCollide(Entity collidedWith) {
-		// TODO Auto-generated method stub
-		
+	public void onCollide(Entity collidedWith) {		
 	}
 }

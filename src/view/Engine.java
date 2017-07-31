@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.newdawn.slick.*;
 
+import Utilities.D;
 import entities.Bullet;
 import entities.PlayerBullet;
 import entities.EnemyBullet;
@@ -149,7 +150,6 @@ public class Engine extends BasicGame{
 		
 		//CHECK FOR COLLISIONS
 		//Check each player
-		//Check each player
 		for(Player p : players){
 			for(Entity e : entities){
 				
@@ -157,6 +157,19 @@ public class Engine extends BasicGame{
 				if(e.isDangerous()){
 					if(p.hitTest(e)){
 						p.onCollide(e);
+					}
+				}
+			}
+		}
+		
+		for(Bullet b : bullets){
+			if(!b.isDangerous()){
+				for(Entity e : entities){
+					if(e.isDangerous()){
+						if(e.hitTest(b)){
+							D.BUG("Bullet collided!");
+							e.onCollide(b);
+						}
 					}
 				}
 			}

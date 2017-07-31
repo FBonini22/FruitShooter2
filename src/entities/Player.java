@@ -28,7 +28,7 @@ public class Player extends Entity{
 	private final int	HIT_ANIM_FLASH = 200;										//Milliseconds between each flash of the player hit animation
 	private final float PLAYER_HEIGHT = 48f;
 	private final float PLAYER_WIDTH = 48f;
-	private final int	DEFAULT_FIRE_COOLDOWN = 750;								//Milliseconds for the default time between each firing
+	private final int	DEFAULT_FIRE_COOLDOWN = 50;								//Milliseconds for the default time between each firing
 	
 	
 	//Instance Variables
@@ -60,6 +60,7 @@ public class Player extends Entity{
 	 */
 	public Player(FruitType selectedFruit, int pNum){
 
+		super(0, 0, 64, 64);
 		//Instantiate instance variables
 		_currentFruit = selectedFruit;
 		_playerNum = pNum;		
