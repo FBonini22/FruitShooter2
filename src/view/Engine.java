@@ -119,13 +119,7 @@ public class Engine extends BasicGame{
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
 		
-<<<<<<< HEAD
-		//Firing bullets. Need to add cool down to firing rate.
-		if (p1.getFiring() == true){
-			bullets.add(new PlayerBullet(p1.x, p1.y, 0, -20, 1, 1));
-			for(Bullet e : bullets){
-				e.init(gc);
-=======
+
 		//CHECK FOR PLAYER FIRING
 		for(Player p : players){
 			if(p.getFiring()){
@@ -133,7 +127,6 @@ public class Engine extends BasicGame{
 				for(Bullet e : bullets){
 					e.init(gc);
 				}
->>>>>>> Fire_Cooldown
 			}
 		}
 
