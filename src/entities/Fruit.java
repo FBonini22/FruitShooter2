@@ -1,5 +1,5 @@
 package entities;
 
-public class Fruit {
+public abstract class Fruit {
 
 }

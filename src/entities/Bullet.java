@@ -1,5 +1,8 @@
 package entities;
 
+/**
+ * Abstract class for a bullet entity.
+ */
 public abstract class Bullet extends Entity{
 	private float _xMove;
 	private float _yMove;

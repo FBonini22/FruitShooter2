@@ -61,12 +61,17 @@ public class EnemyBullet extends Bullet{
 
 	@Override
 	public boolean isDangerous() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public void init(GameContainer gc) throws SlickException {
 	     _entityImg = new Image(imgPath);
+	}
+
+	@Override
+	public void onCollide(Entity collidedWith) {
+		// TODO Auto-generated method stub
+		
 	}
 }

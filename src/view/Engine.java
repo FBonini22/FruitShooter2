@@ -36,10 +36,12 @@ public class Engine extends BasicGame{
 	private Image Background;
 
 	
-	
+
+	//Singleton Engine Instance
+	public static Engine instance = new Engine("FruitShooter1.0a");
 
 
-	public Engine(String title) {
+	private Engine(String title) {
 		super(title);
 	}
 	
@@ -117,14 +119,25 @@ public class Engine extends BasicGame{
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
 		
+<<<<<<< HEAD
 		//Firing bullets. Need to add cool down to firing rate.
 		if (p1.getFiring() == true){
 			bullets.add(new PlayerBullet(p1.x, p1.y, 0, -20, 1, 1));
 			for(Bullet e : bullets){
 				e.init(gc);
+=======
+		//CHECK FOR PLAYER FIRING
+		for(Player p : players){
+			if(p.getFiring()){
+				bullets.add(new PlayerBullet(p.x, p.y, 0, -20, 1, 1));
+				for(Bullet e : bullets){
+					e.init(gc);
+				}
+>>>>>>> Fire_Cooldown
 			}
-			p1.setFiring(false);
 		}
+
+		//BULLET GARBAGE COLLECTION
 		for(int i = 0; i < bullets.size(); i++){
 			if(bullets.get(i).y <= 10){
 				bullets.remove(i);
@@ -136,6 +149,7 @@ public class Engine extends BasicGame{
 			e.update(gc, delta);
 		}
 		
+		//Update the bullets
 		for (Bullet e : bullets){
 			e.update(gc, delta);
 		}

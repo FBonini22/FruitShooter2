@@ -37,4 +37,10 @@ public class PlayerBullet extends Bullet{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public void onCollide(Entity collidedWith) {
+		// TODO Auto-generated method stub
+		
+	}
 }

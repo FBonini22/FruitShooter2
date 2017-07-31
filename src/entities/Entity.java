@@ -34,6 +34,12 @@ public abstract class Entity extends HitBox{
 	 */
 	public abstract boolean isDangerous();
 	
+	/**
+	 * To override. Built-in method for collision handling.
+	 * @param collidedWith The other Entity that this Entity instance has collided with.
+	 */
+	public abstract void onCollide(Entity collidedWith);
+	
 	
 	
 	/**
@@ -76,6 +82,8 @@ public abstract class Entity extends HitBox{
 					? y
 					: y + transY;
 	}
+	
+	
 	
 	
 	

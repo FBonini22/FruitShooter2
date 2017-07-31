@@ -130,6 +130,14 @@ public class Enemy extends Entity{
 	public EnemyType getEnemyType(){
 		return _currentEnemy;
 	}
+
+
+
+	@Override
+	public void onCollide(Entity collidedWith) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 
