@@ -28,7 +28,7 @@ public class Player extends Entity{
 	private final int	HIT_ANIM_FLASH = 200;										//Milliseconds between each flash of the player hit animation
 	private final float PLAYER_HEIGHT = 48f;
 	private final float PLAYER_WIDTH = 48f;
-	private final int	DEFAULT_FIRE_COOLDOWN = 750;								//Milliseconds for the default time between each firing
+	private final int	DEFAULT_FIRE_COOLDOWN = 250;								//Milliseconds for the default time between each firing
 	
 	
 	//Instance Variables
@@ -39,7 +39,6 @@ public class Player extends Entity{
 	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Player instance
 	
 	private double _health;								//Player health
-	private int powerLevel = 3;
 	
 	private boolean hitCoolingDown = false;				//Boolean to keep track of whether the player is in a cooling down state
 	private int timeSinceLastHit = 0;					//Used to keep track of time since last collision with player
@@ -61,6 +60,7 @@ public class Player extends Entity{
 	 */
 	public Player(FruitType selectedFruit, int pNum){
 
+		super(0, 0, 64, 64);
 		//Instantiate instance variables
 		_currentFruit = selectedFruit;
 		_playerNum = pNum;		
@@ -109,18 +109,10 @@ public class Player extends Entity{
 		case Watermelon:
 			imgPath = "img/Watermelon.png";
 			_health = STARTING_HEALTH;
-			_fireCooldown = 325;
 			break;
 		}
-	}
-	
-	//Gets the Player Power Level
-	public int getPowerLevel(){
-		return powerLevel;
-	}
-	//Gets the Player Fruit Type
-	public FruitType getFruitType(){
-		return _currentFruit;
+		
+
 	}
 	
 	@Override
@@ -303,3 +295,5 @@ public class Player extends Entity{
 
 
 }
+
+

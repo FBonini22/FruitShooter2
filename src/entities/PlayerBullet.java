@@ -8,11 +8,9 @@ import org.newdawn.slick.SlickException;
 public class PlayerBullet extends Bullet{
 
    private String imgPath = "img/Seed.png";	
-   private float dmg;
 
    public PlayerBullet(float x, float y, float xMove, float yMove, float width, float height){
       super(x, y, xMove, yMove, width, height);
-      dmg = 10;
    }
    
    //Check to see if this works
@@ -36,13 +34,11 @@ public class PlayerBullet extends Bullet{
 
 	@Override
 	public boolean isDangerous() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void onCollide(Entity collidedWith) {
-		// TODO Auto-generated method stub
-		
+	public void onCollide(Entity collidedWith) {		
 	}
+
 }

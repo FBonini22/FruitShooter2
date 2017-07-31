@@ -30,6 +30,8 @@ public class Enemy extends Entity{
 	
 	
 	public Enemy(EnemyType selectedFruit, int pNum){
+		
+		super(0, 0, 48,48);
 
 		//Instantiate instance variables
 		_currentEnemy = selectedFruit;
@@ -45,7 +47,7 @@ public class Enemy extends Entity{
 	
 
 	private void InitializeEnemyAttributes(){
-		//D.BUG("Initializing Enemy attributes...");
+		D.BUG("Initializing Enemy attributes...");
 		
 		//All attributes will be those of squirrel for the time being.
 		switch(_currentEnemy){
@@ -68,30 +70,29 @@ public class Enemy extends Entity{
 		
 		
 		
-		if (xPosition1 > 0){
-			this.moveBy((-MOVEMENT_SPEED), 0);
-			xPosition1--;
-
-			
-		}
-		else if (xPosition1 == 0){
-			this.moveBy(0, 26);
-			xPosition = 0;
-			xPosition1 = -1;
-
-		}
-		else if (xPosition < 100){
-			this.moveBy(MOVEMENT_SPEED, 0);
-			xPosition++;
-
-			
-		}
-		else if (xPosition == 100){
-			this.moveBy(0, 26);
-			xPosition1 = 100;
-
-		}
-		
+//		if (xPosition1 > 0){
+//			this.moveBy((-MOVEMENT_SPEED), 0);
+//			xPosition1--;
+//
+//			
+//		}
+//		else if (xPosition1 == 0){
+//			this.moveBy(0, 26);
+//			xPosition = 0;
+//			xPosition1 = -1;
+//
+//		}
+//		else if (xPosition < 100){
+//			this.moveBy(MOVEMENT_SPEED, 0);
+//			xPosition++;
+//
+//			
+//		}
+//		else if (xPosition == 100){
+//			this.moveBy(0, 26);
+//			xPosition1 = 100;
+//
+//		}
 		
 		
 	}
@@ -135,10 +136,23 @@ public class Enemy extends Entity{
 
 	@Override
 	public void onCollide(Entity collidedWith) {
-		// TODO Auto-generated method stub
-		D.BUG("Player shot enemy");
+		D.BUG("Bullet hit enemy");
 		
 		
+		String collisionType = collidedWith.getClass().getSimpleName();
+		
+		switch(collisionType){
+		
+		case "PlayerBullet":
+			_health -= 1;
+		}
+		
+		try {
+			this.finalize();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	

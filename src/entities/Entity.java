@@ -11,15 +11,19 @@ public abstract class Entity extends HitBox{
 	//Instance Variables
 	
 	
+	public Entity(float x, float y, float width, float height) {
+		super(x, y, width, height);
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public Image _entityImg;
 	
 	//TO-DO Implement acceleration
 	//protected float _speedX = 0f;
 	//protected float _speedY = 0f;
 
-	public Entity(){
-		
-	}
+
 	
 	public abstract void init(GameContainer gc) throws SlickException;
 	

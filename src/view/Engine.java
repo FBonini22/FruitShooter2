@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.newdawn.slick.*;
 
+import Utilities.D;
 import entities.Bullet;
 import entities.PlayerBullet;
 import entities.EnemyBullet;
@@ -26,7 +27,7 @@ public class Engine extends BasicGame{
 	private List<Entity> entities = new ArrayList<Entity>();	//List of drawable entities
 	private List<Player> players = new ArrayList<Player>();		//List of players
 	private List<Bullet> bullets = new ArrayList<Bullet>();		//List of bullet entities
-	
+	private List<Entity> toRemove = new ArrayList<Entity>(); 	//List of entities to be removed
 	private boolean worldClipSet = false;
 	
 	//TESTING
@@ -41,7 +42,7 @@ public class Engine extends BasicGame{
 	public static Engine instance = new Engine("FruitShooter1.0a");
 
 
-	protected Engine(String title) {
+	private Engine(String title) {
 		super(title);
 	}
 	
@@ -123,37 +124,16 @@ public class Engine extends BasicGame{
 		//CHECK FOR PLAYER FIRING
 		for(Player p : players){
 			if(p.getFiring()){
-				bullets.add(new PlayerBullet(p.x + 16, p.y, 0, -20, 1, 1));
-				switch(p.getFruitType()){
-				case Apple:
-
-//					break;
-				case Banana:
-					
-//					break;
-				case Lemon:
-					
-//					break;
-				case Watermelon:
-					if (p.getPowerLevel() >= 2){
-						bullets.add(new PlayerBullet(p.x + 16, p.y, -5, -20, 1, 1));
-						bullets.add(new PlayerBullet(p.x + 16, p.y, 5, -20, 1, 1));
-					}
-					if (p.getPowerLevel() >= 3){
-						bullets.add(new PlayerBullet(p.x + 16, p.y, -15, -20, 1, 1));
-						bullets.add(new PlayerBullet(p.x + 16, p.y, 15, -20, 1, 1));
-					}
-					break;
+				bullets.add(new PlayerBullet(p.x, p.y, 0, -20, 1, 1));
+				for(Bullet e : bullets){
+					e.init(gc);
 				}
-			}
-			for(Bullet e : bullets){
-				e.init(gc);
 			}
 		}
 
 		//BULLET GARBAGE COLLECTION
 		for(int i = 0; i < bullets.size(); i++){
-			if(bullets.get(i).y <= 10 || bullets.get(i).x < 20 || bullets.get(i).x > 780){
+			if(bullets.get(i).y <= 10){
 				bullets.remove(i);
 			}
 		}
@@ -170,7 +150,6 @@ public class Engine extends BasicGame{
 		
 		//CHECK FOR COLLISIONS
 		//Check each player
-		//Check each player
 		for(Player p : players){
 			for(Entity e : entities){
 				
@@ -183,6 +162,23 @@ public class Engine extends BasicGame{
 			}
 		}
 		
+		for(Bullet b : bullets){
+			if(!b.isDangerous()){
+				for(Entity e : entities){
+					if(e.isDangerous()){
+						if(e.hitTest(b)){
+							D.BUG("Bullet collided!");
+							e.onCollide(b);
+							toRemove.add(e);
+						}
+					}
+				}
+				
+				for (Entity e : toRemove) {
+					entities.remove(e);
+				}
+			}
+		}
 		
 	}
 	

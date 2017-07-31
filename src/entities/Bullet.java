@@ -8,12 +8,15 @@ public abstract class Bullet extends Entity{
 	private float _yMove;
 	
 	public Bullet(float x, float y, float xMove, float yMove, float width, float height){
-	   this.x = x;
-	   this.y = y;
-	   _xMove = xMove;
-	   _yMove = yMove;
-	   this.width = width;
-	   this.height = height;
+		
+		super(x, y, width, height);
+		
+		this.x = x;
+		this.y = y;
+		_xMove = xMove;
+		_yMove = yMove;
+		this.width = width;
+		this.height = height;
 	}
 	
 	public float getxMove(){
