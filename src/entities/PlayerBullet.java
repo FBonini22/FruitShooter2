@@ -5,31 +5,17 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-public class PlayerBullet extends Entity{
+public class PlayerBullet extends Bullet{
 
-   private float _xMove;
-   private float _yMove;
-   
    private String imgPath = "img/Seed.png";	
 
-   public PlayerBullet(float x, float y, float xMove, float yMove){
-      this.x = x;
-      this.y = y;
-      _xMove = xMove;
-      _yMove = yMove;
+   public PlayerBullet(float x, float y, float xMove, float yMove, float width, float height){
+      super(x, y, xMove, yMove, width, height);
    }
    
    //Check to see if this works
-   public void Movement(float xMove, float yMove){
+   private void Movement(float xMove, float yMove){
          this.moveBy(xMove, yMove);
-   }
-   
-   private float getxMove(){
-	   return _xMove;
-   }
-   
-   private float getyMove(){
-	   return _yMove;
    }
    
    public void update(GameContainer gc, int delta){
@@ -42,7 +28,7 @@ public class PlayerBullet extends Entity{
 
 	@Override
 	public void init(GameContainer gc) throws SlickException {
-		this._entityImg = new Image(imgPath);
+		_entityImg = new Image(imgPath);
 	}
 		
 

@@ -5,16 +5,15 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-public class EnemyBullet extends Entity{
+public class EnemyBullet extends Bullet{
 
-   private float _xMove;
-   private float _yMove;
+   //Instance Variables
    private boolean _accel;
    private float _xSpeed;
    private float _ySpeed;
-   
+
+   //Constants
    private final float _acceleration = .025f;
-   
    private String imgPath = "img/test.png";	
 
    /**
@@ -26,23 +25,17 @@ public class EnemyBullet extends Entity{
    *@param xMove is the x speed of bullet in pixels
    *@param yMove is the y speed of the bullet in pixels
    *@param accel determines if the bullet accelerates to max speed
- * @throws SlickException 
+   *@throws SlickException 
    */
    public EnemyBullet(float x, float y, float width, float height, float xMove, float yMove, boolean accel){
-      this.x = x;
-      this.y = y;
-      this.width = width;
-      this.height = height;
-      _xMove = xMove;
-      _yMove = yMove;
+	  super(x, y, xMove, yMove, width, height);
       _accel = accel;
       
       _xSpeed = 0;
       _ySpeed = 0;
    }
    
-   //Check to see if this works
-   public void Movement(float xMove, float yMove){
+   private void Movement(float xMove, float yMove){
 	  if (_accel == true){
 		  if (_xSpeed <= xMove && _ySpeed <= yMove){
 			  this.moveBy(_xSpeed, _ySpeed);
@@ -59,7 +52,7 @@ public class EnemyBullet extends Entity{
    } 
    
    public void update(GameContainer gc, int delta){
-      Movement(_xMove, _yMove);
+      Movement(getxMove(), getyMove());
    }
 	
 	public void render(GameContainer gc, Graphics g) throws SlickException{
@@ -74,6 +67,6 @@ public class EnemyBullet extends Entity{
 
 	@Override
 	public void init(GameContainer gc) throws SlickException {
-	     this._entityImg = new Image(imgPath);
+	     _entityImg = new Image(imgPath);
 	}
 }

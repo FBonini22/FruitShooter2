@@ -9,12 +9,12 @@ import org.newdawn.slick.*;
 
 import entities.Bullet;
 import entities.Enemy;
-import entities.EnemyBullet;
 import entities.EnemyType;
 import entities.Entity;
 import entities.FruitType;
 import entities.Player;
 import entities.PlayerBullet;
+
 
 public class Engine extends BasicGame{
 
@@ -72,8 +72,7 @@ public class Engine extends BasicGame{
 		
 		for(Entity e : entities){
 			e.init(gc);
-		}
-		
+		}		
 	}	
 	
 	/**
@@ -103,6 +102,10 @@ public class Engine extends BasicGame{
 		for(Entity e : entities){
 			e.render(gc, g);
 		}
+		
+		for(Bullet e : bullets){
+			e.render(gc,  g);
+		}
 	}
 
 	/**
@@ -114,11 +117,26 @@ public class Engine extends BasicGame{
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
 		
-	
+		if (p1.getFiring() == true){
+			bullets.add(new PlayerBullet(p1.x, p1.y, 0, -20, 1, 1));
+			for(Bullet e : bullets){
+				e.init(gc);
+			}
+			p1.setFiring(false);
+		}
+		for(int i = 0; i < bullets.size(); i++){
+			if(bullets.get(i).y <= 10){
+				bullets.remove(i);
+			}
+		}
+		
 		//Call each entity's update method
 		for(Entity e : entities){
 			e.update(gc, delta);
-			
+		}
+		
+		for (Bullet e : bullets){
+			e.update(gc, delta);
 		}
 		
 		//CHECK FOR COLLISIONS

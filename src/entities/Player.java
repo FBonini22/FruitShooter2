@@ -17,6 +17,7 @@ public class Player extends Entity{
 	private int DOWN_CONTROL = Input.KEY_DOWN;
 	private int LEFT_CONTROL = Input.KEY_LEFT;
 	private int RIGHT_CONTROL = Input.KEY_RIGHT;
+	private int SPACE_CONTROL = Input.KEY_SPACE;
 	
 	//Constants
 	private final float startingX = (float)(GameWindow.SCREEN_WIDTH) / 2f;			//Player starts in the middle of the screen, horizontally
@@ -42,6 +43,8 @@ public class Player extends Entity{
 	private int timeSinceLastHit = 0;			//Used to keep track of time since last collision with player
 	private int timeSinceLastFlash = 0;			//Used for hit animation flashing
 	private boolean isTransparent = false;
+	
+	private boolean firing = false;
 	
 	
 	
@@ -169,6 +172,17 @@ public class Player extends Entity{
 		else if(input.isKeyDown(RIGHT_CONTROL)){
 			this.moveBy(MOVEMENT_SPEED, 0);
 		}
+		
+		if(input.isKeyDown(SPACE_CONTROL)){
+			firing = true;
+		}
+	}
+	
+	public boolean getFiring(){
+		return firing;
+	}
+	public void setFiring(boolean state){
+		firing = state;
 	}
 
 
