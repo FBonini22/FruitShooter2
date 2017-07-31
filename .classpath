@@ -4,8 +4,12 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SLICK2D">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="D:/Coding/Libraries/lwjgl-2.9.3/lwjgl-2.9.3/native/windows"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/josh9/Downloads/lwjgl-2.9.3/lwjgl-2.9.3/native/windows"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/josh9/Downloads/slick/lib/jinput.jar"/>
+	<classpathentry kind="lib" path="C:/Users/josh9/Downloads/slick/lib/lwjgl.jar"/>
+	<classpathentry kind="lib" path="C:/Users/josh9/Downloads/slick/lib/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="C:/Users/josh9/Downloads/slick/lib/slick.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

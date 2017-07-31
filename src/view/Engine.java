@@ -41,7 +41,7 @@ public class Engine extends BasicGame{
 	public static Engine instance = new Engine("FruitShooter1.0a");
 
 
-	private Engine(String title) {
+	protected Engine(String title) {
 		super(title);
 	}
 	
@@ -161,6 +161,7 @@ public class Engine extends BasicGame{
 				}
 			}
 		}
+		
 		
 	}
 	

@@ -45,7 +45,7 @@ public class Enemy extends Entity{
 	
 
 	private void InitializeEnemyAttributes(){
-		D.BUG("Initializing Enemy attributes...");
+		//D.BUG("Initializing Enemy attributes...");
 		
 		//All attributes will be those of squirrel for the time being.
 		switch(_currentEnemy){
@@ -136,6 +136,9 @@ public class Enemy extends Entity{
 	@Override
 	public void onCollide(Entity collidedWith) {
 		// TODO Auto-generated method stub
+		D.BUG("Player shot enemy");
+		
+		
 		
 	}
 	
