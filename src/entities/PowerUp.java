@@ -7,26 +7,34 @@ import org.newdawn.slick.SlickException;
 
 public class PowerUp extends Entity{
 	
-	private float _ySpeed;
-	private float _accel;
-	private float _maxSpeed;
+	//Instance Variables
+	private float ySpeed = -2;
+	private float accel = .05f;
+	private float maxSpeed = 5;
 	
 	private String imgPath = "img/test.png";	
 
+	/**
+	 * Power up Constructor
+	 * @param x position
+	 * @param y position
+	 * @param width of hit box
+	 * @param height of hit box
+	 */
 	public PowerUp(float x, float y, float width, float height) {
 		super(x, y, width, height);
-		_ySpeed = -2;
-		_accel = .05f;
-		_maxSpeed = 5;
 	}
 	
+	/**
+	 * Moves the power up up before going back down
+	 */
 	private void Movement(){
-		if(_ySpeed >= _maxSpeed){
-			this.moveBy(0, _maxSpeed);
+		if(ySpeed >= maxSpeed){
+			this.moveBy(0, maxSpeed);
 		}
 		else{
-			this.moveBy(0, (_ySpeed + _accel));
-			_ySpeed = _ySpeed + _accel;
+			this.moveBy(0, (ySpeed + accel));
+			ySpeed += accel;
 		}
 	}
 	
@@ -53,7 +61,6 @@ public class PowerUp extends Entity{
 
 	@Override
 	public void onCollide(Entity collidedWith) {
-		// TODO Auto-generated method stub
 		
 	}
 

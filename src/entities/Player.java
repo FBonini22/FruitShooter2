@@ -127,6 +127,9 @@ public class Player extends Entity{
 	public void setFirecooldown(int num){
 		_fireCooldown = num;
 	}
+	public void setPowerlevel(int num){
+		powerLevel = num;
+	}
 	
 	@Override
 	public void init(GameContainer gc) throws SlickException {
@@ -222,8 +225,36 @@ public class Player extends Entity{
 			timeSinceLastFire = 0;
 			isInFiringCooldown = true;
 		}
+		else{
+			return;
+		}
 		
 		
+		switch(_currentFruit){
+		case Apple:
+			
+//			break;
+		case Banana:
+
+//			break;
+		case Lemon:
+
+//			break;
+		case Watermelon:
+			if (getPowerLevel() >= 2){
+				
+				Engine.instance.addEntity(new PlayerBullet(x + 46, y + 10, 0, -20, 1, 1));
+
+				Engine.instance.addEntity(new PlayerBullet(x - 16, y + 10, 0, -20, 1, 1));
+			}
+			if (getPowerLevel() >= 3){
+				setFirecooldown(200);
+			}
+			break;
+		}
+//		for(Bullet e : bullets){
+//			e.init(gc);
+//		}
 		
 	}
 
