@@ -10,6 +10,7 @@ import org.newdawn.slick.*;
 import Utilities.D;
 import entities.Bullet;
 import entities.PlayerBullet;
+import entities.PowerUp;
 import entities.EnemyBullet;
 import entities.Enemy;
 import entities.EnemyType;
@@ -137,12 +138,11 @@ public class Engine extends BasicGame{
 //					break;
 				case Watermelon:
 					if (p.getPowerLevel() >= 2){
-						bullets.add(new PlayerBullet(p.x + 16, p.y, 5, -20, 1, 1));
-						bullets.add(new PlayerBullet(p.x + 16, p.y, -5, -20, 1, 1));
+						bullets.add(new PlayerBullet(p.x + 46, p.y + 10, 0, -20, 1, 1));
+						bullets.add(new PlayerBullet(p.x - 16, p.y + 10, 0, -20, 1, 1));
 					}
 					if (p.getPowerLevel() >= 3){
-						bullets.add(new PlayerBullet(p.x + 16, p.y, 15, -20, 1, 1));
-						bullets.add(new PlayerBullet(p.x + 16, p.y, -15, -20, 1, 1));
+						p.setFirecooldown(200);
 					}
 					break;
 				}

@@ -121,6 +121,9 @@ public class Player extends Entity{
 	public int getPowerLevel(){
 		return powerLevel;
 	}
+	public void setFirecooldown(int num){
+		_fireCooldown = num;
+	}
 	
 	@Override
 	public void init(GameContainer gc) throws SlickException {
