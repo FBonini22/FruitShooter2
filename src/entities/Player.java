@@ -26,9 +26,9 @@ public class Player extends Entity{
 	private final double STARTING_HEALTH = 100f;									//Default starting player health
 	private final int	HIT_COOLDOWN = 1000;										//Milliseconds before player can be hit again
 	private final int	HIT_ANIM_FLASH = 200;										//Milliseconds between each flash of the player hit animation
-	private final float PLAYER_HEIGHT = 48f;
-	private final float PLAYER_WIDTH = 48f;
-	private final int	DEFAULT_FIRE_COOLDOWN = 250;								//Milliseconds for the default time between each firing
+	private static final float PLAYER_HEIGHT = 48f;
+	private static final float PLAYER_WIDTH = 48f;
+	private final int	DEFAULT_FIRE_COOLDOWN = 50;								//Milliseconds for the default time between each firing
 	
 	
 	//Instance Variables
@@ -60,7 +60,7 @@ public class Player extends Entity{
 	 */
 	public Player(FruitType selectedFruit, int pNum){
 
-		super(0, 0, 64, 64);
+		super(0, 0, 64, 64, PLAYER_WIDTH/2);
 		//Instantiate instance variables
 		_currentFruit = selectedFruit;
 		_playerNum = pNum;		
@@ -205,10 +205,20 @@ public class Player extends Entity{
 
 	private void fireBullet(){
 		firing = true;
+		
 		if(!isInFiringCooldown){
 			timeSinceLastFire = 0;
-			isInFiringCooldown = true;
+			isInFiringCooldown = true;	
 		}
+		else{
+			return;		
+		}
+		
+		switch(_currentFruit){
+		case Apple:
+			  
+		}
+		
 		
 		
 		
@@ -220,6 +230,7 @@ public class Player extends Entity{
 		return false;
 	}
 	
+	@Override
 	/**
 	 * Method to handle collisions with the player
 	 * @param collidedWith The entity that has collided with this player instance

@@ -1,19 +1,22 @@
 package entities;
 
+import Utilities.D;
+
 public abstract class HitBox {
 
 	public float x;
 	public float y;
 	public float width;
 	public float height;
-	
+	public float radius;			//Radius to use for collision checking
 
 	
-	public HitBox(float x, float y, float width, float height) {
+	public HitBox(float x, float y, float width, float height, float radius) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.radius = radius;
 		System.out.println(this.x);
 		System.out.println(this.y);
 		System.out.println(this.width);
@@ -50,6 +53,12 @@ public abstract class HitBox {
 	 * @return TRUE for collision. FALSE for no collision
 	 */
 	public boolean hitTest(HitBox b) {
-		return (b.getEndX() >= x && b.getEndY() >= y && getEndX() >= b.x && getEndY() >= b.y);
+		
+		double dist = Math.sqrt(Math.pow((this.getCenterX() - b.getCenterX()), 2d) + Math.pow((this.getCenterY() - b.getCenterY()), 2d));
+		if(dist <= radius){
+			D.BUG(String.valueOf(dist));
+		}
+		return (dist <= radius);
+		//		return (b.getEndX() >= x && b.getEndY() >= y && getEndX() >= b.x && getEndY() >= b.y);
 	}
 }

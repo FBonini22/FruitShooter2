@@ -27,8 +27,8 @@ public class EnemyBullet extends Bullet{
    *@param accel determines if the bullet accelerates to max speed
    *@throws SlickException 
    */
-   public EnemyBullet(float x, float y, float width, float height, float xMove, float yMove, boolean accel){
-	  super(x, y, xMove, yMove, width, height);
+   public EnemyBullet(float x, float y, float width, float height, float xMove, float yMove, boolean accel, float angle){
+	  super(x, y, xMove, yMove, width, height, 8, angle);		//CHANGE TO MODULAR VALUE
       _accel = accel;
       
       _xSpeed = 0;

@@ -9,8 +9,8 @@ public class PlayerBullet extends Bullet{
 
    private String imgPath = "img/Seed.png";	
 
-   public PlayerBullet(float x, float y, float xMove, float yMove, float width, float height){
-      super(x, y, xMove, yMove, width, height);
+   public PlayerBullet(float x, float y, float xMove, float yMove, float width, float height, float angle){
+      super(x, y, xMove, yMove, width, height, 8, angle);		//CHANGE TO MODULAR VALUE
    }
    
    //Check to see if this works

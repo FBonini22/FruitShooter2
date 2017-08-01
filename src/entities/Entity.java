@@ -11,8 +11,8 @@ public abstract class Entity extends HitBox{
 	//Instance Variables
 	
 	
-	public Entity(float x, float y, float width, float height) {
-		super(x, y, width, height);
+	public Entity(float x, float y, float width, float height, float radius) {
+		super(x, y, width, height, radius);
 		// TODO Auto-generated constructor stub
 	}
 

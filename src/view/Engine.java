@@ -120,11 +120,14 @@ public class Engine extends BasicGame{
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
 		
+		D.BUG(String.valueOf(bullets.size()));
+		D.BUG(String.valueOf(entities.size()));
+		D.BUG(String.valueOf(toRemove.size()));
 
 		//CHECK FOR PLAYER FIRING
 		for(Player p : players){
 			if(p.getFiring()){
-				bullets.add(new PlayerBullet(p.x, p.y, 0, -20, 1, 1));
+				bullets.add(new PlayerBullet(p.getCenterX(), p.y, 0, -20, 1, 1, 0));
 				for(Bullet e : bullets){
 					e.init(gc);
 				}
@@ -133,7 +136,11 @@ public class Engine extends BasicGame{
 
 		//BULLET GARBAGE COLLECTION
 		for(int i = 0; i < bullets.size(); i++){
-			if(bullets.get(i).y <= 10){
+			if(bullets.get(i).y <= 10
+					|| bullets.get(i).y >= GameWindow.SCREEN_HEIGHT
+					|| bullets.get(i).x <= 10
+					|| bullets.get(i).x >= GameWindow.SCREEN_WIDTH){
+				D.BUG("Removing bullet");
 				bullets.remove(i);
 			}
 		}
@@ -183,6 +190,48 @@ public class Engine extends BasicGame{
 		
 	}
 	
+	/**
+	 * Method for adding an entity to the current instance of the game engine
+	 * @param e Entity to be added
+	 */
+	public void addEntity(Entity e){
+		String entityType = e.getClass().getSimpleName();
+		
+		switch(entityType){
+		case "PlayerBullet":
+		case "EnemyBullet":
+			bullets.add((Bullet) e);
+			break;
+		case "Enemy":
+			default:
+				entities.add(e);
+				
+		}
+	}
+	
+	/**
+	 * Method to mark specific entity for removal
+	 * @param e
+	 */
+	public void markForRemoval(Entity e){
+		try {
+			String entityType = e.getClass().getSimpleName();
+			
+			switch(entityType){
+
+			case "PlayerBullet":
+			case "EnemyBullet":
+				bullets.remove(e);
+				break;				
+			case "Enemy":
+			default:
+				entities.remove(e);
+				break;
+			}
+		} catch (Exception e2) {
+			D.BUG(e2.getMessage());
+		}
+	}
 	
 	
 
