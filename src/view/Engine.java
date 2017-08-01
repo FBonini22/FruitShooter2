@@ -29,6 +29,7 @@ public class Engine extends BasicGame{
 	private List<Player> players = new ArrayList<Player>();		//List of players
 	private List<Bullet> bullets = new ArrayList<Bullet>();		//List of bullet entities
 	private List<Entity> toRemove = new ArrayList<Entity>(); 	//List of entities to be removed
+	private List<Bullet> toRemoveBullets = new ArrayList<Bullet>();
 	private boolean worldClipSet = false;
 	
 	//TESTING
@@ -116,7 +117,7 @@ public class Engine extends BasicGame{
 	 * Update graphics, entities, and game variables. This method is automatically
 	 * called each time the game updates itself. Run the game logic here.
 	 * @param gc The container in which the current game is running
-	 * @param delta UNKNOWN PARAMETER. TO DO: LOOK UP FUNCTION
+	 * @param delta The time between each frame
 	 */
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
@@ -191,6 +192,7 @@ public class Engine extends BasicGame{
 							D.BUG("Bullet collided!");
 							e.onCollide(b);
 							toRemove.add(e);	//Adds entities to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
+							toRemoveBullets.add(b);
 						}
 					}
 				}
@@ -199,9 +201,57 @@ public class Engine extends BasicGame{
 					entities.remove(e);
 				}	
 				toRemove.clear();				//Clears the eraser arraylist to streamline for next iteration of code
+				
 			}
 		}
+		for (Bullet s : toRemoveBullets){
+			bullets.remove(s);
+		}
+		toRemoveBullets.clear();
 		
+	}
+	
+	/**
+	 * Method for adding an entity to the current instance of the game engine
+	 * @param e Entity to be added
+	 */
+	public void addEntity(Entity e){
+		String entityType = e.getClass().getSimpleName();
+		
+		switch(entityType){
+		case "PlayerBullet":
+		case "EnemyBullet":
+			bullets.add((Bullet) e);
+			break;
+		case "Enemy":
+			default:
+				entities.add(e);
+				
+		}
+	}
+	
+	/**
+	 * Method to mark specific entity for removal
+	 * @param e
+	 */
+	public void markForRemoval(Entity e){
+		try {
+			String entityType = e.getClass().getSimpleName();
+			
+			switch(entityType){
+
+			case "PlayerBullet":
+			case "EnemyBullet":
+				bullets.remove(e);
+				break;				
+			case "Enemy":
+			default:
+				entities.remove(e);
+				break;
+			}
+		} catch (Exception e2) {
+			D.BUG(e2.getMessage());
+		}
 	}
 	
 	

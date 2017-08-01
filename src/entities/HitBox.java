@@ -14,10 +14,11 @@ public abstract class HitBox {
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		System.out.println(this.x);
+		/*System.out.println(this.x);
 		System.out.println(this.y);
 		System.out.println(this.width);
 		System.out.println(this.height);
+		*/
 	}
 	
 	public float getEndX() {
