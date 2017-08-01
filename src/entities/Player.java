@@ -100,12 +100,15 @@ public class Player extends Entity{
 			_fireCooldown = 750;
 			
 //			imgPath = "img/Apple.png";
+//			_health = STARTING_HEALTH;
 //			break;
 		case Banana:
 //			imgPath = "img/Banana.png";
+//			_health = STARTING_HEALTH;
 //			break;
 		case Lemon:
 //			imgPath = "img/Lemon.png";
+//			_health = STARTING_HEALTH;
 //			break;
 		case Watermelon:
 			imgPath = "img/Watermelon.png";
