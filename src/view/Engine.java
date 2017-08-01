@@ -29,6 +29,7 @@ public class Engine extends BasicGame{
 	private List<Player> players = new ArrayList<Player>();		//List of players
 	private List<Bullet> bullets = new ArrayList<Bullet>();		//List of bullet entities
 	private List<Entity> toRemove = new ArrayList<Entity>(); 	//List of entities to be removed
+	private List<Bullet> toRemoveBullets = new ArrayList<Bullet>();
 	private boolean worldClipSet = false;
 	
 	//TESTING
@@ -191,6 +192,7 @@ public class Engine extends BasicGame{
 							D.BUG("Bullet collided!");
 							e.onCollide(b);
 							toRemove.add(e);	//Adds entities to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
+							toRemoveBullets.add(b);
 						}
 					}
 				}
@@ -199,8 +201,13 @@ public class Engine extends BasicGame{
 					entities.remove(e);
 				}	
 				toRemove.clear();				//Clears the eraser arraylist to streamline for next iteration of code
+				
 			}
 		}
+		for (Bullet s : toRemoveBullets){
+			bullets.remove(s);
+		}
+		toRemoveBullets.clear();
 		
 	}
 	
