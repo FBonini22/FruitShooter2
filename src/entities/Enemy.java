@@ -70,29 +70,29 @@ public class Enemy extends Entity{
 		
 		
 		
-//		if (xPosition1 > 0){
-//			this.moveBy((-MOVEMENT_SPEED), 0);
-//			xPosition1--;
-//
-//			
-//		}
-//		else if (xPosition1 == 0){
-//			this.moveBy(0, 26);
-//			xPosition = 0;
-//			xPosition1 = -1;
-//
-//		}
-//		else if (xPosition < 100){
-//			this.moveBy(MOVEMENT_SPEED, 0);
-//			xPosition++;
-//
-//			
-//		}
-//		else if (xPosition == 100){
-//			this.moveBy(0, 26);
-//			xPosition1 = 100;
-//
-//		}
+		if (xPosition1 > 0){
+			this.moveBy((-MOVEMENT_SPEED), 0);
+			xPosition1--;
+
+			
+		}
+		else if (xPosition1 == 0){
+			this.moveBy(0, 26);
+			xPosition = 0;
+			xPosition1 = -1;
+
+		}
+		else if (xPosition < 100){
+			this.moveBy(MOVEMENT_SPEED, 0);
+			xPosition++;
+
+			
+		}
+		else if (xPosition == 100){
+			this.moveBy(0, 26);
+			xPosition1 = 100;
+
+		}
 		
 		
 	}

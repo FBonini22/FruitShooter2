@@ -7,6 +7,7 @@ import view.GameWindow;
 public abstract class Entity extends HitBox{
 	
 	//Constants
+	private final int EXTERNAL_PIXELS = 20;							//The amount of pixels an entity may move off screen before it cannot go any further
 	
 	//Instance Variables
 	
@@ -73,16 +74,16 @@ public abstract class Entity extends HitBox{
 	public void moveBy(float transX, float transY){
 
 		//Sets the x-bounds for all entities
-		this.x = (this.getEndX() + transX > GameWindow.SCREEN_WIDTH)
+		this.x = (this.getEndX() + transX > GameWindow.SCREEN_WIDTH + EXTERNAL_PIXELS)
 					? x
-					: (x + transX < 0)
+					: (x + transX < -EXTERNAL_PIXELS)
 						? x
 						: x + transX;
 		
 		//Sets the y-bounds for all entities
-		this.y = (this.getEndY() + transY> GameWindow.SCREEN_HEIGHT)
+		this.y = (this.getEndY() + transY> GameWindow.SCREEN_HEIGHT + EXTERNAL_PIXELS)
 				? y
-				: (y + transY < 0)
+				: (y + transY < -EXTERNAL_PIXELS)
 					? y
 					: y + transY;
 	}
