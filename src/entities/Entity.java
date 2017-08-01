@@ -74,7 +74,7 @@ public abstract class Entity extends HitBox{
 	public void moveBy(float transX, float transY){
 
 		//Sets the x-bounds for all entities
-		this.x = (this.getEndX() + transX > GameWindow.SCREEN_WIDTH + EXTERNAL_PIXELS)
+		this.x = (this.getEndX() + transX > GameWindow.SCREEN_WIDTH + 300)
 					? x
 					: (x + transX < -EXTERNAL_PIXELS)
 						? x
