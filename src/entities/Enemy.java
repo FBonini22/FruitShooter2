@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.Random;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -79,33 +81,33 @@ public class Enemy extends Entity{
 	public void update(GameContainer gc, int delta) {
 		
 		
-		
-//		if (xPosition1 > 0){
-//			this.moveBy((-MOVEMENT_SPEED), 0);
-//			xPosition1--;
-//
-//			
-//		}
-//		else if (xPosition1 == 0){
-//			this.moveBy(0, 26);
-//			xPosition = 0;
-//			xPosition1 = -1;
-//
-//		}
-//		else if (xPosition < 100){
-//			this.moveBy(MOVEMENT_SPEED, 0);
-//			xPosition++;
-//
-//			
-//		}
-//		else if (xPosition == 100){
-//			this.moveBy(0, 26);
-//			xPosition1 = 100;
-//
-//		}
-		
-		
+		Random r = new Random();
+		int Low = 10;
+		int High = 100;
+		int Result = r.nextInt(High-Low) + Low;
+
+				
+            if (Result >= 0 && Result <= 25) {
+            	this.moveBy((-MOVEMENT_SPEED), 0); // Left
+            }
+
+            if (Result >= 26 && Result <= 50) {
+            	this.moveBy(0, MOVEMENT_SPEED); //Down
+            }
+
+            if (Result >= 51 && Result <= 75) {
+            	this.moveBy(MOVEMENT_SPEED, 0); //Right
+            }
+
+            if (Result >= 76 && Result <= 100) {
+            	this.moveBy(0, -MOVEMENT_SPEED); //Up
+            }
 	}
+
+
+	
+		
+	
 /**
  * Method to draw the entities in the desired position according to the update method.
  */
