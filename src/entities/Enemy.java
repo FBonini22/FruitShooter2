@@ -18,7 +18,7 @@ public class Enemy extends Entity{
 	private final float startingY = 0;		
 	private int xPosition = 0;
 	private int xPosition1 = 0;
-	
+	private int pointValue;
 	//Instance Variables
 	private EnemyType _currentEnemy;					//The user-selected enemy
 	private int _EnemyNum;								//The number enemy created
@@ -28,13 +28,17 @@ public class Enemy extends Entity{
 	
 	private double _health = 0d;
 	
-	
-	public Enemy(EnemyType selectedFruit, int pNum){
+	/**
+	 * 
+	 * @param selectedEnemy The fruit that the player will play as
+	 * @param pNum 			The number of the enemy that is being generated ex. enemy 1, enemy 2...
+	 */
+	public Enemy(EnemyType selectedEnemy, int pNum){
 		
 		super(0, 0, 48,48);
 
 		//Instantiate instance variables
-		_currentEnemy = selectedFruit;
+		_currentEnemy = selectedEnemy;
 		_EnemyNum = pNum;		
 		_offSet =_EnemyNum*26;		
 		this.x = startingX + _offSet;
@@ -45,26 +49,32 @@ public class Enemy extends Entity{
 	}
 		
 	
-
+/**
+ * Method to initialize the attributes of the enemy. Contains a switch statement to pick which enemy type will be generated.
+ */
 	private void InitializeEnemyAttributes(){
-		D.BUG("Initializing Enemy attributes...");
+		//D.BUG("Initializing Enemy attributes...");
 		
 		//All attributes will be those of squirrel for the time being.
 		switch(_currentEnemy){
 		case Squirrel:
 			imgPath = "img/Squirrel.png";
 			_health = 1.0;
+			pointValue = 1;
 			break;
 		case JumboSquirrel:
 			imgPath = "img/JumboSquirrel.png";
 			_health = 2.0;
+			pointValue = 10;
 			break;
 		
 		}
 		
 
 	}
-	
+	/**
+	 * Method to update the position of the enemy entities.
+	 */
 	@Override
 	public void update(GameContainer gc, int delta) {
 		
@@ -96,7 +106,9 @@ public class Enemy extends Entity{
 		
 		
 	}
-
+/**
+ * Method to draw the entities in the desired position according to the update method.
+ */
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException {
 
@@ -110,14 +122,18 @@ public class Enemy extends Entity{
 	}
 
 
-
+/**
+ * Method to establish if an entity is dangerous to the player.
+ */
 	@Override
 	public boolean isDangerous() {
 		return true;
 	}
 
 
-
+/**
+ * Method to set the file location for the desired enemy .png.
+ */
 	@Override
 	public void init(GameContainer gc) throws SlickException {
 		// TODO Auto-generated method stub
@@ -125,7 +141,7 @@ public class Enemy extends Entity{
 	}
 
 	/**
-	 * 
+	 * Method to return the current type of enemy.
 	 * @return The enum type of this Enemy instance
 	 */
 	public EnemyType getEnemyType(){
@@ -133,7 +149,9 @@ public class Enemy extends Entity{
 	}
 
 
-
+/**
+ * Method to determine if two entities are currently colliding.
+ */
 	@Override
 	public void onCollide(Entity collidedWith) {
 		D.BUG("Bullet hit enemy");
@@ -156,6 +174,13 @@ public class Enemy extends Entity{
 		
 	}
 	
+	/**
+	 * Method to get the point value for the enemy
+	 * @return pointValue The point value of the enemy
+	 */
+	public int PointValue(){
+		return pointValue;
+	}
 	
 
 
