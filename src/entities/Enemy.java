@@ -85,8 +85,8 @@ public class Enemy extends Entity{
 		
 		Random r_x = new Random();
 		Random r_y = new Random();
-		int Low = -10;
-		int High = 10;
+		int Low = -10;				//Min distance to be moved. Negative means to the left or up.
+		int High = 10;				//Max distance to be moved. Positive means to the right or down.
 		result_x = r_x.nextInt(High-Low) + Low;
 		result_y = r_y.nextInt(High-Low)+Low;
 		//D.BUG("New Random Assigned");
@@ -99,7 +99,7 @@ public class Enemy extends Entity{
 		}
 		
             
-            	this.moveBy(((result_x)), (result_y)); // Left
+            	this.moveBy(((result_x)), (result_y)); 
            
 	}
 
