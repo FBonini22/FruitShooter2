@@ -1,5 +1,4 @@
 
-
 package view;
 
 import java.util.ArrayList;
@@ -22,16 +21,19 @@ public class Engine extends BasicGame{
 
 	//Constants
 	private final int FRAME_RATE = 60;							//Frame rate in fps
-	private final int NUMBER_OF_SQUIRRELS = 100;					//Number of squirrels. FOR DEBUGGING ONLY
+	private final int NUMBER_OF_SQUIRRELS = 10;					//Number of squirrels. FOR DEBUGGING ONLY
 	
 	//Instance Variables
-	private List<Entity> entities = new ArrayList<Entity>();	//List of drawable entities
+	private List<Enemy> enemy = new ArrayList<Enemy>();	//List of drawable entities
 	private List<Player> players = new ArrayList<Player>();		//List of players
 	private List<Bullet> bullets = new ArrayList<Bullet>();		//List of bullet entities
-	private List<Entity> toRemove = new ArrayList<Entity>(); 	//List of entities to be removed
+	private List<Enemy> toRemove = new ArrayList<Enemy>(); 	//List of entities to be removed
+
+
 	private List<Bullet> toRemoveBullets = new ArrayList<Bullet>();
 	private boolean worldClipSet = false;
-	
+	private int point;
+	private int PointTotal;
 	//TESTING
 	private Player p1 = new Player(FruitType.Watermelon, 1);
 	
@@ -62,7 +64,6 @@ public class Engine extends BasicGame{
 		gc.setShowFPS(true);
 		
 		//Initialize Lists
-		entities.add(p1);
 		players.add(p1);
 		
 		//Initialize Background image
@@ -70,14 +71,18 @@ public class Engine extends BasicGame{
 		
 		
 		for (int i = 1; i< NUMBER_OF_SQUIRRELS; i++){
-			entities.add(new Enemy(EnemyType.Squirrel, i));
+			enemy.add(new Enemy(EnemyType.Squirrel, i));
 		}
 		/*Music openingMenuMusic = new Music(""); //TODO Need to find and insert suitable music
     		openingMenuMusic.loop(); */
 		
-		for(Entity e : entities){
+		for(Enemy e : enemy){
 			e.init(gc);
-		}		
+		}	
+		
+		for(Player p : players){
+			p.init(gc);
+		}	
 	}	
 	
 	/**
@@ -92,6 +97,8 @@ public class Engine extends BasicGame{
 		//Render background image
 		Background.draw(0,0);
 		
+		//Draw the current point total
+		g.drawString(String.format("Player Points: %1$s", String.valueOf((int)PointTotal)), 600, 32);
 		
 		
 		//Set world clipping
@@ -104,12 +111,16 @@ public class Engine extends BasicGame{
 				
 		
 		//Call each entity's render method
-		for(Entity e : entities){
+		for(Enemy e : enemy){
 			e.render(gc, g);
 		}
 		
-		for(Bullet e : bullets){
-			e.render(gc,  g);
+		for(Bullet b : bullets){
+			b.render(gc,  g);
+		}
+		
+		for(Player p : players){
+			p.render(gc, g);
 		}
 	}
 
@@ -161,8 +172,12 @@ public class Engine extends BasicGame{
 		}
 		
 		//Call each entity's update method
-		for(Entity e : entities){
+		for(Enemy e : enemy){
 			e.update(gc, delta);
+		}
+		
+		for(Player p : players){
+			p.update(gc, delta);
 		}
 		
 		//Update the bullets
@@ -173,7 +188,7 @@ public class Engine extends BasicGame{
 		//CHECK FOR COLLISIONS
 		//Check each player
 		for(Player p : players){
-			for(Entity e : entities){
+			for(Enemy e : enemy){
 				
 				//Iff the entity can cause harm to the player, check for a collision
 				if(e.isDangerous()){
@@ -186,19 +201,26 @@ public class Engine extends BasicGame{
 		
 		for(Bullet b : bullets){
 			if(!b.isDangerous()){
-				for(Entity e : entities){
+				for(Enemy e : enemy){
 					if(e.isDangerous()){
 						if(e.hitTest(b)){
 							D.BUG("Bullet collided!");
 							e.onCollide(b);
+
+							toRemove.add(e);				//Adds entities to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
+							toRemoveBullets.add(b); 		//Adds bullets to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
+							point = e.PointValue();			//Gets point value for enemy that was just destroyed
+							PointTotal += point;			//Adds point value from enemy destroyed to point total
+							
+
 							toRemove.add(e);	//Adds entities to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
 							toRemoveBullets.add(b);
 						}
 					}
 				}
 				
-				for (Entity e : toRemove) {
-					entities.remove(e);
+				for (Enemy e : toRemove) {
+					enemy.remove(e);
 				}	
 				toRemove.clear();				//Clears the eraser arraylist to streamline for next iteration of code
 				
@@ -208,6 +230,7 @@ public class Engine extends BasicGame{
 			bullets.remove(s);
 		}
 		toRemoveBullets.clear();
+
 		
 	}
 	
@@ -217,6 +240,7 @@ public class Engine extends BasicGame{
 	 */
 	public void addEntity(Entity e){
 		String entityType = e.getClass().getSimpleName();
+
 		
 		switch(entityType){
 		case "PlayerBullet":
@@ -258,5 +282,6 @@ public class Engine extends BasicGame{
 	
 
 }
+
 
 
