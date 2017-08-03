@@ -5,26 +5,22 @@ import java.util.Random;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-
-
 import org.newdawn.slick.SlickException;
 
 import Utilities.D;
-import view.*;
 
 public class Enemy extends Entity{
 	
 		
 	//Constants
-	private final float startingX = 0;
-	private final float startingY = 0;		
-	private int xPosition = 0;
-	private int xPosition1 = 0;
+	private final static float startingX = 0;
+	private final static float startingY = 0;		
 	private int pointValue;
+	
 	//Instance Variables
 	private EnemyType _currentEnemy;					//The user-selected enemy
 	private int _EnemyNum;								//The number enemy created
-	private int _offSet;
+	private int _offSet;								//The amount that the generated enemy will be offset from the first generated enemy.
 	private final float MOVEMENT_SPEED = 5f;			//Movement speed in pixels per second
 	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Enemy instance
 	private int Move = 100;
@@ -37,15 +33,15 @@ public class Enemy extends Entity{
 	 * @param selectedEnemy The fruit that the player will play as
 	 * @param pNum 			The number of the enemy that is being generated ex. enemy 1, enemy 2...
 	 */
-	public Enemy(EnemyType selectedEnemy, int pNum, float P1, float P2){
+	public Enemy(EnemyType selectedEnemy, int pNum, float P1, float P2){ //Added parameters to take in the size of the hitbox desired
 		
-		super(0, 0, P1,P2);
+		super(startingX, startingY, P1,P2);
 
 		//Instantiate instance variables
 		_currentEnemy = selectedEnemy;
 		_EnemyNum = pNum;		
 		_offSet =_EnemyNum*26;		
-		this.x = startingX; // + _offSet;
+		this.x = startingX + _offSet;
 		this.y = startingY;
 		
 		InitializeEnemyAttributes();
@@ -85,10 +81,10 @@ public class Enemy extends Entity{
 		
 		Random r_x = new Random();
 		Random r_y = new Random();
-		int Low = -10;				//Min distance to be moved. Negative means to the left or up.
-		int High = 10;				//Max distance to be moved. Positive means to the right or down.
-		result_x = r_x.nextInt(High-Low) + Low;
-		result_y = r_y.nextInt(High-Low)+Low;
+		float Low = -MOVEMENT_SPEED;				//Min distance to be moved. Negative means to the left or up.
+		float High = MOVEMENT_SPEED;				//Max distance to be moved. Positive means to the right or down.
+		result_x = (int) (r_x.nextInt((int) (High-Low)) + Low);
+		result_y = (int) (r_y.nextInt((int) (High-Low))+Low);
 		//D.BUG("New Random Assigned");
 		Move = 0;
 		}
