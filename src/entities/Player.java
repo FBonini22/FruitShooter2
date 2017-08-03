@@ -1,13 +1,16 @@
 package entities;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Shape;
 
 import Utilities.D;
+import globals.Globals;
 import view.*;
 
 public class Player extends Entity{
@@ -22,7 +25,7 @@ public class Player extends Entity{
 	//Constants
 	private final float startingX = (float)(GameWindow.SCREEN_WIDTH) / 2f;			//Player starts in the middle of the screen, horizontally
 	private final float startingY = (float)(GameWindow.SCREEN_HEIGHT) * 0.90f;		//Player starts 10% up the screen
-	private final float MOVEMENT_SPEED = 10f;
+	private final float DEFAULT_MOVEMENT_SPEED = 10f;
 	private final double STARTING_HEALTH = 100f;									//Default starting player health
 	private final int	HIT_COOLDOWN = 1000;										//Milliseconds before player can be hit again
 	private final int	HIT_ANIM_FLASH = 200;										//Milliseconds between each flash of the player hit animation
@@ -33,13 +36,13 @@ public class Player extends Entity{
 	
 	//Instance Variables
 	private Input input;								//Variable that is called to poll for key inputs
-	private FruitType _currentFruit;					//The user-selected fruit
-	private int _playerNum;								//The player number. 1 or 2 ONLY
+	private FruitType currentFruit;					//The user-selected fruit
+	private int playerNum;								//The player number. 1 or 2 ONLY
 	
 	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Player instance
-	
-	private double _health;								//Player health
-	private int powerLevel = 3;							//Player power up level
+	private double health;								//Player health
+	private int powerLevel = 1;							//Player power up level
+	private float movementSpeed = DEFAULT_MOVEMENT_SPEED;
 	
 	private boolean hitCoolingDown = false;				//Boolean to keep track of whether the player is in a cooling down state
 	private int timeSinceLastHit = 0;					//Used to keep track of time since last collision with player
@@ -63,8 +66,8 @@ public class Player extends Entity{
 
 		super(0, 0, 64, 64);
 		//Instantiate instance variables
-		_currentFruit = selectedFruit;
-		_playerNum = pNum;		
+		currentFruit = selectedFruit;
+		playerNum = pNum;		
 		//input = new Input(pNum);		//Instantiate input. Unknown function of integer. CHECK JAVADOC
 		
 		this.x = startingX;
@@ -84,42 +87,51 @@ public class Player extends Entity{
 		D.BUG("Initializing player controls...");
 		
 		//TO DO: Initialize controls here
-		if(_playerNum == 2){
+		if(playerNum == 2){
 			//Change the controls. Otherwise do nothing
 		}
 		
 	}
 
+	/**
+	 * Local method for initializing the player's attributes. SHOULD BE CALLED ONCE AND ONLY AFTER VARIABLE INSTANTIATION!
+	 */
 	private void InitializePlayerAttributes(){
 		D.BUG("Initializing player attributes...");
 		
 		//All attributes will be those of watermelon for the time being.
-		switch(_currentFruit){
+		switch(currentFruit){
 		case Apple:
 			
-			_fireCooldown = 750;
+			_fireCooldown = DEFAULT_FIRE_COOLDOWN;
 			
-//			imgPath = "img/Apple.png";
-//			_health = STARTING_HEALTH;
-//			break;
+			imgPath = "img/Apple.png";
+			health = STARTING_HEALTH;
+			break;
 		case Banana:
-//			imgPath = "img/Banana.png";
-//			_health = STARTING_HEALTH;
-//			break;
+			
+			_fireCooldown = 200;
+			
+			imgPath = "img/Banana.png";
+			health = STARTING_HEALTH * 0.5f;
+			break;
 		case Lemon:
-//			imgPath = "img/Lemon.png";
-//			_health = STARTING_HEALTH;
-//			break;
+			
+			_fireCooldown = 500;
+			
+			imgPath = "img/Lemon.png";
+			health = STARTING_HEALTH * 0.75f;
+			break;
 		case Watermelon:
 			imgPath = "img/Watermelon.png";
-			_health = STARTING_HEALTH;
+			health = STARTING_HEALTH * 1.5f;
 			break;
 		}
 	}
 	
 	//Getters for Power Up bullet shooting
 	public FruitType getFruit(){
-		return _currentFruit;
+		return currentFruit;
 	}
 	public int getPowerLevel(){
 		return powerLevel;
@@ -129,6 +141,10 @@ public class Player extends Entity{
 	}
 	public void setPowerlevel(int num){
 		powerLevel = num;
+	}
+	
+	public float getHealth(){
+		return (float) health;
 	}
 	
 	@Override
@@ -147,10 +163,8 @@ public class Player extends Entity{
 		}
 		g.drawImage(_entityImg, x, y);	
 		
-		//TO DO: Make the player's health displayed as a health bar
-		//Draw the player's health
-		g.drawString(String.format("Player Health: %1$s", String.valueOf((float)_health)), 16, 32);
-		
+
+		drawHealthBar(g);
 
 	}
 
@@ -186,24 +200,37 @@ public class Player extends Entity{
 
 	}
 	
+	//GRAPHICAL AND HUD
+	private void drawHealthBar(Graphics g){
+		//TO DO: Make the player's health displayed as a health bar
+		//Draw the player's health
+		g.drawString(String.format("Player Health: %1$s", String.valueOf((float)health)), 16, 32);
+		g.setColor(Color.red);
+		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, GameWindow.HBAR_HEIGHT);
+		
+		g.setColor(Color.green);
+		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, (float) (GameWindow.HBAR_HEIGHT * (health / STARTING_HEALTH)));
+
+	}
 	
+	//USER INPUT AND FIRING
 	/**
 	 * Method to check for user input
 	 */
 	private void checkForUserInput(){
 
 		if(input.isKeyDown(UP_CONTROL)){
-			this.moveBy(0, -MOVEMENT_SPEED);
+			this.moveBy(0, -movementSpeed);
 		}
 		else if(input.isKeyDown(DOWN_CONTROL)){
-			this.moveBy(0, MOVEMENT_SPEED);
+			this.moveBy(0, movementSpeed);
 		}
 		
 		if(input.isKeyDown(LEFT_CONTROL)){
-			this.moveBy(-MOVEMENT_SPEED, 0);
+			this.moveBy(-movementSpeed, 0);
 		}
 		else if(input.isKeyDown(RIGHT_CONTROL)){
-			this.moveBy(MOVEMENT_SPEED, 0);
+			this.moveBy(movementSpeed, 0);
 		}
 		
 		if(input.isKeyDown(FIRE_CONTROL)){
@@ -219,6 +246,9 @@ public class Player extends Entity{
 		return firing && !isInFiringCooldown;
 	}
 
+	/**
+	 * Method for firing a bullet
+	 */
 	private void fireBullet(){
 		firing = true;
 		if(!isInFiringCooldown){
@@ -230,16 +260,27 @@ public class Player extends Entity{
 		}
 		
 		
-		switch(_currentFruit){
+		
+		//How the bullets will be handled depends on the current fruit that the player is
+		switch(currentFruit){
 		case Apple:
+			if(getPowerLevel() == 1){
+				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 1, 1));
+			}
 			
-//			break;
+			break;
 		case Banana:
+			if(getPowerLevel() == 1){
+				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 1, 1));
+			}
 
-//			break;
+			break;
 		case Lemon:
+			if(getPowerLevel() == 1){
+				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 1, 1));
+			}
 
-//			break;
+			break;
 		case Watermelon:
 			if (getPowerLevel() >= 2){
 				
@@ -258,6 +299,9 @@ public class Player extends Entity{
 		
 	}
 
+	
+	
+	
 	@Override
 	public boolean isDangerous() {
 
@@ -291,7 +335,7 @@ public class Player extends Entity{
 				
 				switch(e.getEnemyType()){
 					case Squirrel:
-						_health -= 5d;
+						health -= 5d;
 						break;
 					case JumboSquirrel:
 						break;
@@ -299,7 +343,7 @@ public class Player extends Entity{
 				break;
 			case "EnemyBullet":
 				
-				_health -= 5d;
+				health -= 5d;
 				break;
 			
 			}
