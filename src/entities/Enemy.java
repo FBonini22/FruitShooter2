@@ -27,9 +27,11 @@ public class Enemy extends Entity{
 	private int _offSet;
 	private final float MOVEMENT_SPEED = 5f;			//Movement speed in pixels per second
 	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Enemy instance
-	
+	private int Move = 100;
 	private double _health = 0d;
-	
+	private int result_x = 0;
+	private int result_y = 0;
+	int result = 0;
 	/**
 	 * 
 	 * @param selectedEnemy The fruit that the player will play as
@@ -43,7 +45,7 @@ public class Enemy extends Entity{
 		_currentEnemy = selectedEnemy;
 		_EnemyNum = pNum;		
 		_offSet =_EnemyNum*26;		
-		this.x = startingX + _offSet;
+		this.x = startingX; // + _offSet;
 		this.y = startingY;
 		
 		InitializeEnemyAttributes();
@@ -79,29 +81,26 @@ public class Enemy extends Entity{
 	 */
 	@Override
 	public void update(GameContainer gc, int delta) {
+		if (Move > 30){
 		
+		Random r_x = new Random();
+		Random r_y = new Random();
+		int Low = -10;				//Min distance to be moved. Negative means to the left or up.
+		int High = 10;				//Max distance to be moved. Positive means to the right or down.
+		result_x = r_x.nextInt(High-Low) + Low;
+		result_y = r_y.nextInt(High-Low)+Low;
+		//D.BUG("New Random Assigned");
+		Move = 0;
+		}
+		else{
+			
+			Move++;
+			//D.BUG("Move added 1");
+		}
 		
-		Random r = new Random();
-		int Low = 10;
-		int High = 100;
-		int Result = r.nextInt(High-Low) + Low;
-
-				
-            if (Result >= 0 && Result <= 25) {
-            	this.moveBy((-MOVEMENT_SPEED), 0); // Left
-            }
-
-            if (Result >= 26 && Result <= 50) {
-            	this.moveBy(0, MOVEMENT_SPEED); //Down
-            }
-
-            if (Result >= 51 && Result <= 75) {
-            	this.moveBy(MOVEMENT_SPEED, 0); //Right
-            }
-
-            if (Result >= 76 && Result <= 100) {
-            	this.moveBy(0, -MOVEMENT_SPEED); //Up
-            }
+            
+            	this.moveBy(((result_x)), (result_y)); 
+           
 	}
 
 
