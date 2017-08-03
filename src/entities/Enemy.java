@@ -37,9 +37,9 @@ public class Enemy extends Entity{
 	 * @param selectedEnemy The fruit that the player will play as
 	 * @param pNum 			The number of the enemy that is being generated ex. enemy 1, enemy 2...
 	 */
-	public Enemy(EnemyType selectedEnemy, int pNum){
+	public Enemy(EnemyType selectedEnemy, int pNum, float P1, float P2){
 		
-		super(0, 0, 48,48);
+		super(0, 0, P1,P2);
 
 		//Instantiate instance variables
 		_currentEnemy = selectedEnemy;
@@ -67,7 +67,7 @@ public class Enemy extends Entity{
 			pointValue = 1;
 			break;
 		case JumboSquirrel:
-			imgPath = "img/JumboSquirrel.png";
+			imgPath = "img/Jumbo_Squirrel.png";
 			_health = 2.0;
 			pointValue = 10;
 			break;
