@@ -5,13 +5,12 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Shape;
 
 import Utilities.D;
 import globals.Globals;
-import view.*;
+import view.Engine;
+import view.GameWindow;
 
 public class Player extends Entity{
 	
@@ -335,9 +334,10 @@ public class Player extends Entity{
 				
 				switch(e.getEnemyType()){
 					case Squirrel:
-						health -= 5d;
+						health -= 5d;			//Damage that the grunt does
 						break;
 					case JumboSquirrel:
+						health -= 10d;			//Damage that the boss does
 						break;
 				}			
 				break;

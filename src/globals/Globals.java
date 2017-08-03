@@ -15,12 +15,15 @@ public class Globals {
 	//DO NOT USE THESE VARIABLES YET
 	public static float PLAYER_WIDTH = 48f;
 	public static float PLAYER_HEIGHT = 48f;
-	
-	public static float ENEMY_WIDTH = 48f;
-	public static float ENEMY_HEIGHT = 48f;
 	*/
+	public static float GRUNT_WIDTH = 48f;
+	public static float GRUNT_HEIGHT = 48f;
+	
+	public static float BOSS_HEIGHT = 355f;
+	public static float BOSS_WIDTH = 355f;
+	
 	
 	//GAMEPLAY MECHANICS
-	public static final int WAVES_UNTIL_BOSS = 3;
+	public static final int WAVES_UNTIL_BOSS = 1;
 	
 }
