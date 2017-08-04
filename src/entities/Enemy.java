@@ -15,9 +15,9 @@ import view.Engine;
 public class Enemy extends Entity{
 	
 		
-	//Constants
-	private final static float startingX = 0;
-	private final static float startingY = 0;		
+
+	//Constants		
+
 	private int pointValue;
 	
 	//Instance Variables
@@ -28,24 +28,31 @@ public class Enemy extends Entity{
 	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Enemy instance
 	private int Move = 100;
 	private double _health = 0d;
-	private int result_x = 0;
-	private int result_y = 0;
-	int result = 0;
+	private float result_x = 0;
+	private float result_y = 0;
+	int result = 0;										//Determines if enemy will move randomly
+	
+	boolean random;
 	/**
 	 * 
 	 * @param selectedEnemy The fruit that the player will play as
 	 * @param pNum 			The number of the enemy that is being generated ex. enemy 1, enemy 2...
 	 */
+
 	public Enemy(EnemyType selectedEnemy, int pNum, float P1, float P2){ //Added parameters to take in the size of the hitbox desired
 		
 		super(startingX, startingY, P1,P2);
+
 
 		//Instantiate instance variables
 		_currentEnemy = selectedEnemy;
 		_EnemyNum = pNum;		
 		_offSet =_EnemyNum*26;		
-		this.x = startingX;// + _offSet;
-		this.y = startingY;
+
+		random = randomness;
+		
+		//Testing Variables
+
 		
 		InitializeEnemyAttributes();
 
@@ -80,11 +87,26 @@ public class Enemy extends Entity{
 	 */
 	@Override
 	public void update(GameContainer gc, int delta) {
+
+		if(random == true){
+			RandomMovement();
+		}
+		else{
+			Movement();
+			this.moveTo(result_x, result_y);
+		}
+           
+	}
+
+private void RandomMovement(){
+		
+
 		EnemyFire();
 		Random r_f = new Random();
 		int Frames = r_f.nextInt(35-25) + 25;
 				
 		if (Move > Frames){
+
 		
 		Random r_x = new Random();
 		Random r_y = new Random();
@@ -101,13 +123,12 @@ public class Enemy extends Entity{
 			Move++;
 			//D.BUG("Move added 1");
 		}
-		
-            
-            	this.moveBy(((result_x)), (result_y)); 
-           
-	}
+		this.moveBy((result_x), (result_y)); 
+}
 
+private void Movement(){
 
+}
 	
 		
 	

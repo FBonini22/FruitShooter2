@@ -1,3 +1,4 @@
+
 package entities;
 
 import org.newdawn.slick.Color;
@@ -455,5 +456,6 @@ public class Player extends Entity{
 
 
 }
+
 
 
