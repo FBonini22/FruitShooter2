@@ -32,7 +32,7 @@ public class Player extends Entity{
 	private final float PLAYER_HEIGHT = 48f;
 	private final float PLAYER_WIDTH = 48f;
 
-  private final int	DEFAULT_FIRE_COOLDOWN = 250;								//Milliseconds for the default time between each firing
+	private final int	DEFAULT_FIRE_COOLDOWN = 250;								//Milliseconds for the default time between each firing
 	private final int	DEFAULT_BOMB_COOLDOWN = 3000;								//Milliseconds for the cooldown for throwing a cleaing bomb
 
 	
@@ -68,6 +68,8 @@ public class Player extends Entity{
 	
 	private Image healthBarBackground;
 	private Image healthBar;
+	
+	private int points = 0;
 	
 	
 	/**
@@ -167,6 +169,10 @@ public class Player extends Entity{
 	
 	public boolean playerIsDead(){
 		return isDead;
+	}
+	
+	public void addPoints(int point){
+		points += point;
 	}
 	
 	@Override
