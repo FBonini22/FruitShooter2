@@ -23,7 +23,7 @@ public class Engine extends BasicGame{
 
 	//Constants
 	private final int FRAME_RATE = 60;							//Frame rate in fps
-	private final int NUMBER_OF_SQUIRRELS = 2;					//Number of squirrels. FOR DEBUGGING ONLY
+	private final int NUMBER_OF_SQUIRRELS = 20;					//Number of squirrels. FOR DEBUGGING ONLY
 	
 	//Instance Variables
 	private List<Enemy> enemy = new ArrayList<Enemy>();			//List of drawable entities
@@ -79,7 +79,7 @@ public class Engine extends BasicGame{
 		Background = new Image("img/Background.png"); //TODO Change background to desired image
 		
 
-		for (int i = 1; i< NUMBER_OF_SQUIRRELS; i++){
+		for (int i = 0; i< NUMBER_OF_SQUIRRELS; i++){
 			enemy.add(new Enemy(EnemyType.Squirrel, i, Globals.GRUNT_WIDTH ,Globals.GRUNT_HEIGHT));
 		}
 
@@ -183,6 +183,14 @@ public class Engine extends BasicGame{
 					}
 				}
 			}
+			
+			for(Bullet b : bullets){
+				if(b.isDangerous()){
+					if(p.hitTest(b)){
+						p.onCollide(b);
+					}
+				}
+			}
 		}
 		
 		for(Bullet b : bullets){
@@ -269,7 +277,7 @@ public class Engine extends BasicGame{
 	 * Generate new enemies. This should be called after a wave has been completed
 	 */
 	private void generateEnemies(){
-		for (int i = 1; i< NUMBER_OF_SQUIRRELS; i++){
+		for (int i = 0; i< NUMBER_OF_SQUIRRELS; i++){
 			toAdd.add(new Enemy(EnemyType.Squirrel, i, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT));
 		}
 		

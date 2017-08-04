@@ -1,3 +1,4 @@
+//TODO Add more enemies and reduce firing to certain types of enemies using a switch statement in the update method
 package entities;
 
 import java.util.Random;
@@ -8,6 +9,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import Utilities.D;
+import globals.Globals;
+import view.Engine;
 
 public class Enemy extends Entity{
 	
@@ -41,7 +44,7 @@ public class Enemy extends Entity{
 		_currentEnemy = selectedEnemy;
 		_EnemyNum = pNum;		
 		_offSet =_EnemyNum*26;		
-		this.x = startingX + _offSet;
+		this.x = startingX;// + _offSet;
 		this.y = startingY;
 		
 		InitializeEnemyAttributes();
@@ -60,12 +63,12 @@ public class Enemy extends Entity{
 		case Squirrel:
 			imgPath = "img/Squirrel.png";
 			_health = 1.0;
-			pointValue = 1;
+			pointValue = Globals.gruntValue;
 			break;
 		case JumboSquirrel:
 			imgPath = "img/Jumbo_Squirrel.png";
 			_health = 2.0;
-			pointValue = 10;
+			pointValue = Globals.bossValue;
 			break;
 		
 		}
@@ -77,7 +80,11 @@ public class Enemy extends Entity{
 	 */
 	@Override
 	public void update(GameContainer gc, int delta) {
-		if (Move > 30){
+		EnemyFire();
+		Random r_f = new Random();
+		int Frames = r_f.nextInt(35-25) + 25;
+				
+		if (Move > Frames){
 		
 		Random r_x = new Random();
 		Random r_y = new Random();
@@ -85,6 +92,7 @@ public class Enemy extends Entity{
 		float High = MOVEMENT_SPEED;				//Max distance to be moved. Positive means to the right or down.
 		result_x = (int) (r_x.nextInt((int) (High-Low)) + Low);
 		result_y = (int) (r_y.nextInt((int) (High-Low))+Low);
+		
 		//D.BUG("New Random Assigned");
 		Move = 0;
 		}
@@ -179,6 +187,16 @@ public class Enemy extends Entity{
 		return pointValue;
 	}
 	
+	public void EnemyFire(){
+		Random r_f = new Random();
+		
+		int RandomFire = r_f.nextInt(300-0);
+		
+		if (RandomFire>298)
+		Engine.instance.addEntity(new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 0, 1, false));
+		
+		
+	}
 
 
 }

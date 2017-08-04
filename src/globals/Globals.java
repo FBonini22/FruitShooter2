@@ -2,7 +2,7 @@ package globals;
 
 public class Globals {
 
-	public static boolean DEBUGGING = true;			//Change this variable to true for debugging mode.
+	public static boolean DEBUGGING = false;			//Change this variable to true for debugging mode.
 	
 	
 	
@@ -25,5 +25,6 @@ public class Globals {
 	
 	//GAMEPLAY MECHANICS
 	public static final int WAVES_UNTIL_BOSS = 1;
-	
+	public static final int gruntValue = 1;
+	public static final int bossValue = 10;
 }
