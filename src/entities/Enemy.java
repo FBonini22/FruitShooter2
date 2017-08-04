@@ -15,11 +15,7 @@ import view.*;
 public class Enemy extends Entity{
 	
 		
-	//Constants
-	private final float startingX = 0;
-	private final float startingY = 0;		
-	private int xPosition = 0;
-	private int xPosition1 = 0;
+	//Constants		
 	private int pointValue;
 	//Instance Variables
 	private EnemyType _currentEnemy;					//The user-selected enemy
@@ -29,24 +25,27 @@ public class Enemy extends Entity{
 	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Enemy instance
 	private int Move = 100;
 	private double _health = 0d;
-	private int result_x = 0;
-	private int result_y = 0;
-	int result = 0;
+	private float result_x = 0;
+	private float result_y = 0;
+	int result = 0;										//Determines if enemy will move randomly
+	
+	boolean random;
 	/**
 	 * 
 	 * @param selectedEnemy The fruit that the player will play as
 	 * @param pNum 			The number of the enemy that is being generated ex. enemy 1, enemy 2...
 	 */
-	public Enemy(EnemyType selectedEnemy, int pNum){
+	public Enemy(float x, float y, EnemyType selectedEnemy, int pNum, boolean randomness){
 		
-		super(0, 0, 48,48);
+		super(x, y, 48,48);
 
 		//Instantiate instance variables
 		_currentEnemy = selectedEnemy;
 		_EnemyNum = pNum;		
 		_offSet =_EnemyNum*26;		
-		this.x = startingX; // + _offSet;
-		this.y = startingY;
+		random = randomness;
+		
+		//Testing Variables
 		
 		InitializeEnemyAttributes();
 
@@ -81,6 +80,17 @@ public class Enemy extends Entity{
 	 */
 	@Override
 	public void update(GameContainer gc, int delta) {
+		if(random == true){
+			RandomMovement();
+		}
+		else{
+			Movement();
+			this.moveTo(result_x, result_y);
+		}
+           
+	}
+
+private void RandomMovement(){
 		if (Move > 30){
 		
 		Random r_x = new Random();
@@ -97,13 +107,12 @@ public class Enemy extends Entity{
 			Move++;
 			//D.BUG("Move added 1");
 		}
-		
-            
-            	this.moveBy(((result_x)), (result_y)); 
-           
-	}
+		this.moveBy((result_x), (result_y)); 
+}
 
+private void Movement(){
 
+}
 	
 		
 	

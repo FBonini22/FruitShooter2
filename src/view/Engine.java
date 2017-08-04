@@ -30,15 +30,17 @@ public class Engine extends BasicGame{
 	private List<Bullet> bullets = new ArrayList<Bullet>();		//List of bullet entities
 	private List<Entity> toRemove = new ArrayList<Entity>(); 	//List of entities to be removed
 	private List<Entity> toAdd = new ArrayList<Entity>();		//List of entities to be added
+	private int PointTotal;
 
 
 	private List<Bullet> toRemoveBullets = new ArrayList<Bullet>();
 	private boolean worldClipSet = false;
-	private int point;
-	private int PointTotal;
 	
 	private int currentWave = 0;								//Variable to keep track of the current wave of enemies
 	private int currentLevel = 0;								//Variable to keep track of how many bosses have been defeated
+	
+	private int time = 0;
+	private int interval = 0;								//Time before another wave starts
 	
 	
 	//TESTING
@@ -77,8 +79,8 @@ public class Engine extends BasicGame{
 		Background = new Image("img/Background.png"); //TODO Change background to desired image
 		
 
-		for (int i = 1; i< NUMBER_OF_SQUIRRELS; i++){
-			enemy.add(new Enemy(EnemyType.Squirrel, i));
+		for (int i = 0; i< NUMBER_OF_SQUIRRELS; i++){
+			enemy.add(new Enemy(0, 0, EnemyType.Squirrel, i, true));
 		}
 
 		/*Music openingMenuMusic = new Music(""); //TODO Need to find and insert suitable music
@@ -120,6 +122,10 @@ public class Engine extends BasicGame{
 		
 		//Draw the current point total
 		g.drawString(String.format("Player Points: %1$s", String.valueOf((int)PointTotal)), 600, 32);
+		
+		g.drawString(String.format("Time Elapsed: %1$s", String.valueOf((int)time/1000)), 600, 64);
+		
+		g.drawString(String.format("Enemies: %1$s", String.valueOf((int)enemy.size())), 600, 94);
 		
 		
 
@@ -193,8 +199,8 @@ public class Engine extends BasicGame{
 
 							toRemove.add(e);				//Adds entities to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
 							toRemoveBullets.add(b); 		//Adds bullets to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
-							point = e.PointValue();			//Gets point value for enemy that was just destroyed
-							PointTotal += point;			//Adds point value from enemy destroyed to point total
+							p1.setPoints(e.PointValue());			//Gets point value for enemy that was just destroyed. TODO change for each player
+							PointTotal = p1.getPoints();			//Adds point value from enemy destroyed to point total TODO add both players point values
 							
 
 							toRemove.add(e);	//Adds entities to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
@@ -220,6 +226,13 @@ public class Engine extends BasicGame{
 		dumpObjects();
 		
 		checkGameProgress();
+		
+		time += delta;
+		interval += delta;
+		if (interval >= Globals.TIMER){
+			Preset1();
+			interval = 0;
+		}
 	}
 	
 	/**
@@ -229,11 +242,13 @@ public class Engine extends BasicGame{
 	private void checkGameProgress(){
 		
 		//NEW WAVE!
+		/*
 		if(enemy.size() <= 0){
 			currentWave ++;
 			
 			generateEnemies();
 		}
+		*/
 		
 		if(currentWave > Globals.WAVES_UNTIL_BOSS){
 			//ENABLE BOSS BATTLE
@@ -244,8 +259,8 @@ public class Engine extends BasicGame{
 	 * Generate new enemies. This should be called after a wave has been completed
 	 */
 	private void generateEnemies(){
-		for (int i = 1; i< NUMBER_OF_SQUIRRELS; i++){
-			toAdd.add(new Enemy(EnemyType.Squirrel, i));
+		for (int i = 0; i< NUMBER_OF_SQUIRRELS; i++){
+			toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, i, true));
 		}
 		
 	}
@@ -333,8 +348,11 @@ public class Engine extends BasicGame{
 		toRemove.clear();
 	}
 	
+ private void Preset1(){
+		generateEnemies();
+		D.BUG("Preset1");
+	}
 	
-
 }
 
 

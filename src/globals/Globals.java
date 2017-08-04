@@ -23,4 +23,6 @@ public class Globals {
 	//GAMEPLAY MECHANICS
 	public static final int WAVES_UNTIL_BOSS = 3;
 	
+	public static final int TIMER = 10000;
+	
 }

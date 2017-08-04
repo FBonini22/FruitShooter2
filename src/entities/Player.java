@@ -32,6 +32,7 @@ public class Player extends Entity{
 	private final float PLAYER_HEIGHT = 48f;
 	private final float PLAYER_WIDTH = 48f;
 	private final int	DEFAULT_FIRE_COOLDOWN = 250;								//Milliseconds for the default time between each firing
+	private int point;
 	
 	
 	//Instance Variables
@@ -141,6 +142,12 @@ public class Player extends Entity{
 	}
 	public void setPowerlevel(int num){
 		powerLevel = num;
+	}
+	public int getPoints(){
+		return point;
+	}
+	public void setPoints(int num){
+		point = point + num;
 	}
 	
 	public float getHealth(){
@@ -345,7 +352,6 @@ public class Player extends Entity{
 				
 				health -= 5d;
 				break;
-			
 			}
 			
 			hitCoolingDown = true;
