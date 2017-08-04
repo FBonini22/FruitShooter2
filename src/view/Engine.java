@@ -33,7 +33,7 @@ public class Engine extends BasicGame{
 
 
 	private List<Bullet> toRemoveBullets = new ArrayList<Bullet>();
-	private boolean worldClipSet = false;
+	private boolean worldClipSet = false;						//Boolean for whether the WorldClip has been initialized
 	private int point;
 	private int PointTotal;
 	
