@@ -4,28 +4,29 @@ package view;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.newdawn.slick.*;
+import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 import Utilities.D;
 import entities.Bullet;
-import entities.PlayerBullet;
-import entities.PowerUp;
-import globals.Globals;
-import entities.EnemyBullet;
 import entities.Enemy;
 import entities.EnemyType;
 import entities.Entity;
 import entities.FruitType;
 import entities.Player;
+import globals.Globals;
 
 public class Engine extends BasicGame{
 
 	//Constants
 	private final int FRAME_RATE = 60;							//Frame rate in fps
-	private final int NUMBER_OF_SQUIRRELS = 10;					//Number of squirrels. FOR DEBUGGING ONLY
+	private final int NUMBER_OF_SQUIRRELS = 20;					//Number of squirrels. FOR DEBUGGING ONLY
 	
 	//Instance Variables
-	private List<Enemy> enemy = new ArrayList<Enemy>();	//List of drawable entities
+	private List<Enemy> enemy = new ArrayList<Enemy>();			//List of drawable entities
 	private List<Player> players = new ArrayList<Player>();		//List of players
 	private List<Bullet> bullets = new ArrayList<Bullet>();		//List of bullet entities
 	private List<Entity> toRemove = new ArrayList<Entity>(); 	//List of entities to be removed
@@ -33,7 +34,12 @@ public class Engine extends BasicGame{
 
 
 	private List<Bullet> toRemoveBullets = new ArrayList<Bullet>();
+
+
+	private boolean isInBossBattle = false;
+
 	private boolean worldClipSet = false;						//Boolean for whether the WorldClip has been initialized
+
 	private int point;
 	private int PointTotal;
 	
@@ -77,12 +83,12 @@ public class Engine extends BasicGame{
 		Background = new Image("img/Background.png"); //TODO Change background to desired image
 		
 
-		for (int i = 1; i< NUMBER_OF_SQUIRRELS; i++){
-			enemy.add(new Enemy(EnemyType.Squirrel, i));
+		for (int i = 0; i< NUMBER_OF_SQUIRRELS; i++){
+			enemy.add(new Enemy(EnemyType.Squirrel, i, Globals.GRUNT_WIDTH ,Globals.GRUNT_HEIGHT));
 		}
 
-		/*Music openingMenuMusic = new Music(""); //TODO Need to find and insert suitable music
-    		openingMenuMusic.loop(); */
+		//Music openingMenuMusic = new Music(""); //TODO Need to find and insert suitable music
+    		//openingMenuMusic.loop(); 
 		
 		for(Enemy e : enemy){
 			e.init(gc);
@@ -181,6 +187,14 @@ public class Engine extends BasicGame{
 					}
 				}
 			}
+			
+			for(Bullet b : bullets){
+				if(b.isDangerous()){
+					if(p.hitTest(b)){
+						p.onCollide(b);
+					}
+				}
+			}
 		}
 		
 		for(Bullet b : bullets){
@@ -227,25 +241,48 @@ public class Engine extends BasicGame{
 	 * Call at the end of the update() method.
 	 */
 	private void checkGameProgress(){
+		//D.BUG(Integer.toString(enemy.size()));
+		//D.BUG(Integer.toString(currentWave));
+		if(enemy.size()<= 0)
+			currentWave++;
 		
+		if(currentWave == Globals.WAVES_UNTIL_BOSS){
+			//ENABLE BOSS BATTLE
+			generateBoss();
+			currentWave++;
+			isInBossBattle = true;
+			D.BUG("Boss Generated");
+			D.BUG(Integer.toString(enemy.size()));
+		}
 		//NEW WAVE!
 		if(enemy.size() <= 0){
-			currentWave ++;
+			D.BUG("No current enemies");
+			D.BUG(Integer.toString(enemy.size()));
+			if(isInBossBattle){
+				//Just defeated a boss
+				D.BUG("Boss defeated");
+				isInBossBattle = false;
+				currentLevel++;
+			}
+			else{
+				generateEnemies();			
+				D.BUG("Enemy Wave");
+			}
 			
-			generateEnemies();
+
 		}
 		
-		if(currentWave > Globals.WAVES_UNTIL_BOSS){
-			//ENABLE BOSS BATTLE
-		}
+		
+		
+		
 	}
 	
 	/**
 	 * Generate new enemies. This should be called after a wave has been completed
 	 */
 	private void generateEnemies(){
-		for (int i = 1; i< NUMBER_OF_SQUIRRELS; i++){
-			toAdd.add(new Enemy(EnemyType.Squirrel, i));
+		for (int i = 0; i< NUMBER_OF_SQUIRRELS; i++){
+			toAdd.add(new Enemy(EnemyType.Squirrel, i, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT));
 		}
 		
 	}
@@ -255,7 +292,8 @@ public class Engine extends BasicGame{
 	 * to unlock a boss battle.
 	 */
 	private void generateBoss(){
-		
+		Enemy B = new Enemy(EnemyType.JumboSquirrel, 1, Globals.BOSS_HEIGHT, Globals.BOSS_WIDTH);
+		toAdd.add(B);
 	}
 	
 	

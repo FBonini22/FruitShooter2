@@ -5,13 +5,12 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Shape;
 
 import Utilities.D;
 import globals.Globals;
-import view.*;
+import view.Engine;
+import view.GameWindow;
 
 public class Player extends Entity{
 	
@@ -32,8 +31,10 @@ public class Player extends Entity{
 	private final int	HIT_ANIM_FLASH = 200;										//Milliseconds between each flash of the player hit animation
 	private final float PLAYER_HEIGHT = 48f;
 	private final float PLAYER_WIDTH = 48f;
-	private final int	DEFAULT_FIRE_COOLDOWN = 250;								//Milliseconds for the default time between each firing
+
+  private final int	DEFAULT_FIRE_COOLDOWN = 250;								//Milliseconds for the default time between each firing
 	private final int	DEFAULT_BOMB_COOLDOWN = 3000;								//Milliseconds for the cooldown for throwing a cleaing bomb
+
 	
 	
 	//Instance Variables
@@ -123,7 +124,9 @@ public class Player extends Entity{
 			break;
 		case Banana:
 			
+
 			fireCooldown = 200;
+
 			
 			imgPath = "img/Banana.png";
 			health = STARTING_HEALTH * 0.5f;
@@ -387,9 +390,10 @@ public class Player extends Entity{
 				
 				switch(e.getEnemyType()){
 					case Squirrel:
-						health -= 5d;
+						health -= 5d;			//Damage that the grunt does
 						break;
 					case JumboSquirrel:
+						health -= 10d;			//Damage that the boss does
 						break;
 				}			
 				break;
