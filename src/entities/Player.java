@@ -15,11 +15,12 @@ import view.GameWindow;
 public class Player extends Entity{
 	
 	//Controls
-	private int UP_CONTROL = Input.KEY_UP;
-	private int DOWN_CONTROL = Input.KEY_DOWN;
-	private int LEFT_CONTROL = Input.KEY_LEFT;
-	private int RIGHT_CONTROL = Input.KEY_RIGHT;
-	private int FIRE_CONTROL = Input.KEY_SPACE;
+	private int UP_CONTROL		= Input.KEY_UP;
+	private int DOWN_CONTROL 	= Input.KEY_DOWN;
+	private int LEFT_CONTROL 	= Input.KEY_LEFT;
+	private int RIGHT_CONTROL 	= Input.KEY_RIGHT;
+	private int FIRE_CONTROL 	= Input.KEY_SPACE;
+	private int BOMB_CONTROL 	= Input.KEY_LCONTROL;
 	
 	//Constants
 	private final float startingX = (float)(GameWindow.SCREEN_WIDTH) / 2f;			//Player starts in the middle of the screen, horizontally
@@ -30,7 +31,10 @@ public class Player extends Entity{
 	private final int	HIT_ANIM_FLASH = 200;										//Milliseconds between each flash of the player hit animation
 	private final float PLAYER_HEIGHT = 48f;
 	private final float PLAYER_WIDTH = 48f;
-	private final int	DEFAULT_FIRE_COOLDOWN = 10;								//Milliseconds for the default time between each firing
+
+  private final int	DEFAULT_FIRE_COOLDOWN = 250;								//Milliseconds for the default time between each firing
+	private final int	DEFAULT_BOMB_COOLDOWN = 3000;								//Milliseconds for the cooldown for throwing a cleaing bomb
+
 	
 	
 	//Instance Variables
@@ -52,7 +56,18 @@ public class Player extends Entity{
 	private boolean isInFiringCooldown = false;
 	private int timeSinceLastFire = 0;
 	
-	private int _fireCooldown = DEFAULT_FIRE_COOLDOWN;
+	private boolean isInBombCooldown = false;
+	private int timeSinceLastBomb = 0;
+	
+	private int fireCooldown = DEFAULT_FIRE_COOLDOWN;
+	private int bombCooldown = DEFAULT_BOMB_COOLDOWN;
+	
+	private int numBombs = 0;
+	
+	private boolean isDead = false;
+	
+	private Image healthBarBackground;
+	private Image healthBar;
 	
 	
 	/**
@@ -102,21 +117,23 @@ public class Player extends Entity{
 		switch(currentFruit){
 		case Apple:
 			
-			_fireCooldown = DEFAULT_FIRE_COOLDOWN;
+			fireCooldown = DEFAULT_FIRE_COOLDOWN;
 			
 			imgPath = "img/Apple.png";
 			health = STARTING_HEALTH;
 			break;
 		case Banana:
 			
-			_fireCooldown = 20;
+
+			fireCooldown = 200;
+
 			
 			imgPath = "img/Banana.png";
 			health = STARTING_HEALTH * 0.5f;
 			break;
 		case Lemon:
 			
-			_fireCooldown = 500;
+			fireCooldown = 500;
 			
 			imgPath = "img/Lemon.png";
 			health = STARTING_HEALTH * 0.75f;
@@ -128,6 +145,8 @@ public class Player extends Entity{
 		}
 	}
 	
+	
+	
 	//Getters for Power Up bullet shooting
 	public FruitType getFruit(){
 		return currentFruit;
@@ -136,7 +155,7 @@ public class Player extends Entity{
 		return powerLevel;
 	}
 	public void setFirecooldown(int num){
-		_fireCooldown = num;
+		fireCooldown = num;
 	}
 	public void setPowerlevel(int num){
 		powerLevel = num;
@@ -146,9 +165,15 @@ public class Player extends Entity{
 		return (float) health;
 	}
 	
+	public boolean playerIsDead(){
+		return isDead;
+	}
+	
 	@Override
 	public void init(GameContainer gc) throws SlickException {
 		_entityImg = new Image(imgPath);
+		healthBarBackground = new Image("img/Health_Bar_Background.png");
+		healthBar = new Image("img/Health_Bar_Foreground.png");
 	}
 
 
@@ -190,26 +215,38 @@ public class Player extends Entity{
 		//Manage firing cooldown
 		if(isInFiringCooldown){
 			timeSinceLastFire += delta;
-			if(timeSinceLastFire >= _fireCooldown){
+			if(timeSinceLastFire >= fireCooldown){
 				timeSinceLastFire = 0;
 				isInFiringCooldown = false;
 			}
 		}
 
+		//Manage firing cooldown
+		if(isInBombCooldown){
+			timeSinceLastBomb += delta;
+			if(timeSinceLastBomb >= bombCooldown){
+				timeSinceLastBomb = 0;
+				isInBombCooldown = false;
+			}
+		}
 
+		checkHealth();
 	}
 	
 	//GRAPHICAL AND HUD
 	private void drawHealthBar(Graphics g){
 		//TO DO: Make the player's health displayed as a health bar
 		//Draw the player's health
-		g.drawString(String.format("Player Health: %1$s", String.valueOf((float)health)), 16, 32);
-		g.setColor(Color.red);
-		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, GameWindow.HBAR_HEIGHT);
-		
-		g.setColor(Color.green);
-		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, (float) (GameWindow.HBAR_HEIGHT * (health / STARTING_HEALTH)));
+//		g.drawString(String.format("Player Health: %1$s", String.valueOf((float)health)), 16, 32);
+//		g.setColor(Color.red);
+//		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, GameWindow.HBAR_HEIGHT);
+//		
+//		g.setColor(Color.green);
+//		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, (float) (GameWindow.HBAR_HEIGHT * (health / STARTING_HEALTH)));
 
+//		g.drawImage(healthBarBackground, GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.SCREEN_WIDTH - 3, GameWindow.HBAR_HEIGHT, DEFAULT_MOVEMENT_SPEED, DEFAULT_MOVEMENT_SPEED);
+	
+		
 	}
 	
 	//USER INPUT AND FIRING
@@ -237,6 +274,10 @@ public class Player extends Entity{
 		}
 		else{
 			firing = false;
+		}
+		
+		if(input.isKeyDown(BOMB_CONTROL)){
+			
 		}
 	}
 	
@@ -298,7 +339,12 @@ public class Player extends Entity{
 		
 	}
 
-	
+	/**
+	 * Method for firing a bomb
+	 */
+	private void fireBomb(){
+		
+	}
 	
 	
 	@Override
@@ -318,13 +364,23 @@ public class Player extends Entity{
 		//Figure out what kind of collision
 		//Subtract health
 		//Play a sound
+
+		String collisionType = collidedWith.getClass().getSimpleName();
+		D.BUG("Player collided with: " + collisionType);
 		
+		//Switch for regular collisions
+		switch(collisionType){
+		
+		case "PowerUp":		
+			break;
+		case "Collectible":
+			break;
+		}
 		
 		
 		//If the player wasn't just previously hit
 		if(!hitCoolingDown){
-			String collisionType = collidedWith.getClass().getSimpleName();
-			D.BUG("Player collided with: " + collisionType);
+
 			
 			switch(collisionType){
 			
@@ -345,7 +401,6 @@ public class Player extends Entity{
 				
 				health -= 5d;
 				break;
-			
 			}
 			
 			hitCoolingDown = true;
@@ -353,6 +408,23 @@ public class Player extends Entity{
 		}
 	}
 
+	private void onDie(){
+		isDead = true;
+		
+		
+	}
+	
+	
+	private void checkHealth(){
+		
+		if(!Globals.INVINCIBLE){
+			if(health <= 0){
+				onDie();
+			}
+		}		
+	}
+	
+	
 	
 
 	//ANIMATIONS
