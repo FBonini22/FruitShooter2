@@ -26,8 +26,12 @@ public class Globals {
 	public static float BOSS_WIDTH = 355f;
 	
 	
+
+	public static final int TIMER = 10000;
+	
 	//GAMEPLAY MECHANICS
 	public static final int WAVES_UNTIL_BOSS = 1;
 	public static final int gruntValue = 1;
 	public static final int bossValue = 10;
+
 }
