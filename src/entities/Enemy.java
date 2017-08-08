@@ -99,12 +99,12 @@ public class Enemy extends Entity{
 		case Test:
 			
 			break;
-		case SliceToRight:
+		case SliceToRight:				//Enemy S
 			xSpeed += accel;
 			ySpeed = 5;
 			moveBy(xSpeed, ySpeed);
 			break;
-		case VShoot:
+		case VShoot:					//Enemy moves in a V. Shoots in the middle.
 			ySpeed = 5;
 			xSpeed = 10;
 			if (x == GameWindow.SCREEN_WIDTH/2){

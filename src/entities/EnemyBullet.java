@@ -11,6 +11,10 @@ public class EnemyBullet extends Bullet{
    private boolean _accel;
    private float _xSpeed;
    private float _ySpeed;
+   
+   private boolean _homing;
+   private float pX;
+   private float pY;
 
    //Constants
    private final float _acceleration = .025f;
@@ -30,26 +34,43 @@ public class EnemyBullet extends Bullet{
    public EnemyBullet(float x, float y, float xMove, float yMove, float width, float height, boolean accel){
 	  super(x, y, xMove, yMove, width, height);
       _accel = accel;
+      _homing = false;
       
       _xSpeed = 0;
       _ySpeed = 0;
    }
    
+   public EnemyBullet(float x, float y, float xMove, float yMove, float width, float height, boolean accel, boolean homing, float pX, float pY){
+		  super(x, y, xMove, yMove, width, height);
+	      _accel = accel;
+	      _homing = homing;
+	      this.pX = pX;
+	      this.pY = pY;
+	      
+	      _xSpeed = 0;
+	      _ySpeed = 0;
+	   }
+   
    private void Movement(float xMove, float yMove){
 	  if (_accel == true){
-		  if (_xSpeed <= xMove && _ySpeed <= yMove){
-			  this.moveBy(_xSpeed, _ySpeed);
-			  _xSpeed = (_xSpeed + _acceleration);
-			  _ySpeed = (_ySpeed + _acceleration);
-		  }
-		  else{
-			  this.moveBy(xMove, yMove);
-		  }
+		  Accelerate(xMove, yMove);
       }
       else{
          this.moveBy(xMove, yMove);
       }
    } 
+   
+   private void Accelerate(float xMove, float yMove){
+		  if (_xSpeed >= xMove){
+			 _xSpeed = xMove;  
+		  }
+		  if (_ySpeed >= yMove){
+			  _ySpeed = yMove;
+		  }
+		  this.moveBy(_xSpeed, _ySpeed);
+		  _xSpeed = (_xSpeed + _acceleration);
+		  _ySpeed = (_ySpeed + _acceleration);
+   }
    
    public void update(GameContainer gc, int delta){
       Movement(getxMove(), getyMove());
