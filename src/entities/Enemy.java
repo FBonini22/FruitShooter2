@@ -41,7 +41,7 @@ public class Enemy extends Entity{
 
 	public Enemy(EnemyType selectedEnemy, int pNum, float P1, float P2){ //Added parameters to take in the size of the hitbox desired
 		
-		super(startingX, startingY, P1,P2);
+		super(0, 0, P1,P2);
 
 
 		//Instantiate instance variables
@@ -49,7 +49,7 @@ public class Enemy extends Entity{
 		_EnemyNum = pNum;		
 		_offSet =_EnemyNum*26;		
 
-		random = randomness;
+		//random = randomness;
 		
 		//Testing Variables
 
@@ -58,7 +58,22 @@ public class Enemy extends Entity{
 
 	}
 		
+	//I ADDED THIS CONSTRUCTOR BECAUSE ENEMIES WERE BEING CREATED IN DIFFERENT WAYS. UNIFY OR KEEP BOTH.
+	//THIS COULD HAVE BEEN DUE TO AN ERROR DURING A MERGE.
+	//-FRANK
+	public Enemy(int i, int j, EnemyType selectedEnemy, int pNum, boolean b) {
 	
+		super(0,0, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT);
+		// TODO Auto-generated constructor stub
+		_currentEnemy = selectedEnemy;
+		_EnemyNum = pNum;		
+		_offSet =_EnemyNum*26;	
+		random = b;
+		
+		InitializeEnemyAttributes();
+	}
+
+
 /**
  * Method to initialize the attributes of the enemy. Contains a switch statement to pick which enemy type will be generated.
  */
