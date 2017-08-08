@@ -2,6 +2,7 @@ package entities;
 
 import org.newdawn.slick.*;
 
+import Utilities.D;
 import view.GameWindow;
 
 public abstract class Entity extends HitBox{

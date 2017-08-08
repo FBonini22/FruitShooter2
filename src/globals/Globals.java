@@ -25,6 +25,9 @@ public class Globals {
 	public static float BOSS_HEIGHT = 355f;
 	public static float BOSS_WIDTH = 355f;
 	
+	public static float BOMB_WIDTH = 24f;
+	public static float BOMB_HEIGHT = 24f;
+	
 	
 
 	public static final int TIMER = 10000;

@@ -11,7 +11,9 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import Utilities.D;
+import engine.CollectibleSpawner;
 import entities.Bullet;
+import entities.Collectible;
 import entities.Enemy;
 import entities.EnemyType;
 import entities.Entity;
@@ -26,9 +28,10 @@ public class Engine extends BasicGame{
 	private final int NUMBER_OF_SQUIRRELS = 20;					//Number of squirrels. FOR DEBUGGING ONLY
 	
 	//Instance Variables
-	private List<Enemy> enemy = new ArrayList<Enemy>();			//List of drawable entities
+	private List<Enemy> enemies = new ArrayList<Enemy>();			//List of drawable entities
 	private List<Player> players = new ArrayList<Player>();		//List of players
 	private List<Bullet> bullets = new ArrayList<Bullet>();		//List of bullet entities
+	private List<Collectible> collectibles = new ArrayList<Collectible>();		//List of collectibles
 	private List<Entity> toRemove = new ArrayList<Entity>(); 	//List of entities to be removed
 	private List<Entity> toAdd = new ArrayList<Entity>();		//List of entities to be added
 	private int PointTotal;
@@ -43,13 +46,14 @@ public class Engine extends BasicGame{
 	private boolean worldClipSet = false;						//Boolean for whether the WorldClip has been initialized
 
 	private int point;
-	private int PointTotal;
 
 	private int currentWave = 0;								//Variable to keep track of the current wave of enemies
 	private int currentLevel = 0;								//Variable to keep track of how many bosses have been defeated
 	
 	private int time = 0;
 	private int interval = 0;								//Time before another wave starts
+	
+	private CollectibleSpawner collecSpawn = new CollectibleSpawner();
 	
 	
 	//TESTING
@@ -90,20 +94,23 @@ public class Engine extends BasicGame{
 
 		for (int i = 0; i< NUMBER_OF_SQUIRRELS; i++){
 
-			enemy.add(new Enemy(0, 0, EnemyType.Squirrel, i, true));
+			enemies.add(new Enemy(0, 0, EnemyType.Squirrel, i, true));
 
 	}
 
 		//Music openingMenuMusic = new Music(""); //TODO Need to find and insert suitable music
     		//openingMenuMusic.loop(); 
 		
-		for(Enemy e : enemy){
+		for(Enemy e : enemies){
 			e.init(gc);
 		}	
 		
 		for(Player p : players){
 			p.init(gc);
-		}	
+		}
+		
+		
+		collecSpawn.init(gc);
 	}	
 	
 	/**
@@ -136,14 +143,14 @@ public class Engine extends BasicGame{
 		
 		g.drawString(String.format("Time Elapsed: %1$s", String.valueOf((int)time/1000)), 600, 64);
 		
-		g.drawString(String.format("Enemies: %1$s", String.valueOf((int)enemy.size())), 600, 94);
+		g.drawString(String.format("Enemies: %1$s", String.valueOf((int)enemies.size())), 600, 94);
 		
 		
 
 				
 		
 		//Call each entity's render method
-		for(Enemy e : enemy){
+		for(Enemy e : enemies){
 			e.render(gc, g);
 		}
 		
@@ -153,6 +160,10 @@ public class Engine extends BasicGame{
 		
 		for(Player p : players){
 			p.render(gc, g);
+		}
+		
+		for(Collectible c : collectibles){
+			c.render(gc, g);
 		}
 	}
 
@@ -166,14 +177,16 @@ public class Engine extends BasicGame{
 	public void update(GameContainer gc, int delta) throws SlickException {
 
 		//BULLET GARBAGE COLLECTION
-		for(int i = 0; i < bullets.size(); i++){
-			if(bullets.get(i).y <= 20 || bullets.get(i).y >= GameWindow.SCREEN_HEIGHT - 20 || bullets.get(i).x <= 20 || bullets.get(i).x >= GameWindow.SCREEN_WIDTH - 20){
-				bullets.remove(i);
-			}
-		}
+//		for(int i = 0; i < bullets.size(); i++){
+//			if(bullets.get(i).y <= 20 || bullets.get(i).y >= GameWindow.SCREEN_HEIGHT - 20 || bullets.get(i).x <= 20 || bullets.get(i).x >= GameWindow.SCREEN_WIDTH - 20){
+//				bullets.remove(i);
+//			}
+//		}
+		
+		collecSpawn.update(gc, delta);
 		
 		//Call each entity's update method
-		for(Enemy e : enemy){
+		for(Enemy e : enemies){
 			e.update(gc, delta);
 		}
 		
@@ -186,10 +199,14 @@ public class Engine extends BasicGame{
 			e.update(gc, delta);
 		}
 		
+		for(Collectible c : collectibles){
+			c.update(gc, delta);
+		}
+		
 		//CHECK FOR COLLISIONS
 		//Check each player
 		for(Player p : players){
-			for(Enemy e : enemy){
+			for(Enemy e : enemies){
 				
 				//Iff the entity can cause harm to the player, check for a collision
 				if(e.isDangerous()){
@@ -206,11 +223,17 @@ public class Engine extends BasicGame{
 					}
 				}
 			}
+			
+			for(Collectible c : collectibles){
+				if(p.hitTest(c)){
+					p.onCollide(c);
+				}
+			}
 		}
 		
 		for(Bullet b : bullets){
 			if(!b.isDangerous()){
-				for(Enemy e : enemy){
+				for(Enemy e : enemies){
 					if(e.isDangerous()){
 						if(e.hitTest(b)){
 							D.BUG("Bullet collided!");
@@ -229,7 +252,7 @@ public class Engine extends BasicGame{
 				}
 				
 				for (Entity e : toRemove) {
-					enemy.remove(e);
+					enemies.remove(e);
 				}	
 				toRemove.clear();				//Clears the eraser arraylist to streamline for next iteration of code
 				
@@ -261,7 +284,7 @@ public class Engine extends BasicGame{
 	private void checkGameProgress(){
 		//D.BUG(Integer.toString(enemy.size()));
 		//D.BUG(Integer.toString(currentWave));
-		if(enemy.size()<= 0)
+		if(enemies.size()<= 0)
 			currentWave++;
 		
 		if(currentWave == Globals.WAVES_UNTIL_BOSS){
@@ -270,7 +293,7 @@ public class Engine extends BasicGame{
 			currentWave++;
 			isInBossBattle = true;
 			D.BUG("Boss Generated");
-			D.BUG(Integer.toString(enemy.size()));
+			D.BUG(Integer.toString(enemies.size()));
 		}
 		//NEW WAVE!
 		/*
@@ -350,9 +373,12 @@ public class Engine extends BasicGame{
 			case "EnemyBullet":
 				bullets.add((Bullet) e);
 				break;
+			case "Collectible":
+				collectibles.add((Collectible) e);
+				break;
 			case "Enemy":
 			default:
-					enemy.add((Enemy)e);	
+					enemies.add((Enemy)e);	
 			}
 		}
 		
@@ -365,6 +391,21 @@ public class Engine extends BasicGame{
 	 */
 	public void markForRemoval(Entity e){
 		toRemove.add(e);
+	}
+	
+	/**
+	 * Method for clearing the game screen
+	 */
+	public void clearScreen(){
+		//Clear enemies list
+		enemies.clear();
+		
+		//Pick out dangerous bullets and clear them
+		for(Bullet b : bullets){
+			if(b.isDangerous()){
+				markForRemoval(b);
+			}
+		}
 	}
 	
 	/**
@@ -383,8 +424,10 @@ public class Engine extends BasicGame{
 				break;
 				
 			case "Enemy":
-				enemy.remove(e);
+				enemies.remove(e);
 				break;
+			case "Collectible":
+				collectibles.remove((Collectible)e);
 			}
 			
 		}
