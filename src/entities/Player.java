@@ -7,9 +7,11 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 
 import Utilities.D;
 import globals.Globals;
+import sounds.*;
 import view.Engine;
 import view.GameWindow;
 
@@ -72,6 +74,11 @@ public class Player extends Entity{
 	
 	private int points = 0;
 	
+	//Audio
+	Sound fireSound;
+	Sound hitSound;
+	Sound powerUpSound;
+	
 	
 	/**
 	 * Main constructor for the Player Class.
@@ -94,6 +101,7 @@ public class Player extends Entity{
 		
 		InitializePlayerAttributes();
 		InitializeControls();
+		initializeAudio();
 	}
 	
 
@@ -148,6 +156,17 @@ public class Player extends Entity{
 		}
 	}
 	
+	private void initializeAudio(){
+		try{
+			fireSound = new Sound(FX.PLAYER_FIRE);
+			hitSound = new Sound(FX.PLAYER_HIT);
+			//powerUpSound = new Sound(SoundEffects.POWERUP);			
+		}
+		catch(Exception e){
+			
+		}
+
+	}
 	
 	
 	//Getters for Power Up bullet shooting
@@ -172,8 +191,11 @@ public class Player extends Entity{
 		return isDead;
 	}
 	
-	public void addPoints(int point){
+	public void setPoints(int point){
 		points += point;
+	}
+	public int getPoints(){
+		return points;
 	}
 	
 	@Override
@@ -295,6 +317,7 @@ public class Player extends Entity{
 
 	/**
 	 * Method for firing a bullet
+	 * @throws SlickException 
 	 */
 	private void fireBullet(){
 		firing = true;
@@ -306,7 +329,9 @@ public class Player extends Entity{
 			return;
 		}
 		
-		
+		//Play sound
+		fireSound.play();
+
 		
 		//How the bullets will be handled depends on the current fruit that the player is
 		switch(currentFruit){
@@ -388,6 +413,8 @@ public class Player extends Entity{
 		//If the player wasn't just previously hit
 		if(!hitCoolingDown){
 
+			//Play a sound
+			hitSound.play();
 			
 			switch(collisionType){
 			
