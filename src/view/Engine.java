@@ -13,6 +13,7 @@ import org.newdawn.slick.SlickException;
 import Utilities.D;
 import entities.Bullet;
 import entities.Enemy;
+import entities.EnemyMovement;
 import entities.EnemyType;
 import entities.Entity;
 import entities.FruitType;
@@ -31,8 +32,6 @@ public class Engine extends BasicGame{
 	private List<Bullet> bullets = new ArrayList<Bullet>();		//List of bullet entities
 	private List<Entity> toRemove = new ArrayList<Entity>(); 	//List of entities to be removed
 	private List<Entity> toAdd = new ArrayList<Entity>();		//List of entities to be added
-	private int PointTotal;
-
 
 	private List<Bullet> toRemoveBullets = new ArrayList<Bullet>();
 
@@ -42,7 +41,6 @@ public class Engine extends BasicGame{
 
 	private boolean worldClipSet = false;						//Boolean for whether the WorldClip has been initialized
 
-	private int point;
 	private int PointTotal;
 
 	private int currentWave = 0;								//Variable to keep track of the current wave of enemies
@@ -90,7 +88,7 @@ public class Engine extends BasicGame{
 
 		for (int i = 0; i< NUMBER_OF_SQUIRRELS; i++){
 
-			enemy.add(new Enemy(0, 0, EnemyType.Squirrel, i, true));
+			enemy.add(new Enemy(0, 0, EnemyType.Squirrel, i, 32, 32, EnemyMovement.VShoot));
 
 	}
 
@@ -303,7 +301,7 @@ public class Engine extends BasicGame{
 	private void generateEnemies(){
 		for (int i = 0; i< NUMBER_OF_SQUIRRELS; i++){
 
-			toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, i, true));
+			toAdd.add(new Enemy(0, 0, EnemyType.Squirrel,i, 32, 32, EnemyMovement.Random));
 
 		}
 		
@@ -314,7 +312,7 @@ public class Engine extends BasicGame{
 	 * to unlock a boss battle.
 	 */
 	private void generateBoss(){
-		Enemy B = new Enemy(EnemyType.JumboSquirrel, 1, Globals.BOSS_HEIGHT, Globals.BOSS_WIDTH);
+		Enemy B = new Enemy(0, 0, EnemyType.JumboSquirrel, 1, Globals.BOSS_HEIGHT, Globals.BOSS_WIDTH, EnemyMovement.Random);
 		toAdd.add(B);
 	}
 	

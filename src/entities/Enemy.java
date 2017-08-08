@@ -11,6 +11,7 @@ import org.newdawn.slick.SlickException;
 import Utilities.D;
 import globals.Globals;
 import view.Engine;
+import view.GameWindow;
 
 public class Enemy extends Entity{
 	
@@ -32,16 +33,22 @@ public class Enemy extends Entity{
 	private float result_y = 0;
 	int result = 0;										//Determines if enemy will move randomly
 	
-	boolean random;
+	private float preset;			//Preset for what kind of movement will be done
+	private float time = 0;				//Incremental time
+	private float xSpeed;			//Spawned X coordinate
+	private float ySpeed;			//Spawned Y coordinate
+	private float accel = .2f;
+	private EnemyMovement movement;
+	;					//Determines if enemy movement will be random
 	/**
 	 * 
 	 * @param selectedEnemy The fruit that the player will play as
 	 * @param pNum 			The number of the enemy that is being generated ex. enemy 1, enemy 2...
 	 */
 
-	public Enemy(EnemyType selectedEnemy, int pNum, float P1, float P2){ //Added parameters to take in the size of the hitbox desired
+	public Enemy(float x, float y, EnemyType selectedEnemy, int pNum, float P1, float P2, EnemyMovement move){ //Added parameters to take in the size of the hitbox desired
 		
-		super(startingX, startingY, P1,P2);
+		super(x, y, P1,P2);
 
 
 		//Instantiate instance variables
@@ -49,9 +56,7 @@ public class Enemy extends Entity{
 		_EnemyNum = pNum;		
 		_offSet =_EnemyNum*26;		
 
-		random = randomness;
-		
-		//Testing Variables
+		movement = move;
 
 		
 		InitializeEnemyAttributes();
@@ -87,16 +92,38 @@ public class Enemy extends Entity{
 	 */
 	@Override
 	public void update(GameContainer gc, int delta) {
-
-		if(random == true){
+		switch(movement){
+		case Random:
 			RandomMovement();
+			break;
+		case Test:
+			
+			break;
+		case SliceToRight:
+			xSpeed += accel;
+			ySpeed = 5;
+			moveBy(xSpeed, ySpeed);
+			break;
+		case VShoot:
+			ySpeed = 5;
+			xSpeed = 10;
+			if (x == GameWindow.SCREEN_WIDTH/2){
+				time += delta; //Time
+				if (time >= 1000){
+					Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, 20, 0, 1, false)));
+					x += xSpeed;
+				}
+				break;
+			}
+			if (x >= GameWindow.SCREEN_WIDTH/2){
+				ySpeed = -5;
+			}
+			moveBy(xSpeed, ySpeed);
+			break;
 		}
-		else{
-			Movement();
-			this.moveTo(result_x, result_y);
-		}
-           
 	}
+		
+			
 
 private void RandomMovement(){
 		
@@ -125,12 +152,6 @@ private void RandomMovement(){
 		}
 		this.moveBy((result_x), (result_y)); 
 }
-
-private void Movement(){
-
-}
-	
-		
 	
 /**
  * Method to draw the entities in the desired position according to the update method.
@@ -214,7 +235,7 @@ private void Movement(){
 		int RandomFire = r_f.nextInt(300-0);
 		
 		if (RandomFire>298)
-		Engine.instance.addEntity(new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 0, 1, false));
+		Engine.instance.addEntity(new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, 20, 0, 1, false));
 		
 		
 	}

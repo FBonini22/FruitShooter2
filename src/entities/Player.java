@@ -63,6 +63,7 @@ public class Player extends Entity{
 	private int fireCooldown = DEFAULT_FIRE_COOLDOWN;
 	private int bombCooldown = DEFAULT_BOMB_COOLDOWN;
 	
+	private int points = 0;
 	private int numBombs = 0;
 	
 	private boolean isDead = false;
@@ -160,6 +161,12 @@ public class Player extends Entity{
 	}
 	public void setPowerlevel(int num){
 		powerLevel = num;
+	}
+	public void setPoints(int num){
+		points = points + num;
+	}
+	public int getPoints(){
+		return points;
 	}
 	
 	public float getHealth(){
