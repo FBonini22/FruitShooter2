@@ -3,6 +3,7 @@ package view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -25,7 +26,7 @@ public class Engine extends BasicGame{
 
 	//Constants
 	private final int FRAME_RATE = 60;							//Frame rate in fps
-	private final int NUMBER_OF_SQUIRRELS = 20;					//Number of squirrels. FOR DEBUGGING ONLY
+	private final int NUMBER_OF_SQUIRRELS = 1;					//Number of squirrels. FOR DEBUGGING ONLY
 	
 	//Instance Variables
 	private List<Enemy> enemies = new ArrayList<Enemy>();			//List of drawable entities
@@ -35,27 +36,19 @@ public class Engine extends BasicGame{
 	private List<Entity> toRemove = new ArrayList<Entity>(); 	//List of entities to be removed
 	private List<Entity> toAdd = new ArrayList<Entity>();		//List of entities to be added
 	private int PointTotal;
-
+	private Random randomGenerator = new Random();
 
 	private List<Bullet> toRemoveBullets = new ArrayList<Bullet>();
 
-
-
-	private boolean isInBossBattle = false;
-
+	private boolean isDead = false;
 	private boolean worldClipSet = false;						//Boolean for whether the WorldClip has been initialized
-
-	private int point;
-
-	private int currentWave = 0;								//Variable to keep track of the current wave of enemies
-	private int currentLevel = 0;								//Variable to keep track of how many bosses have been defeated
-	
+	private boolean bossType = false; 						//False is for boss type 1, true is for boss type 2
 	private int time = 0;
 	private int interval = 0;								//Time before another wave starts
-	
+	private int bossTimer = 0;
 	private CollectibleSpawner collecSpawn = new CollectibleSpawner();
-	
-	
+	private int Time = 0;
+	private int multiplier = 1;
 	//TESTING
 	private Player p1 = new Player(FruitType.Banana, 1);
 	
@@ -93,8 +86,8 @@ public class Engine extends BasicGame{
 		
 
 		for (int i = 0; i< NUMBER_OF_SQUIRRELS; i++){
-
-			enemies.add(new Enemy(0, 0, EnemyType.Squirrel, i, true));
+			//D.BUG("Squirrel rendered");
+		enemies.add(new Enemy(0, 0, EnemyType.Squirrel, true));		//Added Spawn_X and Spawn_Y to change the spawning location of the squirrels to random locations
 
 	}
 
@@ -176,13 +169,13 @@ public class Engine extends BasicGame{
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
 
-		//BULLET GARBAGE COLLECTION
-//		for(int i = 0; i < bullets.size(); i++){
-//			if(bullets.get(i).y <= 20 || bullets.get(i).y >= GameWindow.SCREEN_HEIGHT - 20 || bullets.get(i).x <= 20 || bullets.get(i).x >= GameWindow.SCREEN_WIDTH - 20){
-//				bullets.remove(i);
-//			}
-//		}
-		
+		Time += delta;
+		//D.BUG(Integer.toString(Time));
+		if (Time > Globals.LevelChange){
+			multiplier += 1;
+			Time = 0;
+			D.BUG("Multiplier increased");
+		}	
 		collecSpawn.update(gc, delta);
 		
 		//Call each entity's update method
@@ -211,7 +204,9 @@ public class Engine extends BasicGame{
 				//Iff the entity can cause harm to the player, check for a collision
 				if(e.isDangerous()){
 					if(p.hitTest(e)){
-						p.onCollide(e);
+						p.onCollide(e);		
+						if(p.onDieCheck())			//Checks to see if the player is dead
+							toRemove.add(p);		//If the player is dead it adds the player to the "toRemove" arraylist
 					}
 				}
 			}
@@ -236,16 +231,19 @@ public class Engine extends BasicGame{
 				for(Enemy e : enemies){
 					if(e.isDangerous()){
 						if(e.hitTest(b)){
-							D.BUG("Bullet collided!");
-							e.onCollide(b);
+							//D.BUG("Bullet collided!");
+							isDead = e.onCollide(b);
 
-							toRemove.add(e);				//Adds entities to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
+							if (isDead){
+								toRemove.add(e);						//Adds entities to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
+								p1.setPoints(e.PointValue());			//Gets point value for enemy that was just destroyed. TODO change for each player
+							}
+							
 							toRemoveBullets.add(b); 		//Adds bullets to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
-							p1.setPoints(e.PointValue());			//Gets point value for enemy that was just destroyed. TODO change for each player
+							
 							PointTotal = p1.getPoints();			//Adds point value from enemy destroyed to point total TODO add both players point values
 							
-
-							toRemove.add(e);	//Adds entities to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
+					
 							toRemoveBullets.add(b);
 						}
 					}
@@ -253,6 +251,7 @@ public class Engine extends BasicGame{
 				
 				for (Entity e : toRemove) {
 					enemies.remove(e);
+					players.remove(e);			//Runs the toRemove list through the player list to check if anything should be removed
 				}	
 				toRemove.clear();				//Clears the eraser arraylist to streamline for next iteration of code
 				
@@ -267,66 +266,43 @@ public class Engine extends BasicGame{
 		//REMOVE OLD OBJECTS
 		dumpObjects();
 		
-		checkGameProgress();
+		checkGameProgress(delta);
 		
+		
+		}
+	
+	
+	/**
+	 * Method for checking the game progress. Checks whether player can progress to the next wave or boss.
+	 * Call at the end of the update() method.
+	 */
+	private void checkGameProgress(float delta){
 		time += delta;
 		interval += delta;
 		if (interval >= Globals.TIMER){
 			Preset1();
 			interval = 0;
 		}
-	}
-	
-	/**
-	 * Method for checking the game progress. Checks whether player can progress to the next wave or boss.
-	 * Call at the end of the update() method.
-	 */
-	private void checkGameProgress(){
-		//D.BUG(Integer.toString(enemy.size()));
-		//D.BUG(Integer.toString(currentWave));
-		if(enemies.size()<= 0)
-			currentWave++;
+		bossTimer += delta;
 		
-		if(currentWave == Globals.WAVES_UNTIL_BOSS){
-			//ENABLE BOSS BATTLE
+		if (bossTimer>= Globals.BossTimer){
 			generateBoss();
-			currentWave++;
-			isInBossBattle = true;
-			D.BUG("Boss Generated");
-			D.BUG(Integer.toString(enemies.size()));
+			bossTimer = 0;
 		}
-		//NEW WAVE!
-		/*
-		if(enemy.size() <= 0){
-			D.BUG("No current enemies");
-			D.BUG(Integer.toString(enemy.size()));
-			if(isInBossBattle){
-				//Just defeated a boss
-				D.BUG("Boss defeated");
-				isInBossBattle = false;
-				currentLevel++;
-			}
-			else{
-				generateEnemies();			
-				D.BUG("Enemy Wave");
-			}
-			
-
 		}
-		*/
 		
 		
 		
 		
-	}
+		
+	
 	
 	/**
 	 * Generate new enemies. This should be called after a wave has been completed
 	 */
 	private void generateEnemies(){
 		for (int i = 0; i< NUMBER_OF_SQUIRRELS; i++){
-
-			toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, i, true));
+			toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, true));		//Added Spawn_X and Spawn_Y to change the spawning location of the squirrels to random locations
 
 		}
 		
@@ -337,7 +313,18 @@ public class Engine extends BasicGame{
 	 * to unlock a boss battle.
 	 */
 	private void generateBoss(){
-		Enemy B = new Enemy(EnemyType.JumboSquirrel, 1, Globals.BOSS_HEIGHT, Globals.BOSS_WIDTH);
+		
+		int Spawn_X =  randomGenerator.nextInt(GameWindow.SCREEN_WIDTH-375);
+		Enemy B;
+		if(bossType){		
+			B = new Enemy(EnemyType.JumboSquirrel_1, 1, Globals.BOSS_HEIGHT1, Globals.BOSS_WIDTH1, Spawn_X, 0, true, multiplier); 	//Added Spawn_X and Spawn_Y to change the spawning location of the squirrels to random locations
+			bossType = false;
+		}
+		else{
+			B = new Enemy(EnemyType.JumboSquirrel_2, 1, Globals.BOSS_HEIGHT2, Globals.BOSS_WIDTH2, Spawn_X, 0, true, multiplier); 	//Added Spawn_X and Spawn_Y to change the spawning location of the squirrels to random locations
+			bossType = true;
+		}
+		
 		toAdd.add(B);
 	}
 	
@@ -438,7 +425,7 @@ public class Engine extends BasicGame{
 	
  private void Preset1(){
 		generateEnemies();
-		D.BUG("Preset1");
+		//D.BUG("Preset1");
 	}
 	
 }

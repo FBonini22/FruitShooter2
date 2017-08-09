@@ -39,7 +39,6 @@ public class EnemyBullet extends Bullet{
 	  if (_accel == true){
 		  if (_xSpeed <= xMove && _ySpeed <= yMove){
 			  this.moveBy(_xSpeed, _ySpeed);
-			  _xSpeed = (_xSpeed + _acceleration);
 			  _ySpeed = (_ySpeed + _acceleration);
 		  }
 		  else{
@@ -70,8 +69,8 @@ public class EnemyBullet extends Bullet{
 	}
 
 	@Override
-	public void onCollide(Entity collidedWith) {
-		// TODO Auto-generated method stub
+	public boolean onCollide(Entity collidedWith) {
+		return false;// TODO Auto-generated method stub
 		
 	}
 }
