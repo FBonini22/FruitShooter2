@@ -60,8 +60,18 @@ public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, Enem
 
 		
 		InitializeEnemyAttributes();
-
 }
+
+public Enemy(EnemyType selectedEnemy, float P1, float P2, EnemyMovement move){ //Shorter Constructor for just having a preset movement enemy spawn
+	
+	super(0, 0, P1,P2);
+
+	//Instantiate instance variables
+	_currentEnemy = selectedEnemy;	
+	movement = move;
+	InitializeEnemyAttributes();
+}
+
 
 /**
  * Method to initialize the attributes of the enemy. Contains a switch statement to pick which enemy type will be generated.
@@ -95,36 +105,26 @@ public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, Enem
 		case Random:
 			RandomMovement();
 			break;
-		case Test:
-			
-			break;
 		case SliceToRight:
-			if (initialize == false){
-				x = 0;
-				y = 0;
-				initialize = true;
-			}
+			SpawnTopLeft();
 			xSpeed += accel;
 			ySpeed = 5;
 			moveBy(xSpeed, ySpeed);
 			break;
 		case SliceToLeft:
-			if (initialize == false){
-				x = GameWindow.SCREEN_WIDTH - 50;
-				y = 0;
-				initialize = true;
-			}
+			SpawnTopRight();
 			xSpeed -= accel;
 			ySpeed = 5;
 			moveBy(xSpeed, ySpeed);
 			break;
 		case VShoot:					//Enemy moves in a V. Shoots in the middle.
+			SpawnTopLeft();
 			ySpeed = 5;
 			xSpeed = 10;
 			if (x == (GameWindow.SCREEN_WIDTH/2) - 30){
 				time += delta; //Time
 				if (time >= 1000){
-					Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, 20, 0, 1, false)));
+					Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, 20, 0, 1, false, true)));
 					x += xSpeed;
 				}
 				break;
@@ -137,10 +137,23 @@ public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, Enem
 		}
 	}
 			
-
+private void SpawnTopLeft(){
+	if (initialize == false){
+		x = 0;
+		y = 0;
+		initialize = true;
+	}
+}
+private void SpawnTopRight(){
+	if (initialize == false){
+		x = GameWindow.SCREEN_WIDTH - 50;
+		y = 0;
+		initialize = true;
+	}
+}
+	
+	
 private void RandomMovement(){
-		
-
 		EnemyFire();
 		Random r_f = new Random();
 		int Frames = r_f.nextInt(35-25) + 25;

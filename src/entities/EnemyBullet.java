@@ -5,6 +5,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import view.Engine;
+
 public class EnemyBullet extends Bullet{
 
    //Instance Variables
@@ -40,12 +42,12 @@ public class EnemyBullet extends Bullet{
       _ySpeed = 0;
    }
    
-   public EnemyBullet(float x, float y, float xMove, float yMove, float width, float height, boolean accel, boolean homing, float pX, float pY){
+   public EnemyBullet(float x, float y, float xMove, float yMove, float width, float height, boolean accel, boolean homing){
 		  super(x, y, xMove, yMove, width, height);
 	      _accel = accel;
 	      _homing = homing;
-	      this.pX = pX;
-	      this.pY = pY;
+	      pX = Engine.x;
+	      pY = Engine.y;
 	      
 	      _xSpeed = 0;
 	      _ySpeed = 0;
@@ -68,8 +70,8 @@ public class EnemyBullet extends Bullet{
 			  _ySpeed = yMove;
 		  }
 		  this.moveBy(_xSpeed, _ySpeed);
-		  _xSpeed = (_xSpeed + _acceleration);
-		  _ySpeed = (_ySpeed + _acceleration);
+		  _xSpeed += _acceleration;
+		  _ySpeed += _acceleration;
    }
    
    public void update(GameContainer gc, int delta){

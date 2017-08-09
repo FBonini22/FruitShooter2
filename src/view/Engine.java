@@ -24,6 +24,10 @@ import globals.Globals;
 
 public class Engine extends BasicGame{
 
+	//Public Static Player X and Player Y;
+	public static float x;
+	public static float y;
+	
 	//Constants
 	private final int FRAME_RATE = 60;							//Frame rate in fps
 	private final int NUMBER_OF_SQUIRRELS = 20;					//Number of squirrels. FOR DEBUGGING ONLY
@@ -185,6 +189,12 @@ public class Engine extends BasicGame{
 //				bullets.remove(i);
 //			}
 //		}
+		
+		//Testing Purposes. Not sure how this will work for multiple players yet
+		x = p1.x;
+		y = p1.y;
+		
+		
 		
 		collecSpawn.update(gc, delta);
 		
