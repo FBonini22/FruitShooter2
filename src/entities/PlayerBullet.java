@@ -38,7 +38,8 @@ public class PlayerBullet extends Bullet{
 	}
 
 	@Override
-	public void onCollide(Entity collidedWith) {		
+	public boolean onCollide(Entity collidedWith) {	
+		return false;
 	}
 
 }

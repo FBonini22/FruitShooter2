@@ -295,14 +295,14 @@ public class Player extends Entity{
 	private void drawHealthBar(Graphics g){
 		//TO DO: Make the player's health displayed as a health bar
 		//Draw the player's health
-//		g.drawString(String.format("Player Health: %1$s", String.valueOf((float)health)), 16, 32);
-//		g.setColor(Color.red);
-//		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, GameWindow.HBAR_HEIGHT);
-//		
-//		g.setColor(Color.green);
-//		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, (float) (GameWindow.HBAR_HEIGHT * (health / STARTING_HEALTH)));
+		g.drawString(String.format("Player Health: %1$s", String.valueOf((float)health)), 16, 32);
+		g.setColor(Color.red);
+		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, GameWindow.HBAR_HEIGHT);
+		
+		g.setColor(Color.green);
+		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, (float) (GameWindow.HBAR_HEIGHT * (health / STARTING_HEALTH)));
 
-//		g.drawImage(healthBarBackground, GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.SCREEN_WIDTH - 3, GameWindow.HBAR_HEIGHT, DEFAULT_MOVEMENT_SPEED, DEFAULT_MOVEMENT_SPEED);
+		g.drawImage(healthBarBackground, GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.SCREEN_WIDTH - 3, GameWindow.HBAR_HEIGHT, DEFAULT_MOVEMENT_SPEED, DEFAULT_MOVEMENT_SPEED);
 	
 		
 	}
@@ -467,7 +467,8 @@ public class Player extends Entity{
 	 * Method to handle collisions with the player
 	 * @param collidedWith The entity that has collided with this player instance
 	 */
-	public void onCollide(Entity collidedWith){
+	@SuppressWarnings("incomplete-switch")
+	public boolean onCollide(Entity collidedWith){
 		
 		//Handle collisions
 		
@@ -476,7 +477,7 @@ public class Player extends Entity{
 		//Play a sound
 
 		String collisionType = collidedWith.getClass().getSimpleName();
-		D.BUG("Player collided with: " + collisionType);
+		//D.BUG("Player collided with: " + collisionType);
 		
 		//Switch for regular collisions
 		switch(collisionType){
@@ -495,7 +496,7 @@ public class Player extends Entity{
 				break;
 			}
 			
-			return;
+			return isDead;
 			
 		}
 		
@@ -516,8 +517,11 @@ public class Player extends Entity{
 					case Squirrel:
 						health -= 5d;			//Damage that the grunt does
 						break;
-					case JumboSquirrel:
+					case JumboSquirrel_1:
 						health -= 10d;			//Damage that the boss does
+						break;
+					case JumboSquirrel_2:
+						health -= 10d;
 						break;
 				}			
 				break;
@@ -530,12 +534,16 @@ public class Player extends Entity{
 			hitCoolingDown = true;
 			timeSinceLastHit = 0;
 		}
+		return isDead;
 	}
 
 	private void onDie(){
 		isDead = true;
 		
-		
+	}
+	
+	public boolean onDieCheck(){
+		return isDead;
 	}
 	
 	

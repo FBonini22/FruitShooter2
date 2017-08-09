@@ -43,7 +43,7 @@ public abstract class Entity extends HitBox{
 	 * To override. Built-in method for collision handling.
 	 * @param collidedWith The other Entity that this Entity instance has collided with.
 	 */
-	public abstract void onCollide(Entity collidedWith);
+	public abstract boolean onCollide(Entity collidedWith);
 	
 	
 	

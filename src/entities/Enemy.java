@@ -22,8 +22,6 @@ public class Enemy extends Entity{
 	
 	//Instance Variables
 	private EnemyType _currentEnemy;					//The user-selected enemy
-	private int _EnemyNum;								//The number enemy created
-	private int _offSet;								//The amount that the generated enemy will be offset from the first generated enemy.
 	private final float MOVEMENT_SPEED = 5f;			//Movement speed in pixels per second
 	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Enemy instance
 	private int Move = 100;
@@ -31,23 +29,24 @@ public class Enemy extends Entity{
 	private float result_x = 0;
 	private float result_y = 0;
 	int result = 0;										//Determines if enemy will move randomly
-	
+	private boolean dead = false;
 	boolean random;
+	private int multiplier;
 	/**
 	 * 
 	 * @param selectedEnemy The fruit that the player will play as
 	 * @param pNum 			The number of the enemy that is being generated ex. enemy 1, enemy 2...
 	 */
 
-	public Enemy(EnemyType selectedEnemy, int pNum, float P1, float P2){ //Added parameters to take in the size of the hitbox desired
+	public Enemy(EnemyType selectedEnemy, int pNum, float P1, float P2, float X, float Y, boolean random, int mult){ //Added parameters to take in the size of the hitbox desired. Edit also added dimensions for starting location
 		
-		super(0, 0, P1,P2);
-
-
+		super(X, Y, P1,P2);
+		this.random = random;
+		multiplier = mult;
 		//Instantiate instance variables
 		_currentEnemy = selectedEnemy;
-		_EnemyNum = pNum;		
-		_offSet =_EnemyNum*26;		
+				
+				
 
 		//random = randomness;
 		
@@ -61,13 +60,11 @@ public class Enemy extends Entity{
 	//I ADDED THIS CONSTRUCTOR BECAUSE ENEMIES WERE BEING CREATED IN DIFFERENT WAYS. UNIFY OR KEEP BOTH.
 	//THIS COULD HAVE BEEN DUE TO AN ERROR DURING A MERGE.
 	//-FRANK
-	public Enemy(int i, int j, EnemyType selectedEnemy, int pNum, boolean b) {
+	public Enemy(int i, int j, EnemyType selectedEnemy, boolean b) {
 	
-		super(0,0, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT);
+		super(i,j, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT);
 		// TODO Auto-generated constructor stub
 		_currentEnemy = selectedEnemy;
-		_EnemyNum = pNum;		
-		_offSet =_EnemyNum*26;	
 		random = b;
 		
 		InitializeEnemyAttributes();
@@ -84,15 +81,19 @@ public class Enemy extends Entity{
 		switch(_currentEnemy){
 		case Squirrel:
 			imgPath = "img/Squirrel.png";
-			_health = 1.0;
+			_health = 1.0*multiplier;
 			pointValue = Globals.gruntValue;
 			break;
-		case JumboSquirrel:
+		case JumboSquirrel_1:
 			imgPath = "img/Jumbo_Squirrel.png";
-			_health = 2.0;
+			_health = 10.0*multiplier;
 			pointValue = Globals.bossValue;
 			break;
-		
+		case JumboSquirrel_2:
+			imgPath = "img/New_Jumbo_Squirrel_edited.png";
+			_health = 10.0*multiplier;
+			pointValue = Globals.bossValue;
+			break;
 		}
 		
 
@@ -102,7 +103,7 @@ public class Enemy extends Entity{
 	 */
 	@Override
 	public void update(GameContainer gc, int delta) {
-
+		
 		if(random == true){
 			RandomMovement();
 		}
@@ -130,7 +131,7 @@ private void RandomMovement(){
 		result_x = (int) (r_x.nextInt((int) (High-Low)) + Low);
 		result_y = (int) (r_y.nextInt((int) (High-Low))+Low);
 		
-		//D.BUG("New Random Assigned");
+		// D.BUG("New Random Assigned");
 		Move = 0;
 		}
 		else{
@@ -138,7 +139,7 @@ private void RandomMovement(){
 			Move++;
 			//D.BUG("Move added 1");
 		}
-		this.moveBy((result_x), (result_y)); 
+		this.moveBy((result_x), 0); 
 }
 
 private void Movement(){
@@ -194,7 +195,7 @@ private void Movement(){
  * Method to determine if two entities are currently colliding.
  */
 	@Override
-	public void onCollide(Entity collidedWith) {
+	public boolean onCollide(Entity collidedWith) {
 		D.BUG("Bullet hit enemy");
 		
 		
@@ -204,6 +205,7 @@ private void Movement(){
 		
 		case "PlayerBullet":
 			_health -= 1;
+			
 		}
 		
 		try {
@@ -213,6 +215,9 @@ private void Movement(){
 			e.printStackTrace();
 		}
 		
+		if(_health<1)
+			dead = true;
+		return dead;
 	}
 	
 	/**
@@ -229,7 +234,7 @@ private void Movement(){
 		int RandomFire = r_f.nextInt(300-0);
 		
 		if (RandomFire>298)
-		Engine.instance.addEntity(new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 0, 1, false));
+		Engine.instance.addEntity(new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, 10, 0, 1, false));
 		
 		
 	}

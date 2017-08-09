@@ -5,10 +5,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import globals.Globals;
-import view.Engine;
-
-public class Collectible extends Entity{
+public class PowerUp extends Entity{
 	
 	//Instance Variables
 	private float ySpeed = -2;
@@ -16,7 +13,6 @@ public class Collectible extends Entity{
 	private float maxSpeed = 5;
 	
 	private String imgPath = "img/test.png";	
-	private CollectibleType type;
 
 	/**
 	 * Power up Constructor
@@ -25,13 +21,8 @@ public class Collectible extends Entity{
 	 * @param width of hit box
 	 * @param height of hit box
 	 */
-	public Collectible(float x, float y, float width, float height, CollectibleType cType) {
+	public PowerUp(float x, float y, float width, float height) {
 		super(x, y, width, height);
-		type = cType;
-	}
-	
-	public CollectibleType getType(){
-		return type;
 	}
 	
 	/**
@@ -54,20 +45,6 @@ public class Collectible extends Entity{
 
 	@Override
 	public void init(GameContainer gc) throws SlickException {
-		switch(type){
-		case Health:
-			imgPath = "";
-			break;
-		case PowerUp:
-			imgPath = "";
-			break;
-		case Points:
-			imgPath = "";
-			break;
-		case Bomb:
-			imgPath = "img/Bomb.png";
-			break;
-		}
 		 _entityImg = new Image(imgPath);
 	}
 
