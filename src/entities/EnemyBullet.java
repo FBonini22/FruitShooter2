@@ -17,7 +17,7 @@ public class EnemyBullet extends Bullet{
    private float pY;
 
    //Constants
-   private final float _acceleration = .025f;
+   private final float _acceleration = .5f;
    private String imgPath = "img/acorn2.png";	
 
    /**

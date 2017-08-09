@@ -1,15 +1,20 @@
 
 package entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 
 import Utilities.D;
 import globals.Globals;
+import sounds.*;
 import view.Engine;
 import view.GameWindow;
 
@@ -33,9 +38,10 @@ public class Player extends Entity{
 	private final float PLAYER_HEIGHT = 48f;
 	private final float PLAYER_WIDTH = 48f;
 
-  private final int	DEFAULT_FIRE_COOLDOWN = 250;								//Milliseconds for the default time between each firing
+	private final int	DEFAULT_FIRE_COOLDOWN = 250;								//Milliseconds for the default time between each firing
 	private final int	DEFAULT_BOMB_COOLDOWN = 3000;								//Milliseconds for the cooldown for throwing a cleaing bomb
 
+	private final int	BOMB_CAPACITY = 3;											//How many bombs the player may have at a given time
 	
 	
 	//Instance Variables
@@ -63,13 +69,22 @@ public class Player extends Entity{
 	private int fireCooldown = DEFAULT_FIRE_COOLDOWN;
 	private int bombCooldown = DEFAULT_BOMB_COOLDOWN;
 	
-	private int points = 0;
 	private int numBombs = 0;
 	
 	private boolean isDead = false;
 	
 	private Image healthBarBackground;
 	private Image healthBar;
+
+	List<Image> bombBar = new ArrayList<Image>(BOMB_CAPACITY);	//ArrayList used to render the amount of bombs the player posesses
+	
+	private int points = 0;
+	
+	//Audio
+	Sound fireSound;
+	Sound hitSound;
+	Sound powerUpSound;
+	Sound bombSound;
 	
 	
 	/**
@@ -93,6 +108,7 @@ public class Player extends Entity{
 		
 		InitializePlayerAttributes();
 		InitializeControls();
+		initializeAudio();
 	}
 	
 
@@ -145,9 +161,23 @@ public class Player extends Entity{
 			health = STARTING_HEALTH * 1.5f;
 			break;
 		}
+		
+		numBombs = BOMB_CAPACITY;
 	}
 	
-	
+	private void initializeAudio(){
+		try{
+			fireSound = new Sound(FX.PLAYER_FIRE);
+			hitSound = new Sound(FX.PLAYER_HIT);
+			bombSound = new Sound(FX.PLAYER_BOMB);
+			//powerUpSound = new Sound(SoundEffects.POWERUP);			
+		}
+		catch(Exception e){
+			
+		}
+
+	}
+
 	
 	//Getters for Power Up bullet shooting
 	public FruitType getFruit(){
@@ -162,12 +192,6 @@ public class Player extends Entity{
 	public void setPowerlevel(int num){
 		powerLevel = num;
 	}
-	public void setPoints(int num){
-		points = points + num;
-	}
-	public int getPoints(){
-		return points;
-	}
 	
 	public float getHealth(){
 		return (float) health;
@@ -177,26 +201,45 @@ public class Player extends Entity{
 		return isDead;
 	}
 	
+	public void setPoints(int point){
+		points += point;
+	}
+	public int getPoints(){
+		return points;
+	}
+	public float getX(){
+		return x;
+	}
+	public float getY(){
+		return y;
+	}
+	
 	@Override
 	public void init(GameContainer gc) throws SlickException {
 		_entityImg = new Image(imgPath);
 		healthBarBackground = new Image("img/Health_Bar_Background.png");
 		healthBar = new Image("img/Health_Bar_Foreground.png");
+
+		initializeBombBar();
 	}
 
 
 	@Override
 	public void render(GameContainer gc, Graphics g){
 		
-		//Draw the player at the default starting coordinates
 		
+		//Anything drawn ABOVE this comment will appear UNDERNEATH the player
+		
+		//Draw the player at the default starting coordinates
 		if(hitCoolingDown){
 			hitAnim();
 		}
 		g.drawImage(_entityImg, x, y);	
 		
 
+		//Anything drawn BELOW this comment will appear ON TOP of the player
 		drawHealthBar(g);
+		drawBombBar(g);
 
 	}
 
@@ -206,6 +249,21 @@ public class Player extends Entity{
 		input = gc.getInput();
 		checkForUserInput();
 		
+		manageCooldowns(delta);
+
+		
+		updateBombBar();
+
+		//Check the player's health
+		checkHealth();
+	}
+	
+	//COOLDOWNS
+	/**
+	 * Method to manage all player cooldowns. Call during update method.
+	 * @param delta
+	 */
+	private void manageCooldowns(int delta){
 		
 		//If the player was just hit, alter graphics and enter cooldown check
 		if(hitCoolingDown){
@@ -229,7 +287,7 @@ public class Player extends Entity{
 			}
 		}
 
-		//Manage firing cooldown
+		//Manage bomb cooldown
 		if(isInBombCooldown){
 			timeSinceLastBomb += delta;
 			if(timeSinceLastBomb >= bombCooldown){
@@ -237,8 +295,6 @@ public class Player extends Entity{
 				isInBombCooldown = false;
 			}
 		}
-
-		checkHealth();
 	}
 	
 	//GRAPHICAL AND HUD
@@ -256,7 +312,35 @@ public class Player extends Entity{
 	
 		
 	}
-	
+	/**
+	 * Initializes the [bombBar] list. To be called ONLY ONCE during the [init] method.
+	 * @throws SlickException
+	 */
+	private void initializeBombBar() throws SlickException{
+		for(int i = 0; i < BOMB_CAPACITY; i++){
+			bombBar.add(new Image("img/Bomb.png"));
+		}
+	}
+
+	private void drawBombBar(Graphics g){
+		for(int i = 0; i < bombBar.size(); i++){
+			
+			int xOffset = (int)((float)i * Globals.BOMB_WIDTH);			//Offset for bomb position. Bombs are displayed horizontally
+			
+			g.drawImage(bombBar.get(i), (GameWindow.BBAR_X + xOffset), GameWindow.BBAR_Y);
+		}
+	}
+
+	private void updateBombBar(){
+		for(Image bomb : bombBar){
+			if(bombBar.indexOf(bomb) + 1 > numBombs){
+				bomb.setAlpha(0.3f);
+			}
+			else{
+				bomb.setAlpha(1f);
+			}
+		}
+	}
 	//USER INPUT AND FIRING
 	/**
 	 * Method to check for user input
@@ -285,7 +369,7 @@ public class Player extends Entity{
 		}
 		
 		if(input.isKeyDown(BOMB_CONTROL)){
-			
+			fireBomb();
 		}
 	}
 	
@@ -296,6 +380,7 @@ public class Player extends Entity{
 
 	/**
 	 * Method for firing a bullet
+	 * @throws SlickException 
 	 */
 	private void fireBullet(){
 		firing = true;
@@ -307,7 +392,9 @@ public class Player extends Entity{
 			return;
 		}
 		
-		
+		//Play sound
+		fireSound.play();
+
 		
 		//How the bullets will be handled depends on the current fruit that the player is
 		switch(currentFruit){
@@ -352,6 +439,27 @@ public class Player extends Entity{
 	 */
 	private void fireBomb(){
 		
+		if(numBombs < 1){
+			return;
+		}
+		
+		if(!isInBombCooldown){
+			timeSinceLastBomb = 0;
+			isInBombCooldown = true;
+		}
+		else{
+			return;
+		}
+		
+		
+		//Play a noise
+		bombSound.play();
+		
+		//Decrement number of bombs
+		numBombs --;
+		
+		//Clear the screen
+		Engine.instance.clearScreen();
 	}
 	
 	
@@ -382,13 +490,27 @@ public class Player extends Entity{
 		case "PowerUp":		
 			break;
 		case "Collectible":
-			break;
+			
+			switch(((Collectible)collidedWith).getType()){
+			case Bomb:
+				if(numBombs < BOMB_CAPACITY){
+					numBombs++;
+				}
+				
+				Engine.instance.markForRemoval(collidedWith);
+				break;
+			}
+			
+			return;
+			
 		}
 		
 		
 		//If the player wasn't just previously hit
 		if(!hitCoolingDown){
 
+			//Play a sound
+			hitSound.play();
 			
 			switch(collisionType){
 			

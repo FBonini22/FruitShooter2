@@ -65,7 +65,7 @@ public class Collectible extends Entity{
 			imgPath = "";
 			break;
 		case Bomb:
-			imgPath = "";
+			imgPath = "img/Bomb.png";
 			break;
 		}
 		 _entityImg = new Image(imgPath);
