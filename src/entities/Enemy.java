@@ -11,6 +11,7 @@ import org.newdawn.slick.SlickException;
 import Utilities.D;
 import globals.Globals;
 import view.Engine;
+import view.GameWindow;
 
 public class Enemy extends Entity{
 	
@@ -22,6 +23,8 @@ public class Enemy extends Entity{
 	
 	//Instance Variables
 	private EnemyType _currentEnemy;					//The user-selected enemy
+	private int _EnemyNum;								//The number enemy created
+	private int _offSet;								//The amount that the generated enemy will be offset from the first generated enemy.
 	private final float MOVEMENT_SPEED = 5f;			//Movement speed in pixels per second
 	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Enemy instance
 	private int Move = 100;
@@ -29,6 +32,14 @@ public class Enemy extends Entity{
 	private float result_x = 0;
 	private float result_y = 0;
 	int result = 0;										//Determines if enemy will move randomly
+	
+	private float time = 0;			//Incremental time
+	private float xSpeed;			//Spawned X coordinate
+	private float ySpeed;			//Spawned Y coordinate
+	private float accel = .2f;
+	private boolean initialize;		//Initializes the preset coordinates
+	private EnemyMovement movement;
+	
 	private boolean dead = false;
 	boolean random;
 	private int multiplier;
@@ -38,37 +49,29 @@ public class Enemy extends Entity{
 	 * @param pNum 			The number of the enemy that is being generated ex. enemy 1, enemy 2...
 	 */
 
-	public Enemy(EnemyType selectedEnemy, int pNum, float P1, float P2, float X, float Y, boolean random, int mult){ //Added parameters to take in the size of the hitbox desired. Edit also added dimensions for starting location
+public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, EnemyMovement move){ //Added parameters to take in the size of the hitbox desired
 		
-		super(X, Y, P1,P2);
-		this.random = random;
-		multiplier = mult;
+		super(x, y, P1,P2);
+
 		//Instantiate instance variables
-		_currentEnemy = selectedEnemy;
-				
-				
+		_currentEnemy = selectedEnemy;	
+		_offSet =_EnemyNum*26;		
 
-		//random = randomness;
-		
-		//Testing Variables
+		movement = move;
 
 		
 		InitializeEnemyAttributes();
+}
 
-	}
-		
-	//I ADDED THIS CONSTRUCTOR BECAUSE ENEMIES WERE BEING CREATED IN DIFFERENT WAYS. UNIFY OR KEEP BOTH.
-	//THIS COULD HAVE BEEN DUE TO AN ERROR DURING A MERGE.
-	//-FRANK
-	public Enemy(int i, int j, EnemyType selectedEnemy, boolean b) {
+public Enemy(EnemyType selectedEnemy, float P1, float P2, EnemyMovement move){ //Shorter Constructor for just having a preset movement enemy spawn
 	
-		super(i,j, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT);
-		// TODO Auto-generated constructor stub
-		_currentEnemy = selectedEnemy;
-		random = b;
-		
-		InitializeEnemyAttributes();
-	}
+	super(0, 0, P1,P2);
+
+	//Instantiate instance variables
+	_currentEnemy = selectedEnemy;	
+	movement = move;
+	InitializeEnemyAttributes();
+}
 
 
 /**
@@ -103,20 +106,59 @@ public class Enemy extends Entity{
 	 */
 	@Override
 	public void update(GameContainer gc, int delta) {
-		
-		if(random == true){
+		switch(movement){
+		case Random:
 			RandomMovement();
+			break;
+		case SliceToRight:
+			SpawnTopLeft();
+			xSpeed += accel;
+			ySpeed = 5;
+			moveBy(xSpeed, ySpeed);
+			break;
+		case SliceToLeft:
+			SpawnTopRight();
+			xSpeed -= accel;
+			ySpeed = 5;
+			moveBy(xSpeed, ySpeed);
+			break;
+		case VShoot:					//Enemy moves in a V. Shoots in the middle.
+			SpawnTopLeft();
+			ySpeed = 5;
+			xSpeed = 10;
+			if (x == (GameWindow.SCREEN_WIDTH/2) - 30){
+				time += delta; //Time
+				if (time >= 1000){
+					Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 10, 0, 1, false, true)));
+					x += xSpeed;
+				}
+				break;
+			}
+			if (x >= (GameWindow.SCREEN_WIDTH/2) - 30){
+				ySpeed = -5;
+			}
+			moveBy(xSpeed, ySpeed);
+			break;
 		}
-		else{
-			Movement();
-			this.moveTo(result_x, result_y);
-		}
-           
 	}
-
+			
+private void SpawnTopLeft(){
+	if (initialize == false){
+		x = 0;
+		y = 0;
+		initialize = true;
+	}
+}
+private void SpawnTopRight(){
+	if (initialize == false){
+		x = GameWindow.SCREEN_WIDTH - 50;
+		y = 0;
+		initialize = true;
+	}
+}
+	
+	
 private void RandomMovement(){
-		
-
 		EnemyFire();
 		Random r_f = new Random();
 		int Frames = r_f.nextInt(35-25) + 25;
@@ -131,7 +173,7 @@ private void RandomMovement(){
 		result_x = (int) (r_x.nextInt((int) (High-Low)) + Low);
 		result_y = (int) (r_y.nextInt((int) (High-Low))+Low);
 		
-		// D.BUG("New Random Assigned");
+		//D.BUG("New Random Assigned");
 		Move = 0;
 		}
 		else{
@@ -139,7 +181,7 @@ private void RandomMovement(){
 			Move++;
 			//D.BUG("Move added 1");
 		}
-		this.moveBy((result_x), 0); 
+		this.moveBy((result_x), (result_y)); 
 }
 
 private void Movement(){
@@ -205,7 +247,6 @@ private void Movement(){
 		
 		case "PlayerBullet":
 			_health -= 1;
-			
 		}
 		
 		try {
@@ -234,7 +275,7 @@ private void Movement(){
 		int RandomFire = r_f.nextInt(300-0);
 		
 		if (RandomFire>298)
-		Engine.instance.addEntity(new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, 10, 0, 1, false));
+		Engine.instance.addEntity(new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 0, 1, false));
 		
 		
 	}

@@ -207,6 +207,12 @@ public class Player extends Entity{
 	public int getPoints(){
 		return points;
 	}
+	public float getX(){
+		return x;
+	}
+	public float getY(){
+		return y;
+	}
 	
 	@Override
 	public void init(GameContainer gc) throws SlickException {
@@ -295,14 +301,14 @@ public class Player extends Entity{
 	private void drawHealthBar(Graphics g){
 		//TO DO: Make the player's health displayed as a health bar
 		//Draw the player's health
-		g.drawString(String.format("Player Health: %1$s", String.valueOf((float)health)), 16, 32);
-		g.setColor(Color.red);
-		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, GameWindow.HBAR_HEIGHT);
-		
-		g.setColor(Color.green);
-		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, (float) (GameWindow.HBAR_HEIGHT * (health / STARTING_HEALTH)));
+//		g.drawString(String.format("Player Health: %1$s", String.valueOf((float)health)), 16, 32);
+//		g.setColor(Color.red);
+//		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, GameWindow.HBAR_HEIGHT);
+//		
+//		g.setColor(Color.green);
+//		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, (float) (GameWindow.HBAR_HEIGHT * (health / STARTING_HEALTH)));
 
-		g.drawImage(healthBarBackground, GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.SCREEN_WIDTH - 3, GameWindow.HBAR_HEIGHT, DEFAULT_MOVEMENT_SPEED, DEFAULT_MOVEMENT_SPEED);
+//		g.drawImage(healthBarBackground, GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.SCREEN_WIDTH - 3, GameWindow.HBAR_HEIGHT, DEFAULT_MOVEMENT_SPEED, DEFAULT_MOVEMENT_SPEED);
 	
 		
 	}
@@ -477,13 +483,14 @@ public class Player extends Entity{
 		//Play a sound
 
 		String collisionType = collidedWith.getClass().getSimpleName();
-		//D.BUG("Player collided with: " + collisionType);
+		D.BUG("Player collided with: " + collisionType);
 		
 		//Switch for regular collisions
 		switch(collisionType){
 		
 		case "PowerUp":		
-			break;
+			return isDead;
+
 		case "Collectible":
 			
 			switch(((Collectible)collidedWith).getType()){
@@ -495,9 +502,7 @@ public class Player extends Entity{
 				Engine.instance.markForRemoval(collidedWith);
 				break;
 			}
-			
 			return isDead;
-			
 		}
 		
 		
@@ -539,6 +544,7 @@ public class Player extends Entity{
 
 	private void onDie(){
 		isDead = true;
+		
 		
 	}
 	
