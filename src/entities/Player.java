@@ -170,7 +170,7 @@ public class Player extends Entity{
 			fireSound = new Sound(FX.PLAYER_FIRE);
 			hitSound = new Sound(FX.PLAYER_HIT);
 			bombSound = new Sound(FX.PLAYER_BOMB);
-			//powerUpSound = new Sound(SoundEffects.POWERUP);			
+			powerUpSound = new Sound(FX.POWERUP_COLLECT);			
 		}
 		catch(Exception e){
 			
@@ -492,6 +492,8 @@ public class Player extends Entity{
 			return isDead;
 
 		case "Collectible":
+			
+			powerUpSound.play();
 			
 			switch(((Collectible)collidedWith).getType()){
 			case Bomb:

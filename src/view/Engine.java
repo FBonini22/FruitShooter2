@@ -230,7 +230,7 @@ public class Engine extends BasicGame{
 					if(p.hitTest(e)){
 						p.onCollide(e);		
 						if(p.onDieCheck())			//Checks to see if the player is dead
-							toRemove.add(p);		//If the player is dead it adds the player to the "toRemove" arraylist
+							markForRemoval(p);		//If the player is dead it adds the player to the "toRemove" arraylist
 					}
 				}
 			}
@@ -259,33 +259,18 @@ public class Engine extends BasicGame{
 							isDead = e.onCollide(b);
 
 							if (isDead){
-								toRemove.add(e);						//Adds entities to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
+								markForRemoval(e);						//Adds entities to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
 								p1.setPoints(e.PointValue());			//Gets point value for enemy that was just destroyed. TODO change for each player
 							}
-							
-							toRemoveBullets.add(b); 		//Adds bullets to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
 							p1.setPoints(e.PointValue());			//Gets point value for enemy that was just destroyed. TODO change for each player
 							PointTotal = p1.getPoints();			//Adds point value from enemy destroyed to point total TODO add both players point values
-							
-
-							toRemove.add(e);	//Adds entities to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
-							toRemoveBullets.add(b);
+							markForRemoval(b);
 						}
 					}
 				}
 				
-				for (Entity e : toRemove) {
-					enemies.remove(e);
-					players.remove(e);			//Runs the toRemove list through the player list to check if anything should be removed
-				}	
-				toRemove.clear();				//Clears the eraser arraylist to streamline for next iteration of code
-				
 			}
 		}
-		for (Bullet s : toRemoveBullets){
-			bullets.remove(s);
-		}
-		toRemoveBullets.clear();
 
 		
 		//REMOVE OLD OBJECTS

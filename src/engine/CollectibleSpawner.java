@@ -20,7 +20,7 @@ public class CollectibleSpawner{
 	private final int HEALTH_FREQUENCY = 36000;						//Frequency in ms between health spawns
 	private final int POWERUP_FREQUENCY = 28000;					//Frequency in ms between powerup spawns
 	private final int POINTS_FREQUENCY = 100000000;				    //DO NOT USE. PLACEHOLDER VARIABLE
-	private final int BOMB_FREQUENCY = 6000;						//Frequency in ms between bomb spawns
+	private final int BOMB_FREQUENCY = 36000;						//Frequency in ms between bomb spawns
 
 	
 	private final float RANDOM_DEVIATION = 0.1f;					//Randomness deviation is set to 10%

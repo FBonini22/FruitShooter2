@@ -42,7 +42,7 @@ public class Enemy extends Entity{
 	
 	private boolean dead = false;
 	boolean random;
-	private int multiplier;
+	private int multiplier = 1;
 	/**
 	 * 
 	 * @param selectedEnemy The fruit that the player will play as

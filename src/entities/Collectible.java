@@ -56,7 +56,7 @@ public class Collectible extends Entity{
 	public void init(GameContainer gc) throws SlickException {
 		switch(type){
 		case Health:
-			imgPath = "";
+			imgPath = "img/Health.png";
 			break;
 		case PowerUp:
 			imgPath = "";
