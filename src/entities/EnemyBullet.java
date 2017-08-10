@@ -13,10 +13,16 @@ public class EnemyBullet extends Bullet{
    private boolean _accel;
    private float _xSpeed;
    private float _ySpeed;
+   private float _speed;
+   private float _hyp;
+   private float _xMove;
+   private float _yMove;
+   
    
    private boolean _homing;
    private float pX;
    private float pY;
+   private boolean _check;
 
    //Constants
    private final float _acceleration = .5f;
@@ -42,19 +48,43 @@ public class EnemyBullet extends Bullet{
       _ySpeed = 0;
    }
    
-   public EnemyBullet(float x, float y, float xMove, float yMove, float width, float height, boolean accel, boolean homing){
-		  super(x, y, xMove, yMove, width, height);
+   /**
+    * Secondary Bullet Class
+    * @param x is the initial x position
+    * @param y is the initial y position
+    * @param speed is the speed of the bullet
+    * @param width is the width of the hitbox
+    * @param height is the height of the hitbox
+    * @param accel determines if the bullet accelerates
+    * @param homing determines if the bullet will target for the player
+    */
+   public EnemyBullet(float x, float y, float speed, float width, float height, boolean accel, boolean homing){
+		  super(x, y, 0, 0, width, height);
 	      _accel = accel;
 	      _homing = homing;
 	      pX = Engine.x;
 	      pY = Engine.y;
+	      _speed = speed;
 	      
 	      _xSpeed = 0;
 	      _ySpeed = 0;
 	   }
    
    private void Movement(float xMove, float yMove){
-	  if (_accel == true){
+	  if (_homing == true){
+			 if (_check == false){
+				 Homing(pX, pY);
+				 _check = true;
+			 }
+			 
+			 if (_accel == true){
+				 Accelerate(_xMove, _yMove);
+			 }
+			 else{
+				 this.moveBy(_xMove, _yMove);
+			 }
+		 } 
+	  else if (_accel == true){
 		  Accelerate(xMove, yMove);
       }
       else{
@@ -62,15 +92,20 @@ public class EnemyBullet extends Bullet{
       }
    } 
    
+   private void Homing(float pX, float pY){
+	   _hyp = (float) Math.sqrt(((pX-x)*(pX-x)) + ((pY-y)*(pY-y)));
+	   _xMove = ((pX - x)/_hyp) * _speed;
+	   _yMove = ((pY - y)/_hyp) * _speed;
+   }
+   
+   //Still fixing this
    private void Accelerate(float xMove, float yMove){
-		  if (_xSpeed >= xMove){
-			 _xSpeed = xMove;  
-		  }
-		  if (_ySpeed >= yMove){
+		  if (_xSpeed > xMove || _ySpeed > yMove){
+			  _xSpeed = xMove;
 			  _ySpeed = yMove;
 		  }
+			  
 		  this.moveBy(_xSpeed, _ySpeed);
-		  _xSpeed += _acceleration;
 		  _ySpeed += _acceleration;
    }
    

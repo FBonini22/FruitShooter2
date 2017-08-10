@@ -124,7 +124,7 @@ public Enemy(EnemyType selectedEnemy, float P1, float P2, EnemyMovement move){ /
 			if (x == (GameWindow.SCREEN_WIDTH/2) - 30){
 				time += delta; //Time
 				if (time >= 1000){
-					Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, 20, 0, 1, false, true)));
+					Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 10, 0, 1, false, true)));
 					x += xSpeed;
 				}
 				break;
