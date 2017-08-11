@@ -21,22 +21,22 @@ import view.GameWindow;
 public class Player extends Entity{
 	
 	//Controls
-	private int UP_CONTROL		= Input.KEY_UP;
-	private int DOWN_CONTROL 	= Input.KEY_DOWN;
-	private int LEFT_CONTROL 	= Input.KEY_LEFT;
-	private int RIGHT_CONTROL 	= Input.KEY_RIGHT;
-	private int FIRE_CONTROL 	= Input.KEY_SPACE;
-	private int BOMB_CONTROL 	= Input.KEY_LCONTROL;
+	private int UP_CONTROL		= Input.KEY_UP;										//Up control movement
+	private int DOWN_CONTROL 	= Input.KEY_DOWN;									//Down control movement
+	private int LEFT_CONTROL 	= Input.KEY_LEFT;									//Left control movement
+	private int RIGHT_CONTROL 	= Input.KEY_RIGHT;									//Right control movement
+	private int FIRE_CONTROL 	= Input.KEY_SPACE;									//Shooting control movement
+	private int BOMB_CONTROL 	= Input.KEY_LCONTROL;								//Bomb control movement
 	
 	//Constants
 	private final float startingX = (float)(GameWindow.SCREEN_WIDTH) / 2f;			//Player starts in the middle of the screen, horizontally
 	private final float startingY = (float)(GameWindow.SCREEN_HEIGHT) * 0.90f;		//Player starts 10% up the screen
-	private final float DEFAULT_MOVEMENT_SPEED = 10f;
+	private final float DEFAULT_MOVEMENT_SPEED = 10f;								//Movement speed
 	private final double STARTING_HEALTH = 100f;									//Default starting player health
 	private final int	HIT_COOLDOWN = 1000;										//Milliseconds before player can be hit again
 	private final int	HIT_ANIM_FLASH = 200;										//Milliseconds between each flash of the player hit animation
-	private final float PLAYER_HEIGHT = 48f;
-	private final float PLAYER_WIDTH = 48f;
+	private final float PLAYER_HEIGHT = 48f;										//Height of the player
+	private final float PLAYER_WIDTH = 48f;											//Width of the player
 
 	private final int	DEFAULT_FIRE_COOLDOWN = 250;								//Milliseconds for the default time between each firing
 	private final int	DEFAULT_BOMB_COOLDOWN = 3000;								//Milliseconds for the cooldown for throwing a cleaing bomb
@@ -45,33 +45,33 @@ public class Player extends Entity{
 	
 	
 	//Instance Variables
-	private Input input;								//Variable that is called to poll for key inputs
-	private FruitType currentFruit;					//The user-selected fruit
-	private int playerNum;								//The player number. 1 or 2 ONLY
+	private Input input;															//Variable that is called to poll for key inputs
+	private FruitType currentFruit;													//The user-selected fruit
+	private int playerNum;															//The player number. 1 or 2 ONLY
 	
-	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Player instance
-	private double health;								//Player health
-	private int powerLevel = 1;							//Player power up level
+	private String imgPath = "img/test.png";										//Path to image that will be loaded for this Player instance
+	private double health;															//Player health
+	private int powerLevel = 1;														//Player power up level
 	private float movementSpeed = DEFAULT_MOVEMENT_SPEED;
 	
-	private boolean hitCoolingDown = false;				//Boolean to keep track of whether the player is in a cooling down state
-	private int timeSinceLastHit = 0;					//Used to keep track of time since last collision with player
-	private int timeSinceLastFlash = 0;					//Used for hit animation flashing
-	private boolean isTransparent = false;
+	private boolean hitCoolingDown = false;											//Boolean to keep track of whether the player is in a cooling down state
+	private int timeSinceLastHit = 0;												//Used to keep track of time since last collision with player
+	private int timeSinceLastFlash = 0;												//Used for hit animation flashing
+	private boolean isTransparent = false;											//Boolean to determine if something is transparent
 	
-	private boolean firing = false;
-	private boolean isInFiringCooldown = false;
-	private int timeSinceLastFire = 0;
+	private boolean firing = false;													//Boolean to determine if the player is firing
+	private boolean isInFiringCooldown = false;										//Boolean to determine if the player is in firing cooldown
+	private int timeSinceLastFire = 0;												//Variable to determine how long since the player last fired
 	
-	private boolean isInBombCooldown = false;
-	private int timeSinceLastBomb = 0;
+	private boolean isInBombCooldown = false;										//Boolean to determine if the player is in bomb cooldown
+	private int timeSinceLastBomb = 0;												//Variable to determine how long since the player last used a bomb
 	
-	private int fireCooldown = DEFAULT_FIRE_COOLDOWN;
-	private int bombCooldown = DEFAULT_BOMB_COOLDOWN;
+	private int fireCooldown = DEFAULT_FIRE_COOLDOWN;								//Assign a default fire cooldown
+	private int bombCooldown = DEFAULT_BOMB_COOLDOWN;								//Assign a default bomb cooldown
 	
-	private int numBombs = 0;
+	private int numBombs = 0;														//Variable to keep track of the number of bombs
 	
-	private boolean isDead = false;
+	private boolean isDead = false;													//Boolean to determine if the player is dead
 	
 	private Image healthBarBackground;
 	private Image healthBar;

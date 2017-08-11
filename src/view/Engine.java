@@ -30,42 +30,45 @@ public class Engine extends BasicGame{
 	public static float y;
 	
 	//Constants
-	private final int FRAME_RATE = 60;							//Frame rate in fps
-	private final int NUMBER_OF_SQUIRRELS = 20;					//Number of squirrels. FOR DEBUGGING ONLY
+	private final int FRAME_RATE = 60;											//Frame rate in fps
+	private final int NUMBER_OF_SQUIRRELS = 20;									//Number of squirrels. FOR DEBUGGING ONLY
 	
 	//Instance Variables
-	private List<Enemy> enemies = new ArrayList<Enemy>();			//List of drawable entities
-	private List<Player> players = new ArrayList<Player>();		//List of players
-	private List<Bullet> bullets = new ArrayList<Bullet>();		//List of bullet entities
+	private List<Enemy> enemies = new ArrayList<Enemy>();						//List of drawable entities
+	private List<Player> players = new ArrayList<Player>();						//List of players
+	private List<Bullet> bullets = new ArrayList<Bullet>();						//List of bullet entities
 	private List<Collectible> collectibles = new ArrayList<Collectible>();		//List of collectibles
-	private List<Entity> toRemove = new ArrayList<Entity>(); 	//List of entities to be removed
-	private List<Entity> toAdd = new ArrayList<Entity>();		//List of entities to be added
-	private int PointTotal;
-	private Random randomGenerator = new Random();
+	private List<Entity> toRemove = new ArrayList<Entity>(); 					//List of entities to be removed
+	private List<Entity> toAdd = new ArrayList<Entity>();						//List of entities to be added
+	private int PointTotal;														//The total number of points that the player has
+	private Random randomGenerator = new Random();								//A general use random number generator that can be accesed by any method in engine
+	
+	private boolean spawner = false;											//Boolean that determines if enemies will spawn
+	private List<Bullet> toRemoveBullets = new ArrayList<Bullet>();				//Nu current use for this list
 
 
-	private List<Bullet> toRemoveBullets = new ArrayList<Bullet>();
 
+	private boolean worldClipSet = false;										//Boolean for whether the WorldClip has been initialized
 
+	private int point;															//No current use for this variable
 
-	private boolean isInBossBattle = false;
-
-	private boolean worldClipSet = false;						//Boolean for whether the WorldClip has been initialized
-
-	private int point;
-
-	private int currentWave = 0;								//Variable to keep track of the current wave of enemies
-	private int currentLevel = 0;								//Variable to keep track of how many bosses have been defeated
+	private int currentWave = 0;												//Variable to keep track of the current wave of enemies
+	private int currentLevel = 0;												//Variable to keep track of how many bosses have been defeated
 	
 	private boolean isDead = false;
-	private boolean bossType = false;							//False is for boss type 1, true is for boss type 2
+	private boolean bossType = false;											//False is for boss type 1, true is for boss type 2
 	
-	private int time = 0;
-	private int interval = 0;								//Time before another wave starts
-	private int bossTimer = 0;
-	private CollectibleSpawner collecSpawn = new CollectibleSpawner();
-	private int Time = 0;
-	private int multiplier = 1;
+	private int time = 0;														//Variable to keep track of total game time
+	private int interval = 0;													//Timer used to keep track of the delay within the spawner methods
+	private int bossTimer = 0;													//Time before a boss spawns
+	private float delayTimer;													//The timer used by the spawning method
+	private int Time = 0;														//Timer used to keep track of difficulty changes
+	
+	private CollectibleSpawner collecSpawn = new CollectibleSpawner();			//List to hold all collectables
+	
+	private float multiplier = 1f;												//Difficulty increase tracker
+	private int spawnChoice = 0;												//Variable to determine what type of enemy movement will occur
+	
 	//TESTING
 	private Player p1 = new Player(FruitType.Banana, 1);
 	
@@ -99,7 +102,7 @@ public class Engine extends BasicGame{
 		players.add(p1);
 		
 		//Initialize Background image
-		Background = new Image("img/Background.png"); //TODO Change background to desired image
+		Background = new Image("img/Background2.png"); //TODO Change background to desired image
 		
 
 		for (int i = 0; i< NUMBER_OF_SQUIRRELS; i++){
@@ -148,14 +151,15 @@ public class Engine extends BasicGame{
 		
 		
 		//Render background image
+
 		Background.draw(0,0);
 		
 		//Draw the current point total
-		g.drawString(String.format("Player Points: %1$s", String.valueOf((int)PointTotal)), 600, 32);
+		g.drawString(String.format("Player Points: %1$s", String.valueOf((int)PointTotal)), GameWindow.SCREEN_WIDTH-200, 32);
 		
-		g.drawString(String.format("Time Elapsed: %1$s", String.valueOf((int)time/1000)), 600, 64);
+		g.drawString(String.format("Time Elapsed: %1$s", String.valueOf((int)time/1000)), GameWindow.SCREEN_WIDTH-200, 64);
 		
-		g.drawString(String.format("Enemies: %1$s", String.valueOf((int)enemies.size())), 600, 94);
+		g.drawString(String.format("Enemies: %1$s", String.valueOf((int)enemies.size())), GameWindow.SCREEN_WIDTH-200, 94);
 		
 		
 
@@ -192,13 +196,36 @@ public class Engine extends BasicGame{
 		x = p1.x;
 		y = p1.y;
 		
-		
+		delayTimer += delta;
+		//D.BUG(Float.toString(delayTimer));
 		Time += delta;
+		
+		time += delta;
+		if (delayTimer >= Globals.reset){
+			spawner = false;
+			delayTimer = 0;
+		}
+		if (delayTimer >= Globals.TIMER){
+			spawner = true;
+			//D.BUG("Spawner is true");
+		}
+		if (spawner){
+			//D.BUG(Float.toString(interval));
+			if(interval >= Globals.Delay){
+			generateEnemies();
+			interval = 0;
+			}
+			else
+				interval += delta;
+		}
+		
+		
 		//D.BUG(Integer.toString(Time));
 		if (Time > Globals.LevelChange){
-			multiplier += 1;
+			multiplier += Globals.LevelChangeAmount;
 			Time = 0;
-			D.BUG("Multiplier increased");
+			//D.BUG("Multiplier increased");
+			//D.BUG(Float.toString(multiplier));
 		}	
 		collecSpawn.update(gc, delta);
 		
@@ -277,13 +304,8 @@ public class Engine extends BasicGame{
 		dumpObjects();
 		
 		checkGameProgress(delta);
+		//D.BUG(Boolean.toString(spawner));
 		
-		time += delta;
-		interval += delta;
-		if (interval >= Globals.TIMER){
-			Preset1();
-			interval = 0;
-		}
 	}
 	
 	/**
@@ -291,12 +313,8 @@ public class Engine extends BasicGame{
 	 * Call at the end of the update() method.
 	 */
 	private void checkGameProgress(float delta){
-		time += delta;
-		interval += delta;
-		if (interval >= Globals.TIMER){
-			Preset1();
-			interval = 0;
-		}
+
+		
 		bossTimer += delta;
 		
 		if (bossTimer>= Globals.BossTimer){
@@ -329,15 +347,29 @@ public class Engine extends BasicGame{
 	}
 	
 	/**
-	 * Generate new enemies. This should be called after a wave has been completed
+	 * Generate a random number and pick which spawn type will be used
 	 */
 	private void generateEnemies(){
-		for (int i = 0; i< NUMBER_OF_SQUIRRELS; i++){
-
-			toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Random));
-
+		spawnChoice = randomGenerator.nextInt(Globals.spawnMethods);
+		//D.BUG(Integer.toString(spawnChoice));
+		if (spawnChoice <= 1){
+			Preset1();
 		}
-		
+		else if (spawnChoice <= 2){
+			Preset2();
+		}
+		else if (spawnChoice <= 3){
+			Preset3();
+		}
+		else if (spawnChoice <= 4){
+			Preset4();
+		}
+		else if (spawnChoice <= 5){
+			Preset5();
+		}
+		else if (spawnChoice <= 6){
+			Preset6();
+		}
 	}
 	
 	/**
@@ -349,11 +381,11 @@ public class Engine extends BasicGame{
 		int Spawn_X =  randomGenerator.nextInt(GameWindow.SCREEN_WIDTH-375);
 		Enemy B;
 		if(bossType){		
-			B = new Enemy(Spawn_X, 0, EnemyType.JumboSquirrel_1, Globals.BOSS_HEIGHT1, Globals.BOSS_WIDTH1, EnemyMovement.Random); 	//Added Spawn_X and Spawn_Y to change the spawning location of the squirrels to random locations
+			B = new Enemy(Spawn_X, 0, EnemyType.JumboSquirrel_1, Globals.BOSS_HEIGHT1, Globals.BOSS_WIDTH1, EnemyMovement.Random, multiplier); 	//Added Spawn_X and Spawn_Y to change the spawning location of the squirrels to random locations
 			bossType = false;
 		}
 		else{
-			B = new Enemy(Spawn_X, 0, EnemyType.JumboSquirrel_2, Globals.BOSS_HEIGHT2, Globals.BOSS_WIDTH2, EnemyMovement.Random); 	//Added Spawn_X and Spawn_Y to change the spawning location of the squirrels to random locations
+			B = new Enemy(Spawn_X, 0, EnemyType.JumboSquirrel_2, Globals.BOSS_HEIGHT2, Globals.BOSS_WIDTH2, EnemyMovement.Random, multiplier); 	//Added Spawn_X and Spawn_Y to change the spawning location of the squirrels to random locations
 			bossType = true;
 		}
 		
@@ -454,12 +486,54 @@ public class Engine extends BasicGame{
 		//Clear entities marked for removal
 		toRemove.clear();
 	}
-	
+/**
+ * Method to spawn enemies using slice to movement
+ */
  private void Preset1(){
-		generateEnemies();
-		D.BUG("Preset1");
+		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToRight));
+		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToLeft));
+		//D.BUG("Preset1");
 	}
-	
+ 
+ /**
+  * Method to generate enemies using the vShoot method
+  */
+ private void Preset2(){
+		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.VShoot));
+		//D.BUG("Preset2");
+ }
+
+ /**
+  * Method to generate an enemy using random movement
+  */
+ private void Preset3(){
+	 	int x = randomGenerator.nextInt(600);
+	 	int y = randomGenerator.nextInt(200);
+	 
+	 	toAdd.add(new Enemy(x, y, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Random));
+	 	//D.BUG("Preset3");
+ }
+ 
+ /**
+  * Method to spawn an enemy using a yet to be determined movement method
+  */
+ private void Preset4(){
+	 //D.BUG("Preset4");
+ }
+ 
+ /**
+  * Method to spawn an enemy using a yet to be determined movement method
+  */
+ private void Preset5(){
+	// D.BUG("Preset5");
+ }
+ 
+ /**
+  * Method to spawn an enemy using a yet to be determined movement method
+  */
+ private void Preset6(){
+	 //D.BUG("Preset6");
+ }
 }
 
 

@@ -23,8 +23,6 @@ public class Enemy extends Entity{
 	
 	//Instance Variables
 	private EnemyType _currentEnemy;					//The user-selected enemy
-	private int _EnemyNum;								//The number enemy created
-	private int _offSet;								//The amount that the generated enemy will be offset from the first generated enemy.
 	private final float MOVEMENT_SPEED = 5f;			//Movement speed in pixels per second
 	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Enemy instance
 	private int Move = 100;
@@ -40,9 +38,10 @@ public class Enemy extends Entity{
 	private boolean initialize;		//Initializes the preset coordinates
 	private EnemyMovement movement;
 	
-	private boolean dead = false;
+	private boolean dead = false;	//Parameter used to determine if an enemy should be deleted or not
 	boolean random;
-	private int multiplier = 1;
+	private float multiplier = 1;	//Parameter used to increase the health of an enemy
+	private float location_y;
 	/**
 	 * 
 	 * @param selectedEnemy The fruit that the player will play as
@@ -52,16 +51,15 @@ public class Enemy extends Entity{
 public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, EnemyMovement move){ //Added parameters to take in the size of the hitbox desired
 		
 		super(x, y, P1,P2);
-
+		location_y = y;
 		//Instantiate instance variables
 		_currentEnemy = selectedEnemy;	
-		_offSet =_EnemyNum*26;		
-
 		movement = move;
 
 		
 		InitializeEnemyAttributes();
 }
+
 
 public Enemy(EnemyType selectedEnemy, float P1, float P2, EnemyMovement move){ //Shorter Constructor for just having a preset movement enemy spawn
 	
@@ -73,6 +71,17 @@ public Enemy(EnemyType selectedEnemy, float P1, float P2, EnemyMovement move){ /
 	InitializeEnemyAttributes();
 }
 
+public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, EnemyMovement move, float mult){ //Boss constructor. Used to spawn a boss with an increasing amount health
+	
+	super(x, y, P1,P2);
+
+	//Instantiate instance variables
+	_currentEnemy = selectedEnemy;	
+	movement = move;
+	multiplier = mult;
+	
+	InitializeEnemyAttributes();
+}
 
 /**
  * Method to initialize the attributes of the enemy. Contains a switch statement to pick which enemy type will be generated.
@@ -141,7 +150,9 @@ public Enemy(EnemyType selectedEnemy, float P1, float P2, EnemyMovement move){ /
 			break;
 		}
 	}
-			
+/**
+ * 	Method to spawn an enemy in the top left
+ */
 private void SpawnTopLeft(){
 	if (initialize == false){
 		x = 0;
@@ -149,6 +160,10 @@ private void SpawnTopLeft(){
 		initialize = true;
 	}
 }
+
+/**
+ * Method to spawn an enemy in the top right
+ */
 private void SpawnTopRight(){
 	if (initialize == false){
 		x = GameWindow.SCREEN_WIDTH - 50;
@@ -157,33 +172,48 @@ private void SpawnTopRight(){
 	}
 }
 	
-	
+/**
+ * Method to spawn an enemy with random movement and to test that the enemy won't pass beyond a certain y value
+ */
 private void RandomMovement(){
 		EnemyFire();
 		Random r_f = new Random();
-		int Frames = r_f.nextInt(35-25) + 25;
-				
-		if (Move > Frames){
-
-		
 		Random r_x = new Random();
 		Random r_y = new Random();
 		float Low = -MOVEMENT_SPEED;				//Min distance to be moved. Negative means to the left or up.
 		float High = MOVEMENT_SPEED;				//Max distance to be moved. Positive means to the right or down.
-		result_x = (int) (r_x.nextInt((int) (High-Low)) + Low);
-		result_y = (int) (r_y.nextInt((int) (High-Low))+Low);
+		
+		int Frames = r_f.nextInt(35-25) + 25;
+				
+		if (Move > Frames){
+			result_x = (int) (r_x.nextInt((int) (High-Low)) + Low);
+			result_y = (int) (r_y.nextInt((int) (High-Low))+Low);
+			if (y+result_y > 500){ //TODO set this back to < 500. Changed for testing purposes.
+				D.BUG("Test Limit Reached");
+				result_y = -5;
+			}
+		
+		
+		
+		
 		
 		//D.BUG("New Random Assigned");
 		Move = 0;
+
 		}
 		else{
 			
 			Move++;
 			//D.BUG("Move added 1");
 		}
-		this.moveBy((result_x), (result_y)); 
-}
+		this.moveBy((result_x), (result_y));
 
+		
+		//D.BUG(Float.toString(y));
+}
+/**
+ * Stuff needs to be added to this still
+ */
 private void Movement(){
 
 }
