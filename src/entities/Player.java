@@ -14,9 +14,9 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
 import Utilities.D;
+import gameStates.Engine;
 import globals.Globals;
 import sounds.*;
-import view.Engine;
 import view.GameWindow;
 
 public class Player extends Entity{

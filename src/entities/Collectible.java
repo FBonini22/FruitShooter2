@@ -5,8 +5,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import gameStates.Engine;
 import globals.Globals;
-import view.Engine;
 
 public class Collectible extends Entity{
 	
