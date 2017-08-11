@@ -23,6 +23,8 @@ public class Enemy extends Entity{
 	
 	//Instance Variables
 	private EnemyType _currentEnemy;					//The user-selected enemy
+	private int _EnemyNum;								//The number enemy created
+	private int _offSet;								//The amount that the generated enemy will be offset from the first generated enemy.
 	private final float MOVEMENT_SPEED = 5f;			//Movement speed in pixels per second
 	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Enemy instance
 	private int Move = 100;
@@ -39,9 +41,13 @@ public class Enemy extends Entity{
 	private EnemyMovement movement;
 	
 	private boolean dead = false;	//Parameter used to determine if an enemy should be deleted or not
-	boolean random;
+	Random random = new Random();
 	private float multiplier = 1;	//Parameter used to increase the health of an enemy
 	private float location_y;
+	
+
+	private int count;
+	
 	/**
 	 * 
 	 * @param selectedEnemy The fruit that the player will play as
@@ -59,7 +65,6 @@ public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, Enem
 		
 		InitializeEnemyAttributes();
 }
-
 
 public Enemy(EnemyType selectedEnemy, float P1, float P2, EnemyMovement move){ //Shorter Constructor for just having a preset movement enemy spawn
 	
@@ -138,7 +143,7 @@ public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, Enem
 			if (x == (GameWindow.SCREEN_WIDTH/2) - 30){
 				time += delta; //Time
 				if (time >= 1000){
-					Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 10, 0, 1, false, true)));
+					Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 10, 0, 1, true)));
 					x += xSpeed;
 				}
 				break;
@@ -147,6 +152,45 @@ public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, Enem
 				ySpeed = -5;
 			}
 			moveBy(xSpeed, ySpeed);
+			break;
+		case Spider:
+			if (initialize == false){
+				x = random.nextInt(GameWindow.SCREEN_WIDTH - 30);
+				y = 0;
+				ySpeed = 5;
+				initialize = true;
+			}
+			xSpeed = 0;
+			moveBy(xSpeed, ySpeed);
+			if (ySpeed > 0 && ySpeed < 0.05){
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 10, 0, 1, true)));
+			}
+			ySpeed -= (accel/4);
+			break;
+		case Teleport:
+			if (initialize == false){
+				x = random.nextInt(GameWindow.SCREEN_WIDTH - 30);
+				y = random.nextInt(GameWindow.SCREEN_HEIGHT - 300);
+				initialize = true;
+			}
+			time += delta;
+			if (time >= 2000 && count == 1){
+				moveTo(random.nextInt(GameWindow.SCREEN_WIDTH - 30), y = random.nextInt(GameWindow.SCREEN_HEIGHT - 300));
+				count--;
+				time = 0;
+			}
+			if (time >= 2000){
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 5, 5, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, 5, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, -5, 5, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 5, 0, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, -5, 0, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -5, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 5, -5, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, -5, -5, 0, 1)));
+				count++;
+				time = 0;
+			}
 			break;
 		}
 	}
@@ -172,9 +216,7 @@ private void SpawnTopRight(){
 	}
 }
 	
-/**
- * Method to spawn an enemy with random movement and to test that the enemy won't pass beyond a certain y value
- */
+	
 private void RandomMovement(){
 		EnemyFire();
 		Random r_f = new Random();
@@ -199,17 +241,13 @@ private void RandomMovement(){
 		
 		//D.BUG("New Random Assigned");
 		Move = 0;
-
 		}
 		else{
 			
 			Move++;
 			//D.BUG("Move added 1");
 		}
-		this.moveBy((result_x), (result_y));
-
-		
-		//D.BUG(Float.toString(y));
+		this.moveBy((result_x), (result_y)); 
 }
 /**
  * Stuff needs to be added to this still
@@ -305,7 +343,7 @@ private void Movement(){
 		int RandomFire = r_f.nextInt(300-0);
 		
 		if (RandomFire>298)
-		Engine.instance.addEntity(new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 0, 1, false));
+		Engine.instance.addEntity(new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, 10, 0, 1));
 		
 		
 	}

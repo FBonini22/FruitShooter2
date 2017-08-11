@@ -3,6 +3,7 @@ package entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -75,6 +76,9 @@ public class Player extends Entity{
 	
 	private Image healthBarBackground;
 	private Image healthBar;
+	
+	Random random = new Random();
+	private int temp = 0;
 
 	List<Image> bombBar = new ArrayList<Image>(BOMB_CAPACITY);	//ArrayList used to render the amount of bombs the player posesses
 	
@@ -151,7 +155,7 @@ public class Player extends Entity{
 			break;
 		case Lemon:
 			
-			fireCooldown = 500;
+			fireCooldown = 200;
 			
 			imgPath = "img/Lemon.png";
 			health = STARTING_HEALTH * 0.75f;
@@ -399,32 +403,55 @@ public class Player extends Entity{
 		//How the bullets will be handled depends on the current fruit that the player is
 		switch(currentFruit){
 		case Apple:
-			if(getPowerLevel() == 1){
+			if(getPowerLevel() >= 1){
 				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 1, 1));
+			}
+			if (getPowerLevel() >= 2){
+				Engine.instance.addEntity(new PlayerBullet(x + 46, y + 10, 5, -15, 1, 1));
+				Engine.instance.addEntity(new PlayerBullet(x - 16, y + 10, -5, -15, 1, 1));
+			}
+			if (getPowerLevel() >= 3){
+				Engine.instance.addEntity(new PlayerBullet(x + 46, y + 10, 10, -10, 1, 1));
+				Engine.instance.addEntity(new PlayerBullet(x - 16, y + 10, -10, -10, 1, 1));
 			}
 			
 			break;
 		case Banana:
-			if(getPowerLevel() == 1){
+			if(getPowerLevel() >= 1){
 				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 1, 1));
 			}
-
-			break;
-		case Lemon:
-			if(getPowerLevel() == 1){
-				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 1, 1));
-			}
-
-			break;
-		case Watermelon:
 			if (getPowerLevel() >= 2){
-				
 				Engine.instance.addEntity(new PlayerBullet(x + 46, y + 10, 0, -20, 1, 1));
-
 				Engine.instance.addEntity(new PlayerBullet(x - 16, y + 10, 0, -20, 1, 1));
 			}
 			if (getPowerLevel() >= 3){
 				setFirecooldown(200);
+			}
+
+			break;
+		case Lemon:
+			if(getPowerLevel() >= 1){
+				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 1, 1));
+			}
+			if (getPowerLevel() >= 2){
+				setFirecooldown(100);
+			}
+			if (getPowerLevel() >= 3){
+				setFirecooldown(75);
+			}
+
+			break;
+		case Watermelon:
+			if(getPowerLevel() >= 1){
+				temp = random.nextInt(10) - 5;
+				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, temp, -20, 1, 1));
+			}
+			if (getPowerLevel() >= 2){
+				temp = random.nextInt(14) - 7;
+				setFirecooldown(200);
+			}
+			if (getPowerLevel() >= 3){
+				setFirecooldown(100);
 			}
 			break;
 		}
@@ -492,8 +519,6 @@ public class Player extends Entity{
 			return isDead;
 
 		case "Collectible":
-			
-			powerUpSound.play();
 			
 			switch(((Collectible)collidedWith).getType()){
 			case Bomb:

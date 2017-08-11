@@ -25,13 +25,13 @@ import globals.Globals;
 
 public class Engine extends BasicGame{
 
-	//Public Static Player X and Player Y;
+	//Public Static Player X and Player Y. Used for homing attacks from enemy
 	public static float x;
 	public static float y;
 	
 	//Constants
-	private final int FRAME_RATE = 60;											//Frame rate in fps
-	private final int NUMBER_OF_SQUIRRELS = 20;									//Number of squirrels. FOR DEBUGGING ONLY
+	private final int FRAME_RATE = 60;							//Frame rate in fps
+	private final int NUMBER_OF_SQUIRRELS = 1;					//Number of squirrels. FOR DEBUGGING ONLY
 	
 	//Instance Variables
 	private List<Enemy> enemies = new ArrayList<Enemy>();						//List of drawable entities
@@ -48,9 +48,8 @@ public class Engine extends BasicGame{
 
 
 
-	private boolean worldClipSet = false;										//Boolean for whether the WorldClip has been initialized
+	private boolean worldClipSet = false;						//Boolean for whether the WorldClip has been initialized
 
-	private int point;															//No current use for this variable
 
 	private int currentWave = 0;												//Variable to keep track of the current wave of enemies
 	private int currentLevel = 0;												//Variable to keep track of how many bosses have been defeated
@@ -151,7 +150,6 @@ public class Engine extends BasicGame{
 		
 		
 		//Render background image
-
 		Background.draw(0,0);
 		
 		//Draw the current point total
@@ -304,7 +302,9 @@ public class Engine extends BasicGame{
 		dumpObjects();
 		
 		checkGameProgress(delta);
-		//D.BUG(Boolean.toString(spawner));
+		
+		time += delta;
+		interval += delta;
 		
 	}
 	
