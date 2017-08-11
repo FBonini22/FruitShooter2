@@ -24,13 +24,13 @@ import globals.Globals;
 
 public class Engine extends BasicGame{
 
-	//Public Static Player X and Player Y;
+	//Public Static Player X and Player Y. Used for homing attacks from enemy
 	public static float x;
 	public static float y;
 	
 	//Constants
 	private final int FRAME_RATE = 60;							//Frame rate in fps
-	private final int NUMBER_OF_SQUIRRELS = 20;					//Number of squirrels. FOR DEBUGGING ONLY
+	private final int NUMBER_OF_SQUIRRELS = 1;					//Number of squirrels. FOR DEBUGGING ONLY
 	
 	//Instance Variables
 	private List<Enemy> enemies = new ArrayList<Enemy>();			//List of drawable entities
@@ -46,23 +46,19 @@ public class Engine extends BasicGame{
 
 
 
-	private boolean isInBossBattle = false;
 
 	private boolean worldClipSet = false;						//Boolean for whether the WorldClip has been initialized
 
-	private int point;
 
-	private int currentWave = 0;								//Variable to keep track of the current wave of enemies
-	private int currentLevel = 0;								//Variable to keep track of how many bosses have been defeated
-	
 	private int time = 0;
 	private int interval = 0;								//Time before another wave starts
+	private int count = 0;
 	
 	private CollectibleSpawner collecSpawn = new CollectibleSpawner();
 	
 	
 	//TESTING
-	private Player p1 = new Player(FruitType.Banana, 1);
+	private Player p1 = new Player(FruitType.Apple, 1);
 	
 	// TODO New background and cleaner implementation 
 	private Image Background;
@@ -99,9 +95,8 @@ public class Engine extends BasicGame{
 
 		for (int i = 0; i< NUMBER_OF_SQUIRRELS; i++){
 
-			enemies.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToRight));
-			enemies.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToLeft));
-			enemies.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.VShoot));
+			enemies.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Teleport));
+			enemies.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Spider));
 
 	}
 
@@ -190,7 +185,7 @@ public class Engine extends BasicGame{
 //			}
 //		}
 		
-		//Testing Purposes. Not sure how this will work for multiple players yet
+		//Updates the player position so homing attacks can update as well. Not sure how the multiplayer aspect will work yet.
 		x = p1.x;
 		y = p1.y;
 		
@@ -284,9 +279,15 @@ public class Engine extends BasicGame{
 		
 		time += delta;
 		interval += delta;
-		if (interval >= Globals.TIMER){
+		
+		if (count == 5){
 			Preset1();
+			count = 0;
+		}
+		if (interval >= Globals.TIMER){
+			generateEnemies();
 			interval = 0;
+			count++;
 		}
 	}
 	
@@ -295,38 +296,6 @@ public class Engine extends BasicGame{
 	 * Call at the end of the update() method.
 	 */
 	private void checkGameProgress(){
-		//D.BUG(Integer.toString(enemy.size()));
-		//D.BUG(Integer.toString(currentWave));
-		if(enemies.size()<= 0)
-			currentWave++;
-		
-		if(currentWave == Globals.WAVES_UNTIL_BOSS){
-			//ENABLE BOSS BATTLE
-			generateBoss();
-			currentWave++;
-			isInBossBattle = true;
-			D.BUG("Boss Generated");
-			D.BUG(Integer.toString(enemies.size()));
-		}
-		//NEW WAVE!
-		/*
-		if(enemy.size() <= 0){
-			D.BUG("No current enemies");
-			D.BUG(Integer.toString(enemy.size()));
-			if(isInBossBattle){
-				//Just defeated a boss
-				D.BUG("Boss defeated");
-				isInBossBattle = false;
-				currentLevel++;
-			}
-			else{
-				generateEnemies();			
-				D.BUG("Enemy Wave");
-			}
-			
-
-		}
-		*/
 		
 		
 		
@@ -449,10 +418,18 @@ public class Engine extends BasicGame{
 		toRemove.clear();
 	}
 	
- private void Preset1(){
-		generateEnemies();
-		D.BUG("Preset1");
+	
+	
+	//Uhhhh idk quite yet
+	private void Preset1(){
+		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToRight));
+		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToLeft));
+		count = 0;
 	}
+	private void Preset2(){
+		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.VShoot));
+	}
+	
 	
 }
 

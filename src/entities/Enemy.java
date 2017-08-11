@@ -40,8 +40,8 @@ public class Enemy extends Entity{
 	private boolean initialize;		//Initializes the preset coordinates
 	private EnemyMovement movement;
 	
-	
-	boolean random;
+	Random random = new Random();
+	private int count;
 	/**
 	 * 
 	 * @param selectedEnemy The fruit that the player will play as
@@ -124,7 +124,7 @@ public Enemy(EnemyType selectedEnemy, float P1, float P2, EnemyMovement move){ /
 			if (x == (GameWindow.SCREEN_WIDTH/2) - 30){
 				time += delta; //Time
 				if (time >= 1000){
-					Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 10, 0, 1, false, true)));
+					Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 10, 0, 1, true)));
 					x += xSpeed;
 				}
 				break;
@@ -133,6 +133,45 @@ public Enemy(EnemyType selectedEnemy, float P1, float P2, EnemyMovement move){ /
 				ySpeed = -5;
 			}
 			moveBy(xSpeed, ySpeed);
+			break;
+		case Spider:
+			if (initialize == false){
+				x = random.nextInt(GameWindow.SCREEN_WIDTH - 30);
+				y = 0;
+				ySpeed = 5;
+				initialize = true;
+			}
+			xSpeed = 0;
+			moveBy(xSpeed, ySpeed);
+			if (ySpeed > 0 && ySpeed < 0.05){
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 10, 0, 1, true)));
+			}
+			ySpeed -= (accel/4);
+			break;
+		case Teleport:
+			if (initialize == false){
+				x = random.nextInt(GameWindow.SCREEN_WIDTH - 30);
+				y = random.nextInt(GameWindow.SCREEN_HEIGHT - 300);
+				initialize = true;
+			}
+			time += delta;
+			if (time >= 2000 && count == 1){
+				moveTo(random.nextInt(GameWindow.SCREEN_WIDTH - 30), y = random.nextInt(GameWindow.SCREEN_HEIGHT - 300));
+				count--;
+				time = 0;
+			}
+			if (time >= 2000){
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 5, 5, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, 5, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, -5, 5, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 5, 0, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, -5, 0, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -5, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 5, -5, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, -5, -5, 0, 1)));
+				count++;
+				time = 0;
+			}
 			break;
 		}
 	}
@@ -268,7 +307,7 @@ private void Movement(){
 		int RandomFire = r_f.nextInt(300-0);
 		
 		if (RandomFire>298)
-		Engine.instance.addEntity(new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 0, 1, false));
+		Engine.instance.addEntity(new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, 10, 0, 1));
 		
 		
 	}
