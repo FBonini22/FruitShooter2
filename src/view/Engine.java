@@ -44,15 +44,11 @@ public class Engine extends BasicGame{
 
 	private List<Bullet> toRemoveBullets = new ArrayList<Bullet>();
 
-
-
-
 	private boolean worldClipSet = false;						//Boolean for whether the WorldClip has been initialized
 
 
 	private int time = 0;
 	private int interval = 0;								//Time before another wave starts
-	private int count = 0;
 	
 	private CollectibleSpawner collecSpawn = new CollectibleSpawner();
 	
@@ -280,14 +276,9 @@ public class Engine extends BasicGame{
 		time += delta;
 		interval += delta;
 		
-		if (count == 5){
-			Preset1();
-			count = 0;
-		}
 		if (interval >= Globals.TIMER){
 			generateEnemies();
 			interval = 0;
-			count++;
 		}
 	}
 	
@@ -417,20 +408,6 @@ public class Engine extends BasicGame{
 		//Clear entities marked for removal
 		toRemove.clear();
 	}
-	
-	
-	
-	//Uhhhh idk quite yet
-	private void Preset1(){
-		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToRight));
-		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToLeft));
-		count = 0;
-	}
-	private void Preset2(){
-		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.VShoot));
-	}
-	
-	
 }
 
 

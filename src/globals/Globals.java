@@ -34,7 +34,7 @@ public class Globals {
 	
 	//GAMEPLAY MECHANICS
 	public static final int WAVES_UNTIL_BOSS = 1;
-	public static final int gruntValue = 1;
-	public static final int bossValue = 10;
+	public static final int gruntValue = 100;
+	public static final int bossValue = 1000;
 
 }
