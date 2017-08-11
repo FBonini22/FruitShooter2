@@ -20,7 +20,7 @@ public class GameWindow {
 	public static final float HBAR_HEIGHT = SCREEN_HEIGHT * 0.95f;	//Height of the health bar
 	
 	//Bomb Layout
-	public static final int BBAR_X = (int)((float)SCREEN_WIDTH * 0.1f);
-	public static final int BBAR_Y = (int)((float)SCREEN_HEIGHT * 0.9f);
+	public static final int BBAR_X = (int)((float)SCREEN_WIDTH * 0.87f);
+	public static final int BBAR_Y = (int)((float)SCREEN_HEIGHT * 0.97f);
 	
 }
