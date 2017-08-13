@@ -43,4 +43,11 @@ public class Globals {
 	public static final float Delay = 250f;			//Time between spawning of enemies once spawning method is triggered by a boolean
 	public static final float reset = 7000f;		//Time until the spawning method is reset
 	public static final int spawnMethods = 6;		//Variable that determines how many spawning methods are available to be used. Increasing this will increase the number of possibilities that the random number generator can pick
+
+	//GAME STATE IDS
+	public static final int CHARACTER_SELECT_STATE_ID = 1000;
+	public static final int GAME_ENGINE_STATE_ID = 1001;
+	public static final int GAME_OVER_STATE_ID = 1002;
+
+
 }

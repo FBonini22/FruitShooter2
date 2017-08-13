@@ -1,5 +1,5 @@
 
-package view;
+package gameStates;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
 
 import Utilities.D;
 import engine.CollectibleSpawner;
@@ -22,16 +24,17 @@ import entities.Entity;
 import entities.FruitType;
 import entities.Player;
 import globals.Globals;
+import view.GameWindow;
 
-public class Engine extends BasicGame{
+public class Engine extends BasicGameState{
 
-	//Public Static Player X and Player Y;
+	//Public Static Player X and Player Y. Used for homing attacks from enemy
 	public static float x;
 	public static float y;
 	
 	//Constants
-	private final int FRAME_RATE = 60;											//Frame rate in fps
-	private final int NUMBER_OF_SQUIRRELS = 20;									//Number of squirrels. FOR DEBUGGING ONLY
+	private final int FRAME_RATE = 60;							//Frame rate in fps
+	private final int NUMBER_OF_SQUIRRELS = 1;					//Number of squirrels. FOR DEBUGGING ONLY
 	
 	//Instance Variables
 	private List<Enemy> enemies = new ArrayList<Enemy>();						//List of drawable entities
@@ -48,9 +51,8 @@ public class Engine extends BasicGame{
 
 
 
-	private boolean worldClipSet = false;										//Boolean for whether the WorldClip has been initialized
+	private boolean worldClipSet = false;						//Boolean for whether the WorldClip has been initialized
 
-	private int point;															//No current use for this variable
 
 	private int currentWave = 0;												//Variable to keep track of the current wave of enemies
 	private int currentLevel = 0;												//Variable to keep track of how many bosses have been defeated
@@ -82,7 +84,7 @@ public class Engine extends BasicGame{
 
 
 	private Engine(String title) {
-		super(title);
+		super();
 	}
 	
 
@@ -91,7 +93,7 @@ public class Engine extends BasicGame{
 	 * @param gc The window/container in which the game is running
 	 */
 	@Override
-	public void init(GameContainer gc) throws SlickException {
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		gc.setTargetFrameRate(FRAME_RATE);
 		gc.setAlwaysRender(true);
 		gc.setMaximumLogicUpdateInterval(FRAME_RATE);
@@ -135,7 +137,7 @@ public class Engine extends BasicGame{
 	 * @param g The graphics back-end of the running game. Use contained methods to update and draw graphics.
 	 */
 	@Override
-	public void render(GameContainer gc, Graphics g) throws SlickException {
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		
 		//Set world clipping
 		//We want to utilize the Graphics parameter, so we will call the world
@@ -151,7 +153,6 @@ public class Engine extends BasicGame{
 		
 		
 		//Render background image
-
 		Background.draw(0,0);
 		
 		//Draw the current point total
@@ -190,7 +191,7 @@ public class Engine extends BasicGame{
 	 * @param delta The time between each frame
 	 */
 	@Override
-	public void update(GameContainer gc, int delta) throws SlickException {
+	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 
 		//Testing Purposes. Not sure how this will work for multiple players yet
 		x = p1.x;
@@ -304,7 +305,9 @@ public class Engine extends BasicGame{
 		dumpObjects();
 		
 		checkGameProgress(delta);
-		//D.BUG(Boolean.toString(spawner));
+		
+		time += delta;
+		interval += delta;
 		
 	}
 	
@@ -534,6 +537,12 @@ public class Engine extends BasicGame{
  private void Preset6(){
 	 //D.BUG("Preset6");
  }
+
+
+@Override
+public int getID() {
+	return Globals.GAME_ENGINE_STATE_ID;
+}
 }
 
 

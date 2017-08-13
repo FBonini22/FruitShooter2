@@ -11,7 +11,7 @@ import org.newdawn.slick.SlickException;
 import Utilities.D;
 import entities.Collectible;
 import entities.CollectibleType;
-import view.Engine;
+import gameStates.Engine;
 import view.GameWindow;
 
 public class CollectibleSpawner{
