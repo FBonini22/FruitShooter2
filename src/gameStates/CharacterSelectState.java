@@ -23,25 +23,27 @@ import view.GameWindow;
 public class CharacterSelectState extends GameStateTemplate{
 	
 	//CONSTANTS
-	private final float STARTING_FRUIT_X = GameWindow.SCREEN_WIDTH * 0.125f;
-	private final float STARTING_FRUIT_Y = GameWindow.SCREEN_HEIGHT * 0.5f;
-	private final float X_INCREMENT = GameWindow.SCREEN_WIDTH * 0.25f;
+	private final float STARTING_FRUIT_X = GameWindow.SCREEN_WIDTH * 0.125f;		//The X-coordinate of where the first fruit will be drawn
+	private final float STARTING_FRUIT_Y = GameWindow.SCREEN_HEIGHT * 0.5f;			//The Y-coordinate for all of the fruits
+	private final float X_INCREMENT = GameWindow.SCREEN_WIDTH * 0.25f;				//The value by which to increment each fruit's x-value
 	
 	//INSTANCE VARIABLES
-	private Input input;
-	private Rectangle selectionCursor;
-	private ShapeFill selectionCursorFill;
+	private Input input;									//Variable for key/controller input handling
+	private Rectangle selectionCursor;						//Cursor to be drawn around the currently selected fruit
 	
-	int selectionIndex;									//The current index of the player that the user is selecting
+	int selectionIndex;										//The current index of the player that the user is selecting
 	int pNum = 1;											//Number of the current player in fruit-selection
 	
-	Sound selectionSound;
+	Sound selectionSound;									//The sound to be played when the cursor is moved
 	
 	
-	//List<FruitType>
+	//List of available fruits that can be selected for a character
 	List<Image> fruitSelections = new ArrayList<Image>();
+	
+	//Variable to keep track of the selected fruit. Used for helping draw the cursor
 	Image currentFruit;
 	
+	//List of each player's selected fruit. Each list item is the fruit that the respective player selected
 	List<FruitType> selectedFruits = new ArrayList<FruitType>();
 
 	@Override
@@ -55,7 +57,6 @@ public class CharacterSelectState extends GameStateTemplate{
 		fruitSelections.add(new Image("img/Banana.png"));
 		fruitSelections.add(new Image("img/Lemon.png"));
 		
-		
 		selectionSound = new Sound(FX.SPLAT);
 	}
 
@@ -63,16 +64,20 @@ public class CharacterSelectState extends GameStateTemplate{
 	public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
 		
 		
-		
+		//Draw each selectable fruit
 		for(int i = 0; i < fruitSelections.size(); i++){
 			fruitSelections.get(i).drawCentered(STARTING_FRUIT_X + i * X_INCREMENT, STARTING_FRUIT_Y);
 		}
-		
+
+		//Draw Hint text at the top of the screen
 		g.drawString("Player " + String.valueOf(pNum) + ":", 50, 35);
 		g.drawString("Select your fruit for battle!", 50, 50);
-		g.drawString("(Use the arrow keys to choose a fruit and press enter to confirm selection)", 50, 65);
+		g.drawString("Use the arrow keys to choose a fruit.", 50, 65);
+		g.drawString("Press ENTER to confirm selection.", 50, 80);
 		
-
+		
+		
+		//Draw the selection cursor as yellow
 		g.setColor(org.newdawn.slick.Color.yellow);
 		g.draw(selectionCursor);
 		g.setColor(org.newdawn.slick.Color.white);
@@ -82,8 +87,6 @@ public class CharacterSelectState extends GameStateTemplate{
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
 		
 		input = gc.getInput();
-		
-
 		
 		//Move character selector to the right
 		if(input.isKeyPressed(Input.KEY_RIGHT)){
@@ -103,6 +106,8 @@ public class CharacterSelectState extends GameStateTemplate{
 		//If the user selects the current fruit
 		else if(input.isKeyPressed(Input.KEY_ENTER)){
 			selectedFruits.add(FruitType.values()[selectionIndex]);
+			
+			//Future code for multiplayer handling
 			if(Globals.MULTIPLAYER){
 				pNum++;
 				selectionIndex = 0;
@@ -133,13 +138,12 @@ public class CharacterSelectState extends GameStateTemplate{
 
 	@Override
 	public int getID() {
-		// TODO Auto-generated method stub
 		return Globals.CHARACTER_SELECT_STATE_ID;
 	}
 
 	@Override
 	public void disposeObjects() {
-		// TODO Auto-generated method stub
+		//NOT USED
 		
 	}
 

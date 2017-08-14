@@ -244,15 +244,20 @@ public class Player extends Entity{
 		
 		//Anything drawn ABOVE this comment will appear UNDERNEATH the player
 		
+		
 		//Draw the player at the default starting coordinates
 		if(hitCoolingDown){
+			//Run the hit animation
 			hitAnim();
 		}
 		g.drawImage(_entityImg, x, y);	
-		g.setColor(Color.green);
-		g.drawRect(x, y, width, height);
+		
+		//Draw a rectangle around the player. USED FOR DEBUGGING ONLY
+//		g.setColor(Color.green);
+//		g.drawRect(x, y, width, height);
+//		g.setColor(Color.white);
 
-		g.setColor(Color.white);
+		
 		//Anything drawn BELOW this comment will appear ON TOP of the player
 		drawHealthBar(g);
 		drawBombBar(g);
@@ -357,6 +362,10 @@ public class Player extends Entity{
 		}
 	}
 
+	/**
+	 * Method to draw the visual bomb bar. Call ONCE during the render() method
+	 * @param g 
+	 */
 	private void drawBombBar(Graphics g){
 		for(int i = 0; i < bombBar.size(); i++){
 			
@@ -366,8 +375,13 @@ public class Player extends Entity{
 		}
 	}
 
+	/**
+	 * Method to update the Visual bomb bar. Call ONCE during the update() method
+	 */
 	private void updateBombBar(){
 		for(Image bomb : bombBar){
+			
+			//If the player does not have this many bombs, draw the bomb as transparent
 			if(bombBar.indexOf(bomb) + 1 > numBombs){
 				bomb.setAlpha(0.3f);
 			}
@@ -376,6 +390,8 @@ public class Player extends Entity{
 			}
 		}
 	}
+	
+	
 	//USER INPUT AND FIRING
 	/**
 	 * Method to check for user input
@@ -486,10 +502,6 @@ public class Player extends Entity{
 			}
 			break;
 		}
-//		for(Bullet e : bullets){
-//			e.init(gc);
-//		}
-		
 	}
 
 	/**
@@ -523,7 +535,6 @@ public class Player extends Entity{
 	
 	@Override
 	public boolean isDangerous() {
-
 		return false;
 	}
 	
@@ -649,12 +660,4 @@ public class Player extends Entity{
 		
 	}
 	
-	
-
-
-
-
 }
-
-
-

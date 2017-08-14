@@ -35,4 +35,5 @@ public abstract class GameStateTemplate extends BasicGameState{
 		gc.getInput().clearKeyPressedRecord();
 		sbg.enterState(ID);
 	}
+	
 }

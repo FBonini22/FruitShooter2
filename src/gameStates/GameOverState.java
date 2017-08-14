@@ -26,6 +26,8 @@ public class GameOverState extends GameStateTemplate{
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+		
+		//Draw GAME-OVER message
 		g.drawString("GAME OVER", 50, 50);
 		g.drawString("Player " + String.valueOf(pNum) + " has died!", 50, 65);
 		g.drawString("Press ESC to exit.", 50, 100);
@@ -35,10 +37,12 @@ public class GameOverState extends GameStateTemplate{
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2) throws SlickException {
 		input = gc.getInput();
 		
-
+//TODO: For future implementation: add ability to restart game from inside the program
 //		if(input.isKeyPressed(Input.KEY_SPACE)){
 //			switchGameState(gc, sbg, Globals.CHARACTER_SELECT_STATE_ID);
 //		}
+		
+		//Exit the game
 		if(input.isKeyPressed(Input.KEY_ESCAPE)){
 			gc.exit();
 		}
@@ -47,16 +51,11 @@ public class GameOverState extends GameStateTemplate{
 
 	@Override
 	public void disposeObjects() {
-		
+		//NOT USED
 	}
 
 	@Override
 	public int getID() {
 		return Globals.GAME_OVER_STATE_ID;
 	}
-	
-	public void setPlayerNum(int playerNum){
-		pNum = playerNum;
-	}
-
 }

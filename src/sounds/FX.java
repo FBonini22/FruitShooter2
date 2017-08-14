@@ -4,6 +4,11 @@ import java.net.URL;
 
 import org.newdawn.slick.Sound;
 
+/**
+ * Class for all sound effects. Contains path locations for each file.
+ * @author Frank
+ *
+ */
 public class FX{
 
 	public static final String PLAYER_FIRE = "sound/PlayerFire.ogg";
