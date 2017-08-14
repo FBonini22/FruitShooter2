@@ -1,6 +1,8 @@
 package entities;
 
-public abstract class HitBox {
+import org.newdawn.slick.geom.Shape;
+
+public abstract class HitBox{
 
 	public float x;
 	public float y;

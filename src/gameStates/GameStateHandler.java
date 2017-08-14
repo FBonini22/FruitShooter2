@@ -26,8 +26,10 @@ public class GameStateHandler extends StateBasedGame{
 	 */
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
+		this.addState(new MainScreenState());
 		this.addState(new CharacterSelectState());
 		this.addState(Engine.instance);
+		this.addState(new GameOverState());
 		
 		//this.addState(new );
 		

@@ -12,6 +12,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.geom.Rectangle;
 
 import Utilities.D;
 import gameStates.Engine;
@@ -74,8 +75,11 @@ public class Player extends Entity{
 	
 	private boolean isDead = false;													//Boolean to determine if the player is dead
 	
-	private Image healthBarBackground;
-	private Image healthBar;
+	//private Image healthBarBackground;
+	//private Image healthBar;
+	
+	private Rectangle healthBarBackground;
+	private Rectangle healthBar;
 	
 	Random random = new Random();
 	private int temp = 0;
@@ -147,7 +151,7 @@ public class Player extends Entity{
 		case Banana:
 			
 
-			fireCooldown = 200;
+			fireCooldown = 32;
 
 			
 			imgPath = "img/Banana.png";
@@ -218,11 +222,17 @@ public class Player extends Entity{
 		return y;
 	}
 	
+	public int getPlayerNum(){
+		return playerNum;
+	}
+	
 	@Override
 	public void init(GameContainer gc) throws SlickException {
 		_entityImg = new Image(imgPath);
-		healthBarBackground = new Image("img/Health_Bar_Background.png");
-		healthBar = new Image("img/Health_Bar_Foreground.png");
+		//healthBarBackground = new Image("img/Health_Bar_Background.png");
+		//healthBar = new Image("img/Health_Bar_Foreground.png");
+		healthBarBackground = new Rectangle(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, GameWindow.HBAR_HEIGHT);
+		healthBar = new Rectangle(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, GameWindow.HBAR_HEIGHT);
 
 		initializeBombBar();
 	}
@@ -239,8 +249,10 @@ public class Player extends Entity{
 			hitAnim();
 		}
 		g.drawImage(_entityImg, x, y);	
-		
+		g.setColor(Color.green);
+		g.drawRect(x, y, width, height);
 
+		g.setColor(Color.white);
 		//Anything drawn BELOW this comment will appear ON TOP of the player
 		drawHealthBar(g);
 		drawBombBar(g);
@@ -257,6 +269,7 @@ public class Player extends Entity{
 
 		
 		updateBombBar();
+		updateHealthBar();
 
 		//Check the player's health
 		checkHealth();
@@ -303,19 +316,37 @@ public class Player extends Entity{
 	
 	//GRAPHICAL AND HUD
 	private void drawHealthBar(Graphics g){
-		//TO DO: Make the player's health displayed as a health bar
+		
 		//Draw the player's health
-//		g.drawString(String.format("Player Health: %1$s", String.valueOf((float)health)), 16, 32);
-//		g.setColor(Color.red);
-//		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, GameWindow.HBAR_HEIGHT);
-//		
-//		g.setColor(Color.green);
-//		g.drawRect(GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.HBAR_WIDTH, (float) (GameWindow.HBAR_HEIGHT * (health / STARTING_HEALTH)));
+		//TODO: move this string next to the health bar
+		g.drawString(String.format("Player Health: %1$s", String.valueOf((float)health)), 16, 32);
+		
+		//Keep track of the graphic's previous color
+		Color prevC = g.getColor();
+		
+		//Draw the portion of health remaining
+		g.setColor(Color.green);
+		g.fill(healthBar);
+		g.draw(healthBar);
+		
 
-//		g.drawImage(healthBarBackground, GameWindow.SCREEN_WIDTH - (GameWindow.HBAR_WIDTH + 3), 5, GameWindow.SCREEN_WIDTH - 3, GameWindow.HBAR_HEIGHT, DEFAULT_MOVEMENT_SPEED, DEFAULT_MOVEMENT_SPEED);
-	
+		//Draw health consumed
+		g.setColor(Color.red);
+		g.fill(healthBarBackground);
+		g.draw(healthBarBackground);
+
+		//Reset graphic's color
+		g.setColor(prevC);
 		
 	}
+	
+	/**
+	 * Method to update the size and position of the health bar
+	 */
+	private void updateHealthBar(){
+		healthBarBackground.setHeight((float) (GameWindow.HBAR_HEIGHT * (1f - health / STARTING_HEALTH)));
+	}
+	
 	/**
 	 * Initializes the [bombBar] list. To be called ONLY ONCE during the [init] method.
 	 * @throws SlickException
@@ -404,25 +435,25 @@ public class Player extends Entity{
 		switch(currentFruit){
 		case Apple:
 			if(getPowerLevel() >= 1){
-				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 1, 1));
+				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 1, 1, playerNum));
 			}
 			if (getPowerLevel() >= 2){
-				Engine.instance.addEntity(new PlayerBullet(x + 46, y + 10, 5, -15, 1, 1));
-				Engine.instance.addEntity(new PlayerBullet(x - 16, y + 10, -5, -15, 1, 1));
+				Engine.instance.addEntity(new PlayerBullet(x + 46, y + 10, 5, -15, 1, 1, playerNum));
+				Engine.instance.addEntity(new PlayerBullet(x - 16, y + 10, -5, -15, 1, 1, playerNum));
 			}
 			if (getPowerLevel() >= 3){
-				Engine.instance.addEntity(new PlayerBullet(x + 46, y + 10, 10, -10, 1, 1));
-				Engine.instance.addEntity(new PlayerBullet(x - 16, y + 10, -10, -10, 1, 1));
+				Engine.instance.addEntity(new PlayerBullet(x + 46, y + 10, 10, -10, 1, 1, playerNum));
+				Engine.instance.addEntity(new PlayerBullet(x - 16, y + 10, -10, -10, 1, 1, playerNum));
 			}
 			
 			break;
 		case Banana:
 			if(getPowerLevel() >= 1){
-				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 1, 1));
+				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 1, 1, playerNum));
 			}
 			if (getPowerLevel() >= 2){
-				Engine.instance.addEntity(new PlayerBullet(x + 46, y + 10, 0, -20, 1, 1));
-				Engine.instance.addEntity(new PlayerBullet(x - 16, y + 10, 0, -20, 1, 1));
+				Engine.instance.addEntity(new PlayerBullet(x + 46, y + 10, 0, -20, 1, 1, playerNum));
+				Engine.instance.addEntity(new PlayerBullet(x - 16, y + 10, 0, -20, 1, 1, playerNum));
 			}
 			if (getPowerLevel() >= 3){
 				setFirecooldown(200);
@@ -431,7 +462,7 @@ public class Player extends Entity{
 			break;
 		case Lemon:
 			if(getPowerLevel() >= 1){
-				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 1, 1));
+				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, -20, 1, 1, playerNum));
 			}
 			if (getPowerLevel() >= 2){
 				setFirecooldown(100);
@@ -444,7 +475,7 @@ public class Player extends Entity{
 		case Watermelon:
 			if(getPowerLevel() >= 1){
 				temp = random.nextInt(10) - 5;
-				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, temp, -20, 1, 1));
+				Engine.instance.addEntity(new PlayerBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, temp, -20, 1, 1, playerNum));
 			}
 			if (getPowerLevel() >= 2){
 				temp = random.nextInt(14) - 7;
@@ -520,6 +551,9 @@ public class Player extends Entity{
 
 		case "Collectible":
 			
+			//Play a sound
+			powerUpSound.play();
+			
 			switch(((Collectible)collidedWith).getType()){
 			case Bomb:
 				if(numBombs < BOMB_CAPACITY){
@@ -583,7 +617,8 @@ public class Player extends Entity{
 	private void checkHealth(){
 		
 		if(!Globals.INVINCIBLE){
-			if(health <= 0){
+			if(health <= 0f){
+				D.BUG(String.valueOf(health));
 				onDie();
 			}
 		}		
