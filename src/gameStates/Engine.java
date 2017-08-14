@@ -27,7 +27,7 @@ import entities.PlayerBullet;
 import globals.Globals;
 import view.GameWindow;
 
-public class Engine extends BasicGameState{
+public class Engine extends GameStateTemplate{
 
 	//Public Static Player X and Player Y. Used for homing attacks from enemy
 	public static float x;
@@ -35,7 +35,7 @@ public class Engine extends BasicGameState{
 	
 	//Constants
 	private final int FRAME_RATE = 60;							//Frame rate in fps
-	private final int NUMBER_OF_SQUIRRELS = 1;					//Number of squirrels. FOR DEBUGGING ONLY
+	private final int NUMBER_OF_SQUIRRELS = 100;					//Number of squirrels. FOR DEBUGGING ONLY
 	
 	//Instance Variables
 	private List<Enemy> enemies = new ArrayList<Enemy>();						//List of drawable entities
@@ -260,8 +260,12 @@ public class Engine extends BasicGameState{
 				if(e.isDangerous()){
 					if(p.hitTest(e)){
 						p.onCollide(e);		
-						if(p.onDieCheck())			//Checks to see if the player is dead
+						//Checks to see if the player is dead
+						if(p.onDieCheck()){
 							markForRemoval(p);		//If the player is dead it adds the player to the "toRemove" arraylist
+							this.switchGameState(gc, sbg, Globals.GAME_OVER_STATE_ID);
+						}
+
 					}
 				}
 			}
@@ -577,6 +581,14 @@ public class Engine extends BasicGameState{
  	@Override
 	public int getID() {
  		return Globals.GAME_ENGINE_STATE_ID;
+	}
+
+
+
+	@Override
+	public void disposeObjects() {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

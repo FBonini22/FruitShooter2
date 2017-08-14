@@ -53,7 +53,7 @@ public class MainScreenState extends GameStateTemplate{
 		input = gc.getInput();
 		
 		if(input.isKeyPressed(Input.KEY_SPACE)){
-			game.enterState(Globals.CHARACTER_SELECT_STATE_ID);
+			switchGameState(gc, game, Globals.CHARACTER_SELECT_STATE_ID);
 		}
 		
 	}
@@ -69,6 +69,9 @@ public class MainScreenState extends GameStateTemplate{
 		// TODO Auto-generated method stub
 		
 	}
+
+
+
 	
 	
 

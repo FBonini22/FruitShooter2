@@ -83,6 +83,8 @@ public class CharacterSelectState extends GameStateTemplate{
 		
 		input = gc.getInput();
 		
+
+		
 		//Move character selector to the right
 		if(input.isKeyPressed(Input.KEY_RIGHT)){
 			if(selectionIndex < 3){
@@ -107,7 +109,7 @@ public class CharacterSelectState extends GameStateTemplate{
 			}
 			else{
 				Engine.instance.initializePlayers(selectedFruits);
-				game.enterState(Globals.GAME_ENGINE_STATE_ID);
+				switchGameState(gc, game, Globals.GAME_ENGINE_STATE_ID);
 			}
 			
 		}

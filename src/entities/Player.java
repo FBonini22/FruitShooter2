@@ -151,7 +151,7 @@ public class Player extends Entity{
 		case Banana:
 			
 
-			fireCooldown = 200;
+			fireCooldown = 32;
 
 			
 			imgPath = "img/Banana.png";
@@ -220,6 +220,10 @@ public class Player extends Entity{
 	}
 	public float getY(){
 		return y;
+	}
+	
+	public int getPlayerNum(){
+		return playerNum;
 	}
 	
 	@Override
@@ -613,7 +617,8 @@ public class Player extends Entity{
 	private void checkHealth(){
 		
 		if(!Globals.INVINCIBLE){
-			if(health <= 0){
+			if(health <= 0f){
+				D.BUG(String.valueOf(health));
 				onDie();
 			}
 		}		

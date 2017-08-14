@@ -1,6 +1,9 @@
 package gameStates;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
 
 /**
  * Class that extends BasicGameState, but contains extra methods that must be overridden.
@@ -20,4 +23,16 @@ public abstract class GameStateTemplate extends BasicGameState{
 	 * in order to free-up memory.
 	 */
 	public abstract void disposeObjects();
+	
+	
+	/**
+	 * Method for handling switching game states. Automatically clears key-press records
+	 * @param gc The game container of the current game
+	 * @param sbg The current instance of the state based game
+	 * @param ID The ID of the game state to switch to
+	 */
+	public void switchGameState(GameContainer gc, StateBasedGame sbg, int ID){
+		gc.getInput().clearKeyPressedRecord();
+		sbg.enterState(ID);
+	}
 }
