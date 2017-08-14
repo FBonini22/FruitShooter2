@@ -23,8 +23,6 @@ public class Enemy extends Entity{
 	
 	//Instance Variables
 	private EnemyType _currentEnemy;					//The user-selected enemy
-	private int _EnemyNum;								//The number enemy created
-	private int _offSet;								//The amount that the generated enemy will be offset from the first generated enemy.
 	private final float MOVEMENT_SPEED = 5f;			//Movement speed in pixels per second
 	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Enemy instance
 	private int Move = 100;
@@ -43,9 +41,6 @@ public class Enemy extends Entity{
 	private boolean dead = false;	//Parameter used to determine if an enemy should be deleted or not
 	Random random = new Random();
 	private float multiplier = 1;	//Parameter used to increase the health of an enemy
-	private float location_y;
-	
-
 	private int count;
 	
 	/**
@@ -57,7 +52,6 @@ public class Enemy extends Entity{
 public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, EnemyMovement move){ //Added parameters to take in the size of the hitbox desired
 		
 		super(x, y, P1,P2);
-		location_y = y;
 		//Instantiate instance variables
 		_currentEnemy = selectedEnemy;	
 		movement = move;
@@ -249,15 +243,6 @@ private void RandomMovement(){
 		}
 		this.moveBy((result_x), (result_y)); 
 }
-/**
- * Stuff needs to be added to this still
- */
-private void Movement(){
-
-}
-	
-		
-	
 /**
  * Method to draw the entities in the desired position according to the update method.
  */

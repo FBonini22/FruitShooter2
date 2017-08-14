@@ -17,7 +17,7 @@ import org.newdawn.slick.geom.Rectangle;
 import Utilities.D;
 import gameStates.Engine;
 import globals.Globals;
-import sounds.*;
+import sounds.FX;
 import view.GameWindow;
 
 public class Player extends Entity{
@@ -151,7 +151,7 @@ public class Player extends Entity{
 		case Banana:
 			
 
-			fireCooldown = 32;
+			fireCooldown = 100;
 
 			
 			imgPath = "img/Banana.png";

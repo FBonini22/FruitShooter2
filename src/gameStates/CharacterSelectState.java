@@ -7,16 +7,13 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.ShapeFill;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import entities.FruitType;
 import globals.Globals;
-import javafx.scene.paint.Color;
 import sounds.FX;
 import view.GameWindow;
 
@@ -30,8 +27,6 @@ public class CharacterSelectState extends GameStateTemplate{
 	//INSTANCE VARIABLES
 	private Input input;
 	private Rectangle selectionCursor;
-	private ShapeFill selectionCursorFill;
-	
 	int selectionIndex;									//The current index of the player that the user is selecting
 	int pNum = 1;											//Number of the current player in fruit-selection
 	
@@ -119,14 +114,7 @@ public class CharacterSelectState extends GameStateTemplate{
 		selectionCursor.setCenterX(currentFruit.getCenterOfRotationX() + STARTING_FRUIT_X + selectionIndex * X_INCREMENT - Globals.PLAYER_WIDTH/2);
 		selectionCursor.setCenterY(currentFruit.getCenterOfRotationY() + STARTING_FRUIT_Y - Globals.PLAYER_HEIGHT/2);
 		
-		//selectionCursor.
-		
-		//Automatically go to the engine state for debugging
-		
-		
-//		if(Globals.DEBUGGING){
-//			game.enterState(Globals.GAME_ENGINE_STATE_ID);			
-//		}
+	
 
 		
 	}

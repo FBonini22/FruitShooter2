@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import Utilities.D;
@@ -48,17 +47,10 @@ public class Engine extends GameStateTemplate{
 	private Random randomGenerator = new Random();								//A general use random number generator that can be accesed by any method in engine
 	
 	private boolean spawner = false;											//Boolean that determines if enemies will spawn
-	private List<Bullet> toRemoveBullets = new ArrayList<Bullet>();				//Nu current use for this list
-
-
-
 	private boolean worldClipSet = false;						//Boolean for whether the WorldClip has been initialized
 	private boolean playersInitialized = false;
 
 
-	private int currentWave = 0;												//Variable to keep track of the current wave of enemies
-	private int currentLevel = 0;												//Variable to keep track of how many bosses have been defeated
-	
 	private boolean isDead = false;
 	private boolean bossType = false;											//False is for boss type 1, true is for boss type 2
 	
@@ -67,6 +59,7 @@ public class Engine extends GameStateTemplate{
 	private int bossTimer = 0;													//Time before a boss spawns
 	private float delayTimer;													//The timer used by the spawning method
 	private int Time = 0;														//Timer used to keep track of difficulty changes
+	private int Pause_Control		= Input.KEY_ESCAPE;	
 	
 	private CollectibleSpawner collecSpawn = new CollectibleSpawner();			//List to hold all collectables
 	
@@ -196,6 +189,9 @@ public class Engine extends GameStateTemplate{
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 
+		if(gc.getInput().isKeyPressed(Pause_Control))
+			this.switchGameState(gc, sbg, Globals.PAUSE_GAME_STATE_ID);
+		
 		//Testing Purposes. Not sure how this will work for multiple players yet
 		//x = p1.x;
 		//y = p1.y;
