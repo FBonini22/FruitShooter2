@@ -30,6 +30,8 @@ public class GameStateHandler extends StateBasedGame{
 		this.addState(new CharacterSelectState());
 		this.addState(Engine.instance);
 		this.addState(new GameOverState());
+		this.addState(new PauseMenuState());
+
 	}
 
 }

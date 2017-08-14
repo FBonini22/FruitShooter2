@@ -5,23 +5,16 @@ import java.util.List;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.StateBasedGame;
 
 import globals.Globals;
-import view.GameWindow;
 
 public class PauseMenuState extends GameStateTemplate{
 	
-	//CONSTANTS
-	private final int NUM_MENU_CHOICES = 4;						//The number of menu choices available
-	private final float CURSOR_WIDTH = GameWindow.SCREEN_WIDTH * 0.5f;
-	private final float CURSOR_HEIGHT = 24f;
-	private final float STARTING_X = GameWindow.SCREEN_WIDTH * 0.25f;		//The starting X value for ALL menu options
-	private final float STARTING_Y = GameWindow.SCREEN_HEIGHT * 0.25f;		//The starting Y value for the FIRST menu option
-	private final float Y_INCREMENT = 1;
+	private int Pause_Control		= Input.KEY_ESCAPE;	
 	
 	//Instance Variables
 	private final String[] choices = {"Resume","Options","Quit"};
@@ -44,7 +37,8 @@ public class PauseMenuState extends GameStateTemplate{
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-		
+		if(container.getInput().isKeyPressed(Pause_Control))
+			this.switchGameState(container, game, Globals.GAME_ENGINE_STATE_ID);
 		
 	}
 

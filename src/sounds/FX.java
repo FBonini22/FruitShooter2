@@ -1,8 +1,5 @@
+
 package sounds;
-
-import java.net.URL;
-
-import org.newdawn.slick.Sound;
 
 /**
  * Class for all sound effects. Contains path locations for each file.

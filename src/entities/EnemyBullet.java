@@ -9,9 +9,6 @@ import gameStates.Engine;
 
 public class EnemyBullet extends Bullet{
 
-   //Instance Variables
-   private float _xSpeed;
-   private float _ySpeed;
    private float _speed;
    private float _hyp;
    
@@ -40,9 +37,6 @@ public class EnemyBullet extends Bullet{
    public EnemyBullet(float x, float y, float xMove, float yMove, float width, float height){
 	  super(x, y, xMove, yMove, width, height);
       _homing = false;
-      
-      _xSpeed = 0;
-      _ySpeed = 0;
    }
    
    /**
@@ -61,9 +55,6 @@ public class EnemyBullet extends Bullet{
 	      pY = Engine.y;
 	      
 	      _speed = speed;
-	      
-	      _xSpeed = 0;
-	      _ySpeed = 0;
 	   }
    
    private void Movement(float xMove, float yMove){

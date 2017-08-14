@@ -1,8 +1,12 @@
 package entities;
 
-import org.newdawn.slick.*;
 
-import Utilities.D;
+
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
 import view.GameWindow;
 
 public abstract class Entity extends HitBox{
