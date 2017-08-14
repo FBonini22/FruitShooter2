@@ -3,7 +3,7 @@ package globals;
 public class Globals {
 
 
-	public static boolean DEBUGGING = false;			//Change this variable to true for debugging mode.
+	public static boolean DEBUGGING = true;			//Change this variable to true for debugging mode.
 	public static boolean INVINCIBLE = false;		//Setting to true will disable removal of the player entity
 	public static boolean MULTIPLAYER = false;		//Setting to true will enable multiplayer features. TODO: implement multiplayer features
 

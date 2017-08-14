@@ -34,7 +34,7 @@ public class Engine extends GameStateTemplate{
 	
 	//Constants
 	private final int FRAME_RATE = 60;							//Frame rate in fps
-	private final int NUMBER_OF_SQUIRRELS = 100;					//Number of squirrels. FOR DEBUGGING ONLY
+	private final int NUMBER_OF_SQUIRRELS = 1;					//Number of squirrels. FOR DEBUGGING ONLY
 	
 	//Instance Variables
 	private List<Enemy> enemies = new ArrayList<Enemy>();						//List of drawable entities
@@ -124,6 +124,7 @@ public class Engine extends GameStateTemplate{
 		
 		
 		collecSpawn.init(gc);
+		
 	}	
 	
 	/**
@@ -280,7 +281,7 @@ public class Engine extends GameStateTemplate{
 				}
 			}
 		}
-		
+		//Checks for bullet contact with an enemy
 		for(Bullet b : bullets){
 			if(!b.isDangerous()){
 				for(Enemy e : enemies){
@@ -294,7 +295,7 @@ public class Engine extends GameStateTemplate{
 								
 								//Gets point value for enemy that was just destroyed.
 								players.get(((PlayerBullet)b).getPlayerWhoFired() - 1).setPoints(e.PointValue());
-								
+								D.BUG(Integer.toString(e.PointValue()));
 								//Adds point value from enemy destroyed to point total
 								PointTotal += e.PointValue();								
 							}
