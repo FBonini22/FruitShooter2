@@ -18,7 +18,7 @@ public class MainScreenState extends GameStateTemplate{
 	
 	//Display
 	private String welcomeMsg = "Welcome to " + Globals.GAME_TITLE + Globals.GAME_VERSION + "!";
-	private String contMsg = "Press any key to continue...";
+	private String contMsg = "Press SPACE to continue...";
 	
 	private float textX = 50;
 	private float textY = 50;

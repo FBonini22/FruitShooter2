@@ -26,6 +26,11 @@ import entities.PlayerBullet;
 import globals.Globals;
 import view.GameWindow;
 
+/**
+ * Class for the game engine. Handles most game logic and all game progress.
+ * @author Frank
+ *
+ */
 public class Engine extends GameStateTemplate{
 
 	//Public Static Player X and Player Y. Used for homing attacks from enemy
@@ -403,6 +408,7 @@ public class Engine extends GameStateTemplate{
 	}
 	
 	
+	//METHODS FOR ENTITY HANDLING
 	
 	/**
 	 * Method for adding an entity to the current instance of the game engine
@@ -512,67 +518,71 @@ public class Engine extends GameStateTemplate{
 		//Clear entities marked for removal
 		toRemove.clear();
 	}
-/**
- * Method to spawn enemies using slice to movement
- */
- private void Preset1(){
+	
+	
+	
+	
+	/**
+	 * Method to spawn enemies using slice to movement
+	 */
+	private void Preset1(){
 		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToRight));
 		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToLeft));
 		//D.BUG("Preset1");
 	}
- 
- /**
-  * Method to generate enemies using the vShoot method
-  */
- private void Preset2(){
+
+	/**
+	 * Method to generate enemies using the vShoot method
+	 */
+	private void Preset2(){
 		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.VShoot));
 		//D.BUG("Preset2");
- }
+	}
 
- /**
-  * Method to generate an enemy using random movement
-  */
- private void Preset3(){
-	 	int x = randomGenerator.nextInt(600);
-	 	int y = randomGenerator.nextInt(200);
-	 
-	 	toAdd.add(new Enemy(x, y, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Random));
-	 	//D.BUG("Preset3");
- }
- 
- /**
-  * Method to spawn an enemy using a yet to be determined movement method
-  */
- private void Preset4(){
-	 //D.BUG("Preset4");
- }
- 
- /**
-  * Method to spawn an enemy using a yet to be determined movement method
-  */
- private void Preset5(){
-	// D.BUG("Preset5");
- }
- 
- /**
-  * Method to spawn an enemy using a yet to be determined movement method
-  */
- private void Preset6(){
-	 //D.BUG("Preset6");
- }
- 
- public void initializePlayers(List<FruitType> selectedFruits){
+	/**
+	 * Method to generate an enemy using random movement
+	 */
+	private void Preset3(){
+		int x = randomGenerator.nextInt(600);
+		int y = randomGenerator.nextInt(200);
 
-	 if(!playersInitialized){
-		 for(int i = 0; i < selectedFruits.size(); i++){
-			 this.addEntity(new Player(selectedFruits.get(i), i+1));
-		 }
-		 playersInitialized = true;
-	 }
-	 else{
-		 D.BUG("ERROR in initializePlayers method in Engine.class. Players have already been initialized.");
-	 }
- }
+		toAdd.add(new Enemy(x, y, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Random));
+		//D.BUG("Preset3");
+	}
+
+	/**
+	 * Method to spawn an enemy using a yet to be determined movement method
+	 */
+	private void Preset4(){
+		//D.BUG("Preset4");
+	}
+
+	/**
+	 * Method to spawn an enemy using a yet to be determined movement method
+	 */
+	private void Preset5(){
+		// D.BUG("Preset5");
+	}
+
+	/**
+	 * Method to spawn an enemy using a yet to be determined movement method
+	 */
+	private void Preset6(){
+		//D.BUG("Preset6");
+	}
+
+	public void initializePlayers(List<FruitType> selectedFruits){
+
+		if(!playersInitialized){
+			for(int i = 0; i < selectedFruits.size(); i++){
+				this.addEntity(new Player(selectedFruits.get(i), i+1));
+			}
+			playersInitialized = true;
+		}
+		else{
+			D.BUG("ERROR in initializePlayers method in Engine.class. Players have already been initialized.");
+		}
+	}
 
 
  	@Override

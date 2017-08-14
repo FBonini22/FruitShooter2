@@ -4,7 +4,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 /**
- * Class for handling all of the game's states. This is run from the main class.
+ * Class for handling all of the game's states. This is by the main class and is considered the entire "Game".
  * @author Frank
  *
  */
@@ -16,12 +16,12 @@ public class GameStateHandler extends StateBasedGame{
 	 */
 	public GameStateHandler(String gameName) {
 		super(gameName);
-		// TODO Auto-generated constructor stub
 	}
 
 
 	/**
-	 * This method is automatically called ONCE. Add game states here
+	 * This method is automatically called ONCE. Add game states here.
+	 * This method initializes all of the game states that will be used by the game.
 	 * @param The game container/window in which the game is currently running
 	 */
 	@Override
@@ -31,8 +31,7 @@ public class GameStateHandler extends StateBasedGame{
 		this.addState(Engine.instance);
 		this.addState(new GameOverState());
 		this.addState(new PauseMenuState());
-		//this.addState(new );
-		
+
 	}
 
 }
