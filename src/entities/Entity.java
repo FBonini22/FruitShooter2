@@ -24,12 +24,12 @@ public abstract class Entity extends HitBox{
 
 	public Image _entityImg;
 	
-	//TO-DO Implement acceleration
-	//protected float _speedX = 0f;
-	//protected float _speedY = 0f;
-
-
 	
+	/**
+	 * Render entity graphics here. This method should be called for each entity in the game engine.
+	 * @param gc The window/container in which the game is running
+	 * @param g The graphics back-end of the running game. Use contained methods to update and draw graphics.
+	 */
 	public abstract void init(GameContainer gc) throws SlickException;
 	
 	public abstract void render(GameContainer gc, Graphics g) throws SlickException;
