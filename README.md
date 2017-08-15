@@ -15,3 +15,6 @@ For your native library location, it should be "libraries/lwjgl-2.9.3/native/win
 
 DISCLAIMER:
 Everything distributed in this package is used for EDUCATIONAL PURPOSES ONLY
+
+MUSIC:
+Royalty free, sourced from http://freemusicarchive.org/music/Visager/Songs_From_An_Unmade_World_2/

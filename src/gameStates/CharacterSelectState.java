@@ -12,6 +12,7 @@ import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
+import engine.Engine;
 import entities.FruitType;
 import globals.Globals;
 import sounds.FX;

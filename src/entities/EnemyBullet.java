@@ -5,7 +5,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import gameStates.Engine;
+import engine.Engine;
 
 public class EnemyBullet extends Bullet{
 

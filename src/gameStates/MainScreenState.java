@@ -22,6 +22,7 @@ public class MainScreenState extends GameStateTemplate{
 	
 	private float textX = 50;
 	private float textY = 50;
+
 	
 	
 	public MainScreenState(){

@@ -1,6 +1,6 @@
 package entities;
 
-import gameStates.Engine;
+import engine.Engine;
 import globals.Globals;
 import view.GameWindow;
 

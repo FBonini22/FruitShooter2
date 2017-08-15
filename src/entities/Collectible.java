@@ -51,6 +51,8 @@ public class Collectible extends Entity{
 
 	@Override
 	public void init(GameContainer gc) throws SlickException {
+		
+		//Set the correct collectible image
 		switch(type){
 		case Health:
 			imgPath = "img/Health.png";

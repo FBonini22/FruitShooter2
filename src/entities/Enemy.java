@@ -8,7 +8,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import gameStates.Engine;
+import engine.Engine;
 import globals.Globals;
 import utilities.D;
 import view.GameWindow;
@@ -101,12 +101,12 @@ public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, Enem
 			break;
 		case JumboSquirrel_1:
 			imgPath = "img/Jumbo_Squirrel.png";
-			_health = 10.0*multiplier;
+			_health = 20.0*multiplier;
 			pointValue = Globals.bossValue;
 			break;
 		case JumboSquirrel_2:
 			imgPath = "img/New_Jumbo_Squirrel_edited.png";
-			_health = 10.0*multiplier;
+			_health = 20.0*multiplier;
 			pointValue = Globals.bossValue;
 			break;
 		}

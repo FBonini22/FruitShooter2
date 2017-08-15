@@ -14,7 +14,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Rectangle;
 
-import gameStates.Engine;
+import engine.Engine;
 import globals.Globals;
 import sounds.FX;
 import utilities.D;
@@ -151,7 +151,7 @@ public class Player extends Entity{
 		case Banana:
 			
 
-			fireCooldown = 100;
+			fireCooldown = 150;
 
 			
 			imgPath = "img/Banana.png";
@@ -573,6 +573,9 @@ public class Player extends Entity{
 				
 				Engine.instance.markForRemoval(collidedWith);
 				break;
+			case Health:
+				health += Globals.DEFAULT_HEALTH_POWERUP_VALUE;
+				Engine.instance.markForRemoval(collidedWith);
 			}
 			return isDead;
 		}

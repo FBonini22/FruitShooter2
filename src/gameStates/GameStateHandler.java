@@ -3,6 +3,8 @@ package gameStates;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+
+import engine.Engine;
 /**
  * Class for handling all of the game's states. This is by the main class and is considered the entire "Game".
  * @author Frank

@@ -10,7 +10,6 @@ import org.newdawn.slick.SlickException;
 
 import entities.Collectible;
 import entities.CollectibleType;
-import gameStates.Engine;
 import view.GameWindow;
 
 public class CollectibleSpawner{
@@ -19,7 +18,7 @@ public class CollectibleSpawner{
 	private final int HEALTH_FREQUENCY = 36000;						//Frequency in ms between health spawns
 	private final int POWERUP_FREQUENCY = 28000;					//Frequency in ms between powerup spawns
 	private final int POINTS_FREQUENCY = 100000000;				    //DO NOT USE. PLACEHOLDER VARIABLE
-	private final int BOMB_FREQUENCY = 36000;						//Frequency in ms between bomb spawns
+	private final int BOMB_FREQUENCY = 60000;						//Frequency in ms between bomb spawns
 
 	
 	private final float RANDOM_DEVIATION = 0.1f;					//Randomness deviation is set to 10%
@@ -89,6 +88,8 @@ public class CollectibleSpawner{
 				//SPAWN COLLECTIBLE HERE
 				switch(t){
 				case Health:
+					Engine.instance.addEntity(new Collectible(rand.nextInt(GameWindow.SCREEN_WIDTH), rand.nextInt(GameWindow.SCREEN_HEIGHT),
+							64, 64, t));
 					break;
 				case PowerUp:
 					break;
