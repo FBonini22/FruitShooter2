@@ -14,10 +14,10 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Rectangle;
 
-import Utilities.D;
 import gameStates.Engine;
 import globals.Globals;
 import sounds.FX;
+import utilities.D;
 import view.GameWindow;
 
 public class Player extends Entity{

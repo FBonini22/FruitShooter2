@@ -8,9 +8,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import Utilities.D;
 import gameStates.Engine;
 import globals.Globals;
+import utilities.D;
 import view.GameWindow;
 
 public class Enemy extends Entity{
@@ -18,7 +18,11 @@ public class Enemy extends Entity{
 		
 
 	//Constants		
-
+	private final float ENEMY_EXTRA_BOUNDS = 128f;		//How many pixels outside the screen the enemy may move
+	private final float MAX_X = GameWindow.SCREEN_WIDTH + Globals.GRUNT_WIDTH;
+	private final float MAX_Y = GameWindow.SCREEN_HEIGHT+ Globals.GRUNT_HEIGHT;
+	private final float MIN_X = 0 - Globals.BULLET_WIDTH;
+	private final float MIN_Y = 0 - Globals.BULLET_HEIGHT;
 	private int pointValue;
 	
 	//Instance Variables
@@ -313,6 +317,40 @@ private void RandomMovement(){
 			dead = true;
 		return dead;
 	}
+	
+	
+	@Override
+	public void moveBy(float transX, float transY){
+
+		
+//		D.BUG("Inside overridden moveBy method");
+		
+		//Sets the x-bounds for all bullets
+		this.x = (this.getEndX() + transX > (float)GameWindow.SCREEN_WIDTH + ENEMY_EXTRA_BOUNDS)
+					? x
+					: (x + transX < -ENEMY_EXTRA_BOUNDS)
+						? x
+						: x + transX;
+		
+		//Sets the y-bounds for all bullets
+		this.y = (this.getEndY() + transY> (float)GameWindow.SCREEN_HEIGHT + ENEMY_EXTRA_BOUNDS)
+				? y
+				: (y + transY < -ENEMY_EXTRA_BOUNDS)
+					? y
+					: y + transY;
+//		D.BUG(String.valueOf(x));
+//		D.BUG(String.valueOf(y));
+		
+		checkBounds();
+	}
+	
+	private void checkBounds(){
+		if(this.y > MAX_Y || this.y < MIN_Y || this.x > MAX_X || this.x < MIN_X){
+			Engine.instance.markForRemoval(this);
+//			D.BUG("REMOVING OUT OF BOUNDS BULLET");
+		}
+	}
+	
 	
 	/**
 	 * Method to get the point value for the enemy

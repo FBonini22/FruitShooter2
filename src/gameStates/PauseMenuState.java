@@ -31,8 +31,8 @@ public class PauseMenuState extends GameStateTemplate{
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		// TODO Auto-generated method stub
-		
+		g.drawString("PAUSED", 50, 50);
+
 	}
 
 	@Override

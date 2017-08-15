@@ -12,7 +12,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import Utilities.D;
 import engine.CollectibleSpawner;
 import entities.Bullet;
 import entities.Collectible;
@@ -24,6 +23,7 @@ import entities.FruitType;
 import entities.Player;
 import entities.PlayerBullet;
 import globals.Globals;
+import utilities.D;
 import view.GameWindow;
 
 /**
@@ -38,8 +38,8 @@ public class Engine extends GameStateTemplate{
 	public static float y;
 	
 	//Constants
-	private final int FRAME_RATE = 60;							//Frame rate in fps
-	private final int NUMBER_OF_SQUIRRELS = 100;					//Number of squirrels. FOR DEBUGGING ONLY
+	private final int FRAME_RATE = 60;											//Frame rate in fps
+	private final int NUMBER_OF_SQUIRRELS = 1;									//Number of squirrels. FOR DEBUGGING ONLY
 	
 	//Instance Variables
 	private List<Enemy> enemies = new ArrayList<Enemy>();						//List of drawable entities
@@ -194,8 +194,10 @@ public class Engine extends GameStateTemplate{
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 
-		if(gc.getInput().isKeyPressed(Pause_Control))
-			this.switchGameState(gc, sbg, Globals.PAUSE_GAME_STATE_ID);
+		if(gc.getInput().isKeyPressed(Pause_Control)){
+			this.switchGameState(gc, sbg, Globals.PAUSE_GAME_STATE_ID);			
+		}
+
 		
 		//Testing Purposes. Not sure how this will work for multiple players yet
 		//x = p1.x;

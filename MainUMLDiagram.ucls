@@ -10,8 +10,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="Utilities.D" project="FruitShooter1.0" 
-    file="/FruitShooter1.0/src/Utilities/D.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="2" language="java" name="utilities.D" project="FruitShooter1.0" 
+    file="/FruitShooter1.0/src/utilities/D.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="99" width="107" x="390" y="-106"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -208,16 +208,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="24" language="java" name="view.RunGameTest" project="FruitShooter1.0" 
-    file="/FruitShooter1.0/src/view/RunGameTest.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="99" width="113" x="1856" y="-106"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="25" language="java" name="entities.Player" project="FruitShooter1.0" 
+  <class id="24" language="java" name="entities.Player" project="FruitShooter1.0" 
     file="/FruitShooter1.0/src/entities/Player.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1949" y="1807"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -226,7 +217,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="26" language="java" name="entities.Bullet" project="FruitShooter1.0" 
+  <class id="25" language="java" name="entities.Bullet" project="FruitShooter1.0" 
     file="/FruitShooter1.0/src/entities/Bullet.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="2969" y="873"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -235,7 +226,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <enumeration id="27" language="java" name="entities.EnemyType" project="FruitShooter1.0" 
+  <enumeration id="26" language="java" name="entities.EnemyType" project="FruitShooter1.0" 
     file="/FruitShooter1.0/src/entities/EnemyType.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="2474" y="2016"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -244,161 +235,204 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </enumeration>  
-  <generalization id="28">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="22"/>  
-  </generalization>  
-  <association id="29">    
-    <bendpoint x="1940" y="745"/>    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="30" name="players"/>      
-      <multiplicity id="31" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="25" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="32">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="10"/>  
-  </generalization>  
-  <generalization id="33">    
-    <end type="SOURCE" refId="23"/>    
-    <end type="TARGET" refId="3"/>  
-  </generalization>  
-  <association id="34">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="35" name="toAdd"/>      
-      <multiplicity id="36" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="37">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="38" name="collecSpawn"/>      
-      <multiplicity id="39" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="20" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="40">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="41" name="instance"/>      
-      <multiplicity id="42" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="43">    
-    <end type="SOURCE" refId="26"/>    
-    <end type="TARGET" refId="10"/>  
-  </generalization>  
-  <generalization id="44">    
-    <end type="SOURCE" refId="19"/>    
-    <end type="TARGET" refId="10"/>  
-  </generalization>  
-  <association id="45">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="46" name="toRemove"/>      
-      <multiplicity id="47" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="48">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="49" name="_currentEnemy"/>      
-      <multiplicity id="50" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="27" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="51">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="52" name="movement"/>      
-      <multiplicity id="53" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="54">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="26"/>  
-  </generalization>  
-  <generalization id="55">    
+  <generalization id="27">    
     <end type="SOURCE" refId="21"/>    
     <end type="TARGET" refId="10"/>  
   </generalization>  
-  <association id="56">    
-    <bendpoint x="2381" y="745"/>    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="57" name="bullets"/>      
-      <multiplicity id="58" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="26" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="59">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="3"/>  
-  </generalization>  
-  <association id="60">    
+  <association id="28">    
     <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="61" name="selectedFruits"/>      
-      <multiplicity id="62" minimum="0" maximum="2147483647"/>    
+      <attribute id="29" name="selectedFruits">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="30" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="63">    
-    <end type="SOURCE" refId="25"/>    
-    <end type="TARGET" refId="10"/>  
-  </generalization>  
-  <association id="64">    
-    <end type="SOURCE" refId="25" navigable="false">      
-      <attribute id="65" name="currentFruit"/>      
-      <multiplicity id="66" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="67">    
+  <association id="31">    
     <end type="SOURCE" refId="19" navigable="false">      
-      <attribute id="68" name="type"/>      
-      <multiplicity id="69" minimum="0" maximum="1"/>    
+      <attribute id="32" name="type">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="33" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="18" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="70">    
-    <bendpoint x="2360" y="745"/>    
+  <generalization id="34">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <generalization id="35">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <generalization id="36">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="37">    
+    <bendpoint x="1940" y="745"/>    
     <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="71" name="toRemoveBullets"/>      
-      <multiplicity id="72" minimum="0" maximum="2147483647"/>    
+      <attribute id="38" name="players">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="39" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
-    <end type="TARGET" refId="26" navigable="true"/>    
+    <end type="TARGET" refId="24" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="73">    
+  <generalization id="40">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <association id="41">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="42" name="instance">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="43" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="44">    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="45" name="currentFruit">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="46" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="47">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <generalization id="48">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="49">    
     <bendpoint x="2216" y="745"/>    
     <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="74" name="enemies"/>      
-      <multiplicity id="75" minimum="0" maximum="2147483647"/>    
+      <attribute id="50" name="enemies">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="51" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="9" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="76">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="26"/>  
-  </generalization>  
-  <association id="77">    
+  <association id="52">    
     <bendpoint x="2237" y="745"/>    
     <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="78" name="collectibles"/>      
-      <multiplicity id="79" minimum="0" maximum="2147483647"/>    
+      <attribute id="53" name="collectibles">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="54" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="55">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="56" name="toAdd">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="57" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="58">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="59" name="collecSpawn">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="60" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="61">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="62" name="toRemove">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="63" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="64">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="65" name="_currentEnemy">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="66" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="67">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <generalization id="68">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="22"/>  
+  </generalization>  
+  <generalization id="69">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <association id="70">    
+    <bendpoint x="2381" y="745"/>    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="71" name="bullets">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="72" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="73">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="74" name="movement">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="75" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
