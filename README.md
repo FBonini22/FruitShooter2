@@ -18,3 +18,12 @@ Everything distributed in this package is used for EDUCATIONAL PURPOSES ONLY
 
 MUSIC:
 Royalty free, sourced from http://freemusicarchive.org/music/Visager/Songs_From_An_Unmade_World_2/
+
+
+For Project:
+UML:
+	The UML diagram is in the root folder and is saved as a .gif image
+JavaDoc:
+	The JavaDoc for this project can be found in the "doc" folder.
+Runnable Jar:
+	The runnable .jar file can be found in the "release folder". To run it, run the included .bat file.

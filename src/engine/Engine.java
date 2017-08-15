@@ -129,6 +129,7 @@ public class Engine extends GameStateTemplate{
 	 * Render graphics and entities here. This method is automatically called each time the 
 	 * game updates itself
 	 * @param gc The window/container in which the game is running
+	 * @param sbg The current state based game that is running
 	 * @param g The graphics back-end of the running game. Use contained methods to update and draw graphics.
 	 */
 	@Override
@@ -183,6 +184,7 @@ public class Engine extends GameStateTemplate{
 	 * Update graphics, entities, and game variables. This method is automatically
 	 * called each time the game updates itself. Run the game logic here.
 	 * @param gc The container in which the current game is running
+	 * @param sbg The current state based game that is running
 	 * @param delta The time between each frame
 	 */
 	@Override

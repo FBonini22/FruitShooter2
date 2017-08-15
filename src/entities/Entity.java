@@ -28,12 +28,23 @@ public abstract class Entity extends HitBox{
 	/**
 	 * Render entity graphics here. This method should be called for each entity in the game engine.
 	 * @param gc The window/container in which the game is running
-	 * @param g The graphics back-end of the running game. Use contained methods to update and draw graphics.
 	 */
 	public abstract void init(GameContainer gc) throws SlickException;
 	
+	/**
+	 * Render graphics and entities here. This method should be called for each entity
+	 * in the game engine.
+	 * @param gc The window/container in which the game is running
+	 * @param g The graphics back-end of the running game. Use contained methods to update and draw graphics.
+	 */
 	public abstract void render(GameContainer gc, Graphics g) throws SlickException;
 	
+	/**
+	 * Update graphics, entities, and game variables. This method should be called for each entity
+	 * in the game engine. Run the game logic here.
+	 * @param gc The container in which the current game is running
+	 * @param delta The time between each frame
+	 */
 	public abstract void update(GameContainer gc, int delta);
 	
 	
@@ -91,10 +102,4 @@ public abstract class Entity extends HitBox{
 					? y
 					: y + transY;
 	}
-	
-	
-	
-	
-	
-	
 }

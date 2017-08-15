@@ -2,12 +2,13 @@ package globals;
 
 public class Globals {
 
-
-	public static boolean DEBUGGING = false;			//Change this variable to true for debugging mode.
-	public static boolean INVINCIBLE = false;		//Setting to true will disable removal of the player entity
-	public static boolean MULTIPLAYER = false;		//Setting to true will enable multiplayer features. TODO: implement multiplayer features
+	//TESTING VAEIABLES
+	public static final boolean DEBUGGING = false;			//Change this variable to true for debugging mode.
+	public static final boolean INVINCIBLE = false;			//Setting to true will disable removal of the player entity
+	public static final boolean MULTIPLAYER = false;		//Setting to true will enable multiplayer features. TODO: implement multiplayer features
 
 	
+	//GAME VARIABLES
 	public static final String GAME_TITLE = "Fruit Shooter";
 	public static final String GAME_VERSION = "1.0a";
 	
@@ -35,11 +36,11 @@ public class Globals {
 	
 	//Variables for timer based game
 	public static final int TIMER = 5000;			// Changed for testing purposes. Should be 1000.
-	public static final int BossTimer = 60000;		// Changed for testing purposes. Should be 60000.
+	public static final int BossTimer = 30000;		// How many seconds between boss spawns
 	
 	//GAMEPLAY MECHANICS
-	public static final int gruntValue = 100;
-	public static final int bossValue = 1000;			
+	public static final int gruntValue = 100;		//Point value for grunts
+	public static final int bossValue = 2000;		//Point value for bosses
 	public static final int LevelChange = 61000;		// Changed for testing purposes. Should be 61000.
 	public static final float LevelChangeAmount = 0.25f; // Determine how much the health changes
 	public static final float RandDelay = 1000;			//Time between spawning of random movement enemies

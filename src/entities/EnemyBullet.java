@@ -22,7 +22,7 @@ public class EnemyBullet extends Bullet{
    private boolean _check;
 
    //Constants
-   private String imgPath = "img/acorn2.png";	
+   private String imgPath = "img/Acorn2.png";	
 
    /**
    *Bullet Class

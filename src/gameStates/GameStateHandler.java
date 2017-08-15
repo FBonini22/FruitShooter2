@@ -24,10 +24,10 @@ public class GameStateHandler extends StateBasedGame{
 	/**
 	 * This method is automatically called ONCE. Add game states here.
 	 * This method initializes all of the game states that will be used by the game.
-	 * @param The game container/window in which the game is currently running
+	 * @param gc The game container/window in which the game is currently running
 	 */
 	@Override
-	public void initStatesList(GameContainer container) throws SlickException {
+	public void initStatesList(GameContainer gc) throws SlickException {
 		this.addState(new MainScreenState());
 		this.addState(new CharacterSelectState());
 		this.addState(Engine.instance);

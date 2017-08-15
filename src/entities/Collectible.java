@@ -21,6 +21,7 @@ public class Collectible extends Entity{
 	 * @param y position
 	 * @param width of hit box
 	 * @param height of hit box
+	 * @param the type of collectible to create
 	 */
 	public Collectible(float x, float y, float width, float height, CollectibleType cType) {
 		super(x, y, width, height);
