@@ -125,13 +125,13 @@ public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, Enem
 		case SliceToRight:
 			SpawnTopLeft();
 			xSpeed += accel;
-			ySpeed = 5;
+			ySpeed = 8;
 			moveBy(xSpeed, ySpeed);
 			break;
 		case SliceToLeft:
 			SpawnTopRight();
 			xSpeed -= accel;
-			ySpeed = 5;
+			ySpeed = 8;
 			moveBy(xSpeed, ySpeed);
 			break;
 		case VShoot:					//Enemy moves in a V. Shoots in the middle.
@@ -367,6 +367,10 @@ private void RandomMovement(){
 			checkY = (int)result_y * Frames;
 		}
 		while(y - checkY >= GameWindow.SCREEN_HEIGHT || y + checkY <= 0);
+		
+		if (y >= 500){
+			result_y = -5;
+		}
 		Move = 0;
 	}
 	else{
