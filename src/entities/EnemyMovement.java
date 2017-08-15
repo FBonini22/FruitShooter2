@@ -8,6 +8,10 @@ public enum EnemyMovement {
 	VShoot,
 	Spider,
 	Teleport,
+	RightUnderSwing,
+	LeftUnderSwing,
+	
+	
 	
 	
 	

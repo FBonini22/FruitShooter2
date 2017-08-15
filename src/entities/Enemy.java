@@ -190,6 +190,44 @@ public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, Enem
 				time = 0;
 			}
 			break;
+		case RightUnderSwing:
+			if (initialize == false){
+				x = 0;
+				y = GameWindow.SCREEN_HEIGHT;
+				xSpeed = 15;
+				ySpeed = -5;
+				initialize = true;
+			}
+			xSpeed -= accel;
+			
+			if(xSpeed <= 0){
+				time += delta;
+				if (time >= 225){
+					Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 2, 5, 0, 1)));
+					time = 0;
+				}
+			}
+			moveBy(xSpeed, ySpeed);
+			break;
+		case LeftUnderSwing:
+			if (initialize == false){
+				x = GameWindow.SCREEN_WIDTH;
+				y = GameWindow.SCREEN_HEIGHT;
+				xSpeed = -15;
+				ySpeed = -5;
+				initialize = true;
+			}
+			xSpeed += accel;
+			
+			if(xSpeed >= 0){
+				time += delta;
+				if (time >= 225){
+					Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, -2, 5, 0, 1)));
+					time = 0;
+				}
+			}
+			moveBy(xSpeed, ySpeed);
+			break;
 		}
 	}
 /**
@@ -197,8 +235,8 @@ public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, Enem
  */
 private void SpawnTopLeft(){
 	if (initialize == false){
-		x = 0;
-		y = 0;
+		x = -10;
+		y = -10;
 		initialize = true;
 	}
 }
@@ -208,45 +246,73 @@ private void SpawnTopLeft(){
  */
 private void SpawnTopRight(){
 	if (initialize == false){
-		x = GameWindow.SCREEN_WIDTH - 50;
-		y = 0;
+		x = GameWindow.SCREEN_WIDTH - 30;
+		y = -10;
 		initialize = true;
 	}
 }
-	
-	
-private void RandomMovement(){
-		EnemyFire();
-		Random r_f = new Random();
-		Random r_x = new Random();
-		Random r_y = new Random();
-		float Low = -MOVEMENT_SPEED;				//Min distance to be moved. Negative means to the left or up.
-		float High = MOVEMENT_SPEED;				//Max distance to be moved. Positive means to the right or down.
-		
-		int Frames = r_f.nextInt(35-25) + 25;
-				
-		if (Move > Frames){
-			result_x = (int) (r_x.nextInt((int) (High-Low)) + Low);
-			result_y = (int) (r_y.nextInt((int) (High-Low))+Low);
-			if (y+result_y > 500){ //TODO set this back to < 500. Changed for testing purposes.
-				D.BUG("Test Limit Reached");
-				result_y = -5;
-			}
-		
-		
-		
-		
-		
-		//D.BUG("New Random Assigned");
-		Move = 0;
-		}
-		else{
-			
-			Move++;
-			//D.BUG("Move added 1");
-		}
-		this.moveBy((result_x), (result_y)); 
+/**
+ * Method to spawn an enemy in the bottom right
+ */
+private void SpawnBottomRight(){
+	if (initialize == false){
+		x = GameWindow.SCREEN_WIDTH;
+		y = GameWindow.SCREEN_HEIGHT;
+		initialize = true;
+	}
 }
+/**
+ * Method to spawn an enemy in the bottom left
+ */
+private void SpawnBottomLeft(){
+	if (initialize == false){
+		x = 0;
+		y = GameWindow.SCREEN_HEIGHT;
+		initialize = true;
+	}
+}
+
+/**
+ * Method to determine random enemy movement
+ */
+private void RandomMovement(){
+	EnemyFire();
+	float Low = -MOVEMENT_SPEED;				//Min distance to be moved. Negative means to the left or up.
+	float High = MOVEMENT_SPEED;				//Max distance to be moved. Positive means to the right or down.
+	int checkX;
+	int checkY;
+	
+	int Frames = 25;
+	
+	if (Move >= Frames){
+		result_x = (int) (random.nextInt((int) (High-Low)) + Low);
+		result_y = (int) (random.nextInt((int) (High-Low)) + Low);
+		
+		checkX = (int)result_x * Frames;
+		checkY = (int)result_y * Frames;
+		
+		do{
+			result_x = (int) (random.nextInt((int) (High-Low)) + Low);
+			checkX = (int)result_x * Frames;
+		}while(x - checkX >= GameWindow.SCREEN_WIDTH || x + checkX <= 0);
+
+		do{
+			result_y = (int) (random.nextInt((int) (High-Low)) + Low);
+			checkY = (int)result_y * Frames;
+		}
+		while(y - checkY >= GameWindow.SCREEN_HEIGHT || y + checkY <= 0);
+		Move = 0;
+	}
+	else{
+		
+		Move++;
+		//D.BUG("Move added 1");
+	}
+	
+	
+	this.moveBy((result_x), (result_y)); 
+}
+
 /**
  * Method to draw the entities in the desired position according to the update method.
  */

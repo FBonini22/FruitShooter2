@@ -38,13 +38,13 @@ public class Globals {
 	public static final int BossTimer = 60000;		// Changed for testing purposes. Should be 60000.
 	
 	//GAMEPLAY MECHANICS
-	public static final int gruntValue = 1;
-	public static final int bossValue = 10;			
+	public static final int gruntValue = 100;
+	public static final int bossValue = 1000;			
 	public static final int LevelChange = 61000;		// Changed for testing purposes. Should be 61000.
 	public static final float LevelChangeAmount = 0.25f; // Determine how much the health changes
-	public static final float Delay = 250f;			//Time between spawning of enemies once spawning method is triggered by a boolean
-	public static final float reset = 7000f;		//Time until the spawning method is reset
-	public static final int spawnMethods = 6;		//Variable that determines how many spawning methods are available to be used. Increasing this will increase the number of possibilities that the random number generator can pick
+	public static float Delay = 1000f;			//Time between spawning of enemies once spawning method is triggered by a boolean
+	public static float reset = 5500f;		//Time until the spawning method is reset
+	public static final int spawnMethods = 7;		//Variable that determines how many spawning methods are available to be used. Increasing this will increase the number of possibilities that the random number generator can pick
 
 	//GAME STATE IDS
 	public static final int MAIN_SCREEN_STATE_ID = 999;
