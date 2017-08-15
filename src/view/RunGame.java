@@ -16,7 +16,7 @@ public class RunGame {
 		
 		
 		//Change 
-		File f = new File("libraries/lwjgl-2.9.3/native/windows");
+		File f = new File("natives/lwjgl-2.9.3/native/windows");
 		if(f.exists()){
 			System.setProperty("org.lwjgl.librarypath", f.getAbsolutePath());
 			System.setProperty("org.lwjgl64.librarypath", f.getAbsolutePath());
