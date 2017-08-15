@@ -293,7 +293,37 @@ public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, Enem
 			}
 			moveBy(xSpeed, ySpeed);
 			break;
+		case Parabola:
+			if (initialize == false){
+				x = GameWindow.SCREEN_WIDTH - 20;
+				xSpeed = -3.5f;
+				y = GameWindow.SCREEN_HEIGHT;
+				ySpeed = -17;
+				initialize = true;
+			}
+			time += delta;
+			ySpeed += accel;
 			
+			if (time > 100){
+				count++;
+				time = 0;
+			}
+			
+			if (count == 5){
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, -3, 4, 0, 1)));
+				count++;
+			}
+			else if (count == 14){
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, 4, 0, 1)));
+				count++;
+			}
+			else if (count == 22){
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 3, 4, 0, 1)));
+				count++;
+			}
+			
+			
+			moveBy(xSpeed, ySpeed);
 		}	
 	}
 /**
