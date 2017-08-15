@@ -109,15 +109,6 @@ public class Engine extends GameStateTemplate{
 		//Initialize Background image
 		Background = new Image("img/Background2.png"); //TODO Change background to desired image
 		
-
-		for (int i = 0; i< NUMBER_OF_SQUIRRELS; i++){
-
-			enemies.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToRight));
-			enemies.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToLeft));
-			enemies.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.VShoot));
-
-	}
-
 		//Music openingMenuMusic = new Music(""); //TODO Need to find and insert suitable music
     		//openingMenuMusic.loop(); 
 		
@@ -226,7 +217,7 @@ public class Engine extends GameStateTemplate{
 			interval += delta;
 		}
 
-		if (randInterval >= Globals.Delay){
+		if (randInterval >= Globals.RandDelay){
 			Preset3();
 			randInterval = 0;
 		}
@@ -426,6 +417,11 @@ public class Engine extends GameStateTemplate{
 			Globals.Delay = 1000f;
 			Globals.reset = 5500f;
 			Preset9();
+		}
+		else if (spawnChoice <= 10){
+			Globals.Delay = 2000f;
+			Globals.reset = 7500f;
+			Preset10();
 		}
 	}
 	
@@ -637,6 +633,12 @@ public class Engine extends GameStateTemplate{
 	 */
 	private void Preset9(){
 		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Star, multiplier));
+	}
+	/**
+	 * Method to spawn an enemy using the Parabola method
+	 */
+	private void Preset10(){
+		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Parabola));
 	}
 
 	public void initializePlayers(List<FruitType> selectedFruits){

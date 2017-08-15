@@ -13,7 +13,7 @@ public enum EnemyMovement {
 	RightChase,
 	LeftChase,
 	Star,
-	
+	Parabola,
 	
 	
 	
