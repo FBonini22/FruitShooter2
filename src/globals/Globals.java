@@ -44,7 +44,7 @@ public class Globals {
 	public static final float LevelChangeAmount = 0.25f; // Determine how much the health changes
 	public static float Delay = 1000f;			//Time between spawning of enemies once spawning method is triggered by a boolean
 	public static float reset = 5500f;		//Time until the spawning method is reset
-	public static final int spawnMethods = 7;		//Variable that determines how many spawning methods are available to be used. Increasing this will increase the number of possibilities that the random number generator can pick
+	public static final int spawnMethods = 9;		//Variable that determines how many spawning methods are available to be used. Increasing this will increase the number of possibilities that the random number generator can pick
 
 	//GAME STATE IDS
 	public static final int MAIN_SCREEN_STATE_ID = 999;

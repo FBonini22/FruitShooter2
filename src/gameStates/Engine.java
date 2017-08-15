@@ -71,6 +71,7 @@ public class Engine extends GameStateTemplate{
 	
 	private float multiplier = 1f;												//Difficulty increase tracker
 	private int spawnChoice = 0;												//Variable to determine what type of enemy movement will occur
+	private int count = 0;														//determine what to spawn in presets
 	
 	//TESTING
 	//private Player p1 = new Player(FruitType.Banana, 1);
@@ -224,7 +225,7 @@ public class Engine extends GameStateTemplate{
 			else
 			interval += delta;
 		}
-		
+
 		if (randInterval >= Globals.Delay){
 			Preset3();
 			randInterval = 0;
@@ -232,6 +233,7 @@ public class Engine extends GameStateTemplate{
 		else{
 			randInterval += delta;
 		}
+
 		
 		
 		
@@ -414,6 +416,16 @@ public class Engine extends GameStateTemplate{
 			Globals.Delay = 1000f;
 			Globals.reset = 5500f;
 			Preset7();
+		}
+		else if (spawnChoice <= 8){
+			Globals.Delay = 500f;
+			Globals.reset = 6000f;
+			Preset8();
+		}
+		else if (spawnChoice <= 9){
+			Globals.Delay = 1000f;
+			Globals.reset = 5500f;
+			Preset9();
 		}
 	}
 	
@@ -606,6 +618,25 @@ public class Engine extends GameStateTemplate{
 	 */
 	private void Preset7(){
 		toAdd.add(new Enemy(EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.LeftUnderSwing));
+	}
+	/**
+	 * Method to spawn an enemy using the RightChase method and LeftChae method
+	 */
+	private void Preset8(){
+		if (count == 0){
+			toAdd.add(new Enemy(EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.RightChase));
+			count++;
+		}
+		else if (count == 1){
+			toAdd.add(new Enemy(EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.LeftChase));
+			count--;
+		}
+	}
+	/**
+	 * Method to spawn an enemy using the Star method
+	 */
+	private void Preset9(){
+		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Star, multiplier));
 	}
 
 	public void initializePlayers(List<FruitType> selectedFruits){

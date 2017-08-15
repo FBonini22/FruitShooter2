@@ -228,7 +228,73 @@ public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, Enem
 			}
 			moveBy(xSpeed, ySpeed);
 			break;
-		}
+		case RightChase:
+			if (initialize == false){
+				x = 20;
+				y = -10;
+				xSpeed = 0;
+				ySpeed = 5;
+				initialize = true;
+			}
+			if(y >= Engine.y){
+				xSpeed = 15;
+				ySpeed = 0;
+			}
+			moveBy(xSpeed, ySpeed);
+			break;
+		case LeftChase:
+			if (initialize == false){
+				x = GameWindow.SCREEN_WIDTH - 50;
+				y = -10;
+				xSpeed = 0;
+				ySpeed = 5;
+				initialize = true;
+			}
+			if(y >= Engine.y){
+				xSpeed = -15;
+				ySpeed = 0;
+			}
+			moveBy(xSpeed, ySpeed);
+			break;
+		case Star:
+			if (initialize == false){
+				x = GameWindow.SCREEN_WIDTH/2 - 20;
+				y = 100;
+				initialize = true;
+			}
+			time += delta;
+			if (time > 0){
+				xSpeed = -2;
+				ySpeed = 6;
+			}
+			if (time > 500){
+				xSpeed = 5;
+				ySpeed = -3;
+			}
+			if (time > 1000){
+				xSpeed = -6;
+				ySpeed = 0;
+			}
+			if (time > 1500){
+				xSpeed = 5;
+				ySpeed = 3;
+			}
+			if (time > 2000){
+				xSpeed = -2;
+				ySpeed = -6;
+			}
+			if (time > 2500){
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 0, 5, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, -1, 4, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 2, 3, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, 1, 4, 0, 1)));
+				Engine.instance.addEntity((new EnemyBullet(this.getCenterX() - Globals.BULLET_WIDTH/2, y + 10, -2, 3, 0, 1)));
+				time = 0;
+			}
+			moveBy(xSpeed, ySpeed);
+			break;
+			
+		}	
 	}
 /**
  * 	Method to spawn an enemy in the top left

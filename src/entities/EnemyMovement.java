@@ -10,6 +10,9 @@ public enum EnemyMovement {
 	Teleport,
 	RightUnderSwing,
 	LeftUnderSwing,
+	RightChase,
+	LeftChase,
+	Star,
 	
 	
 	
