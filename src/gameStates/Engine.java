@@ -60,7 +60,8 @@ public class Engine extends GameStateTemplate{
 	private boolean bossType = false;											//False is for boss type 1, true is for boss type 2
 	
 	private int time = 0;														//Variable to keep track of total game time
-	private int interval = 0;													//Timer used to keep track of the delay within the spawner methods
+	private int interval = 0;													//Timer used to keep track of the delay within the preset spawner methods
+	private int randInterval = 0;												//Timer used to keep track of the delay within the random spawn methods
 	private int bossTimer = 0;													//Time before a boss spawns
 	private float delayTimer;													//The timer used by the spawning method
 	private int Time = 0;														//Timer used to keep track of difficulty changes
@@ -70,6 +71,7 @@ public class Engine extends GameStateTemplate{
 	
 	private float multiplier = 1f;												//Difficulty increase tracker
 	private int spawnChoice = 0;												//Variable to determine what type of enemy movement will occur
+	private int count = 0;														//determine what to spawn in presets
 	
 	//TESTING
 	//private Player p1 = new Player(FruitType.Banana, 1);
@@ -197,11 +199,6 @@ public class Engine extends GameStateTemplate{
 		if(gc.getInput().isKeyPressed(Pause_Control)){
 			this.switchGameState(gc, sbg, Globals.PAUSE_GAME_STATE_ID);			
 		}
-
-		
-		//Testing Purposes. Not sure how this will work for multiple players yet
-		//x = p1.x;
-		//y = p1.y;
 		
 		delayTimer += delta;
 		//D.BUG(Float.toString(delayTimer));
@@ -210,7 +207,10 @@ public class Engine extends GameStateTemplate{
 		time += delta;
 		if (delayTimer >= Globals.reset){
 			spawner = false;
+			spawnChoice = randomGenerator.nextInt(Globals.spawnMethods + 1);
 			delayTimer = 0;
+			Globals.Delay = 1000f;
+			Globals.reset = 5500f;
 		}
 		if (delayTimer >= Globals.TIMER){
 			spawner = true;
@@ -223,8 +223,18 @@ public class Engine extends GameStateTemplate{
 			interval = 0;
 			}
 			else
-				interval += delta;
+			interval += delta;
 		}
+
+		if (randInterval >= Globals.Delay){
+			Preset3();
+			randInterval = 0;
+		}
+		else{
+			randInterval += delta;
+		}
+
+		
 		
 		
 		//D.BUG(Integer.toString(Time));
@@ -337,6 +347,13 @@ public class Engine extends GameStateTemplate{
 			generateBoss();
 			bossTimer = 0;
 		}
+		
+		//Fixes the homing bullets.
+		if (players.size() >= 1){
+			x = players.get(randomGenerator.nextInt(players.size())).getCenterX();
+			y = players.get(randomGenerator.nextInt(players.size())).getCenterY();
+		}
+		
 		//NEW WAVE!
 		/*
 		if(enemy.size() <= 0){
@@ -366,25 +383,49 @@ public class Engine extends GameStateTemplate{
 	 * Generate a random number and pick which spawn type will be used
 	 */
 	private void generateEnemies(){
-		spawnChoice = randomGenerator.nextInt(Globals.spawnMethods);
 		//D.BUG(Integer.toString(spawnChoice));
-		if (spawnChoice <= 1){
+		if (spawnChoice <= 1){				//Slice to Left and Slice to Right
+			Globals.Delay = 1000f;
+			Globals.reset = 6500f;
 			Preset1();
 		}
-		else if (spawnChoice <= 2){
+		else if (spawnChoice <= 2){			//VShoot
+			Globals.Delay = 1000f;
+			Globals.reset = 6500f;
 			Preset2();
 		}
-		else if (spawnChoice <= 3){
+		else if (spawnChoice <= 3){			//Random Enemy Movement
 			Preset3();
 		}
-		else if (spawnChoice <= 4){
+		else if (spawnChoice <= 4){			//Teleport
+			Globals.Delay = 1000f;
+			Globals.reset = 6000f;
 			Preset4();
 		}
-		else if (spawnChoice <= 5){
+		else if (spawnChoice <= 5){			//Spider
+			Globals.Delay = 1000f;
+			Globals.reset = 7500f;
 			Preset5();
 		}
 		else if (spawnChoice <= 6){
+			Globals.Delay = 1000f;
+			Globals.reset = 5500f;
 			Preset6();
+		}
+		else if (spawnChoice <= 7){
+			Globals.Delay = 1000f;
+			Globals.reset = 5500f;
+			Preset7();
+		}
+		else if (spawnChoice <= 8){
+			Globals.Delay = 500f;
+			Globals.reset = 6000f;
+			Preset8();
+		}
+		else if (spawnChoice <= 9){
+			Globals.Delay = 1000f;
+			Globals.reset = 5500f;
+			Preset9();
 		}
 	}
 	
@@ -397,11 +438,11 @@ public class Engine extends GameStateTemplate{
 		int Spawn_X =  randomGenerator.nextInt(GameWindow.SCREEN_WIDTH-375);
 		Enemy B;
 		if(bossType){		
-			B = new Enemy(Spawn_X, 0, EnemyType.JumboSquirrel_1, Globals.BOSS_HEIGHT1, Globals.BOSS_WIDTH1, EnemyMovement.Random, multiplier); 	//Added Spawn_X and Spawn_Y to change the spawning location of the squirrels to random locations
+			B = new Enemy(Spawn_X, 0, EnemyType.JumboSquirrel_1, Globals.BOSS_HEIGHT1, Globals.BOSS_WIDTH1, EnemyMovement.Random, multiplier + 1); 	//Added Spawn_X and Spawn_Y to change the spawning location of the squirrels to random locations
 			bossType = false;
 		}
 		else{
-			B = new Enemy(Spawn_X, 0, EnemyType.JumboSquirrel_2, Globals.BOSS_HEIGHT2, Globals.BOSS_WIDTH2, EnemyMovement.Random, multiplier); 	//Added Spawn_X and Spawn_Y to change the spawning location of the squirrels to random locations
+			B = new Enemy(Spawn_X, 0, EnemyType.JumboSquirrel_2, Globals.BOSS_HEIGHT2, Globals.BOSS_WIDTH2, EnemyMovement.Random, multiplier + 1); 	//Added Spawn_X and Spawn_Y to change the spawning location of the squirrels to random locations
 			bossType = true;
 		}
 		
@@ -527,8 +568,8 @@ public class Engine extends GameStateTemplate{
 	 * Method to spawn enemies using slice to movement
 	 */
 	private void Preset1(){
-		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToRight));
-		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToLeft));
+		toAdd.add(new Enemy(EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToRight));
+		toAdd.add(new Enemy(EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToLeft));
 		//D.BUG("Preset1");
 	}
 
@@ -536,7 +577,7 @@ public class Engine extends GameStateTemplate{
 	 * Method to generate enemies using the vShoot method
 	 */
 	private void Preset2(){
-		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.VShoot));
+		toAdd.add(new Enemy(EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.VShoot));
 		//D.BUG("Preset2");
 	}
 
@@ -544,32 +585,58 @@ public class Engine extends GameStateTemplate{
 	 * Method to generate an enemy using random movement
 	 */
 	private void Preset3(){
-		int x = randomGenerator.nextInt(600);
-		int y = randomGenerator.nextInt(200);
-
-		toAdd.add(new Enemy(x, y, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Random));
+		int randX = randomGenerator.nextInt(GameWindow.SCREEN_WIDTH);
+		int randY = randomGenerator.nextInt(GameWindow.SCREEN_HEIGHT - 600);
+		toAdd.add(new Enemy(randX, randY, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Random));
 		//D.BUG("Preset3");
 	}
 
 	/**
-	 * Method to spawn an enemy using a yet to be determined movement method
+	 * Method to spawn an enemy using a teleport method
 	 */
 	private void Preset4(){
+		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Teleport, multiplier));
 		//D.BUG("Preset4");
 	}
 
 	/**
-	 * Method to spawn an enemy using a yet to be determined movement method
+	 * Method to spawn an enemy using the spider method
 	 */
 	private void Preset5(){
+		toAdd.add(new Enemy(EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Spider));
 		// D.BUG("Preset5");
 	}
 
 	/**
-	 * Method to spawn an enemy using a yet to be determined movement method
+	 * Method to spawn an enemy using the RightUnderSwing method
 	 */
 	private void Preset6(){
-		//D.BUG("Preset6");
+		toAdd.add(new Enemy(EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.RightUnderSwing));
+	}
+	/**
+	 * Method to spawn an enemy using the LeftUnderSwing method
+	 */
+	private void Preset7(){
+		toAdd.add(new Enemy(EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.LeftUnderSwing));
+	}
+	/**
+	 * Method to spawn an enemy using the RightChase method and LeftChae method
+	 */
+	private void Preset8(){
+		if (count == 0){
+			toAdd.add(new Enemy(EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.RightChase));
+			count++;
+		}
+		else if (count == 1){
+			toAdd.add(new Enemy(EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.LeftChase));
+			count--;
+		}
+	}
+	/**
+	 * Method to spawn an enemy using the Star method
+	 */
+	private void Preset9(){
+		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Star, multiplier));
 	}
 
 	public void initializePlayers(List<FruitType> selectedFruits){
