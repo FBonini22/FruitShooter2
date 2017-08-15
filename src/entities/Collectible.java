@@ -5,9 +5,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import gameStates.Engine;
-import globals.Globals;
-
 public class Collectible extends Entity{
 	
 	//Instance Variables

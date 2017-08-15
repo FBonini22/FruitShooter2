@@ -8,9 +8,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import Utilities.D;
 import gameStates.Engine;
 import globals.Globals;
+import utilities.D;
 import view.GameWindow;
 
 public class Enemy extends Entity{
@@ -18,13 +18,15 @@ public class Enemy extends Entity{
 		
 
 	//Constants		
-
+	private final float ENEMY_EXTRA_BOUNDS = 128f;		//How many pixels outside the screen the enemy may move
+	private final float MAX_X = GameWindow.SCREEN_WIDTH + Globals.GRUNT_WIDTH;
+	private final float MAX_Y = GameWindow.SCREEN_HEIGHT+ Globals.GRUNT_HEIGHT;
+	private final float MIN_X = 0 - Globals.BULLET_WIDTH;
+	private final float MIN_Y = 0 - Globals.BULLET_HEIGHT;
 	private int pointValue;
 	
 	//Instance Variables
 	private EnemyType _currentEnemy;					//The user-selected enemy
-	private int _EnemyNum;								//The number enemy created
-	private int _offSet;								//The amount that the generated enemy will be offset from the first generated enemy.
 	private final float MOVEMENT_SPEED = 5f;			//Movement speed in pixels per second
 	private String imgPath = "img/test.png";			//Path to image that will be loaded for this Enemy instance
 	private int Move = 100;
@@ -43,9 +45,6 @@ public class Enemy extends Entity{
 	private boolean dead = false;	//Parameter used to determine if an enemy should be deleted or not
 	Random random = new Random();
 	private float multiplier = 1;	//Parameter used to increase the health of an enemy
-	private float location_y;
-	
-
 	private int count;
 	
 	/**
@@ -57,7 +56,6 @@ public class Enemy extends Entity{
 public Enemy(float x, float y, EnemyType selectedEnemy, float P1, float P2, EnemyMovement move){ //Added parameters to take in the size of the hitbox desired
 		
 		super(x, y, P1,P2);
-		location_y = y;
 		//Instantiate instance variables
 		_currentEnemy = selectedEnemy;	
 		movement = move;
@@ -250,15 +248,6 @@ private void RandomMovement(){
 		this.moveBy((result_x), (result_y)); 
 }
 /**
- * Stuff needs to be added to this still
- */
-private void Movement(){
-
-}
-	
-		
-	
-/**
  * Method to draw the entities in the desired position according to the update method.
  */
 	@Override
@@ -328,6 +317,40 @@ private void Movement(){
 			dead = true;
 		return dead;
 	}
+	
+	
+	@Override
+	public void moveBy(float transX, float transY){
+
+		
+//		D.BUG("Inside overridden moveBy method");
+		
+		//Sets the x-bounds for all bullets
+		this.x = (this.getEndX() + transX > (float)GameWindow.SCREEN_WIDTH + ENEMY_EXTRA_BOUNDS)
+					? x
+					: (x + transX < -ENEMY_EXTRA_BOUNDS)
+						? x
+						: x + transX;
+		
+		//Sets the y-bounds for all bullets
+		this.y = (this.getEndY() + transY> (float)GameWindow.SCREEN_HEIGHT + ENEMY_EXTRA_BOUNDS)
+				? y
+				: (y + transY < -ENEMY_EXTRA_BOUNDS)
+					? y
+					: y + transY;
+//		D.BUG(String.valueOf(x));
+//		D.BUG(String.valueOf(y));
+		
+		checkBounds();
+	}
+	
+	private void checkBounds(){
+		if(this.y > MAX_Y || this.y < MIN_Y || this.x > MAX_X || this.x < MIN_X){
+			Engine.instance.markForRemoval(this);
+//			D.BUG("REMOVING OUT OF BOUNDS BULLET");
+		}
+	}
+	
 	
 	/**
 	 * Method to get the point value for the enemy

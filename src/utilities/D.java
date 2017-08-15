@@ -1,5 +1,5 @@
-package Utilities;
-import globals.*;
+package utilities;
+import globals.Globals;;
 
 /**
  * Utility class for debugging.

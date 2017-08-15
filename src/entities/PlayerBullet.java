@@ -8,9 +8,11 @@ import org.newdawn.slick.SlickException;
 public class PlayerBullet extends Bullet{
 
    private String imgPath = "img/Seed.png";	
+   private int pNum;									//Number of player who fired the bullet
 
-   public PlayerBullet(float x, float y, float xMove, float yMove, float width, float height){
+   public PlayerBullet(float x, float y, float xMove, float yMove, float width, float height, int playerNum){
       super(x, y, xMove, yMove, width, height);
+      pNum = playerNum;
    }
    
    //Check to see if this works
@@ -40,6 +42,10 @@ public class PlayerBullet extends Bullet{
 	@Override
 	public boolean onCollide(Entity collidedWith) {	
 		return false;
+	}
+	
+	public int getPlayerWhoFired(){
+		return pNum;
 	}
 
 }

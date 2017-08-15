@@ -5,15 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import Utilities.D;
 import engine.CollectibleSpawner;
 import entities.Bullet;
 import entities.Collectible;
@@ -23,18 +21,25 @@ import entities.EnemyType;
 import entities.Entity;
 import entities.FruitType;
 import entities.Player;
+import entities.PlayerBullet;
 import globals.Globals;
+import utilities.D;
 import view.GameWindow;
 
-public class Engine extends BasicGameState{
+/**
+ * Class for the game engine. Handles most game logic and all game progress.
+ * @author Frank
+ *
+ */
+public class Engine extends GameStateTemplate{
 
 	//Public Static Player X and Player Y. Used for homing attacks from enemy
 	public static float x;
 	public static float y;
 	
 	//Constants
-	private final int FRAME_RATE = 60;							//Frame rate in fps
-	private final int NUMBER_OF_SQUIRRELS = 1;					//Number of squirrels. FOR DEBUGGING ONLY
+	private final int FRAME_RATE = 60;											//Frame rate in fps
+	private final int NUMBER_OF_SQUIRRELS = 1;									//Number of squirrels. FOR DEBUGGING ONLY
 	
 	//Instance Variables
 	private List<Enemy> enemies = new ArrayList<Enemy>();						//List of drawable entities
@@ -47,16 +52,10 @@ public class Engine extends BasicGameState{
 	private Random randomGenerator = new Random();								//A general use random number generator that can be accesed by any method in engine
 	
 	private boolean spawner = false;											//Boolean that determines if enemies will spawn
-	private List<Bullet> toRemoveBullets = new ArrayList<Bullet>();				//Nu current use for this list
-
-
-
 	private boolean worldClipSet = false;						//Boolean for whether the WorldClip has been initialized
+	private boolean playersInitialized = false;
 
 
-	private int currentWave = 0;												//Variable to keep track of the current wave of enemies
-	private int currentLevel = 0;												//Variable to keep track of how many bosses have been defeated
-	
 	private boolean isDead = false;
 	private boolean bossType = false;											//False is for boss type 1, true is for boss type 2
 	
@@ -65,6 +64,7 @@ public class Engine extends BasicGameState{
 	private int bossTimer = 0;													//Time before a boss spawns
 	private float delayTimer;													//The timer used by the spawning method
 	private int Time = 0;														//Timer used to keep track of difficulty changes
+	private int Pause_Control		= Input.KEY_ESCAPE;	
 	
 	private CollectibleSpawner collecSpawn = new CollectibleSpawner();			//List to hold all collectables
 	
@@ -72,7 +72,7 @@ public class Engine extends BasicGameState{
 	private int spawnChoice = 0;												//Variable to determine what type of enemy movement will occur
 	
 	//TESTING
-	private Player p1 = new Player(FruitType.Banana, 1);
+	//private Player p1 = new Player(FruitType.Banana, 1);
 	
 	// TODO New background and cleaner implementation 
 	private Image Background;
@@ -86,6 +86,7 @@ public class Engine extends BasicGameState{
 	private Engine(String title) {
 		super();
 	}
+	
 	
 
 	/**
@@ -101,7 +102,7 @@ public class Engine extends BasicGameState{
 		gc.setShowFPS(true);
 		
 		//Initialize Lists
-		players.add(p1);
+		//players.add(p1);
 		
 		//Initialize Background image
 		Background = new Image("img/Background2.png"); //TODO Change background to desired image
@@ -193,9 +194,14 @@ public class Engine extends BasicGameState{
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 
+		if(gc.getInput().isKeyPressed(Pause_Control)){
+			this.switchGameState(gc, sbg, Globals.PAUSE_GAME_STATE_ID);			
+		}
+
+		
 		//Testing Purposes. Not sure how this will work for multiple players yet
-		x = p1.x;
-		y = p1.y;
+		//x = p1.x;
+		//y = p1.y;
 		
 		delayTimer += delta;
 		//D.BUG(Float.toString(delayTimer));
@@ -257,8 +263,12 @@ public class Engine extends BasicGameState{
 				if(e.isDangerous()){
 					if(p.hitTest(e)){
 						p.onCollide(e);		
-						if(p.onDieCheck())			//Checks to see if the player is dead
+						//Checks to see if the player is dead
+						if(p.onDieCheck()){
 							markForRemoval(p);		//If the player is dead it adds the player to the "toRemove" arraylist
+							this.switchGameState(gc, sbg, Globals.GAME_OVER_STATE_ID);
+						}
+
 					}
 				}
 			}
@@ -288,10 +298,13 @@ public class Engine extends BasicGameState{
 
 							if (isDead){
 								markForRemoval(e);						//Adds entities to be removed to a new arraylist. Erasing an arraylist that's currently running in a loop will cause a crash.
-								p1.setPoints(e.PointValue());			//Gets point value for enemy that was just destroyed. TODO change for each player
+								
+								//Gets point value for enemy that was just destroyed.
+								players.get(((PlayerBullet)b).getPlayerWhoFired() - 1).setPoints(e.PointValue());
+								
+								//Adds point value from enemy destroyed to point total
+								PointTotal += e.PointValue();								
 							}
-							p1.setPoints(e.PointValue());			//Gets point value for enemy that was just destroyed. TODO change for each player
-							PointTotal = p1.getPoints();			//Adds point value from enemy destroyed to point total TODO add both players point values
 							markForRemoval(b);
 						}
 					}
@@ -396,6 +409,7 @@ public class Engine extends BasicGameState{
 	}
 	
 	
+	//METHODS FOR ENTITY HANDLING
 	
 	/**
 	 * Method for adding an entity to the current instance of the game engine
@@ -430,6 +444,9 @@ public class Engine extends BasicGameState{
 			case "Collectible":
 				collectibles.add((Collectible) e);
 				break;
+			case "Player":
+				players.add((Player)e);
+				break;
 			case "Enemy":
 			default:
 					enemies.add((Enemy)e);	
@@ -441,7 +458,7 @@ public class Engine extends BasicGameState{
 	
 	/**
 	 * Method to mark specific entity for removal
-	 * @param e
+	 * @param e The entity to remove from the Engine instance
 	 */
 	public void markForRemoval(Entity e){
 		toRemove.add(e);
@@ -451,8 +468,21 @@ public class Engine extends BasicGameState{
 	 * Method for clearing the game screen
 	 */
 	public void clearScreen(){
-		//Clear enemies list
-		enemies.clear();
+		
+		//Check point value of all enemies and give them to player
+		for(Enemy e : enemies){
+
+			//If the enemy is a not boss
+			if(e.getEnemyType() != EnemyType.JumboSquirrel_1 && e.getEnemyType() != EnemyType.JumboSquirrel_2){
+				for(Player p : players){
+					
+					//Only give half of the total point worth
+					p.setPoints(e.PointValue() / 2);
+					PointTotal += e.PointValue() / 2;
+				}
+				markForRemoval(e);
+			}
+		}
 		
 		//Pick out dangerous bullets and clear them
 		for(Bullet b : bullets){
@@ -489,60 +519,85 @@ public class Engine extends BasicGameState{
 		//Clear entities marked for removal
 		toRemove.clear();
 	}
-/**
- * Method to spawn enemies using slice to movement
- */
- private void Preset1(){
+	
+	
+	
+	
+	/**
+	 * Method to spawn enemies using slice to movement
+	 */
+	private void Preset1(){
 		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToRight));
 		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.SliceToLeft));
 		//D.BUG("Preset1");
 	}
- 
- /**
-  * Method to generate enemies using the vShoot method
-  */
- private void Preset2(){
+
+	/**
+	 * Method to generate enemies using the vShoot method
+	 */
+	private void Preset2(){
 		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.VShoot));
 		//D.BUG("Preset2");
- }
+	}
 
- /**
-  * Method to generate an enemy using random movement
-  */
- private void Preset3(){
-	 	int x = randomGenerator.nextInt(600);
-	 	int y = randomGenerator.nextInt(200);
-	 
-	 	toAdd.add(new Enemy(x, y, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Random));
-	 	//D.BUG("Preset3");
- }
- 
- /**
-  * Method to spawn an enemy using a yet to be determined movement method
-  */
- private void Preset4(){
-	 //D.BUG("Preset4");
- }
- 
- /**
-  * Method to spawn an enemy using a yet to be determined movement method
-  */
- private void Preset5(){
-	// D.BUG("Preset5");
- }
- 
- /**
-  * Method to spawn an enemy using a yet to be determined movement method
-  */
- private void Preset6(){
-	 //D.BUG("Preset6");
- }
+	/**
+	 * Method to generate an enemy using random movement
+	 */
+	private void Preset3(){
+		int x = randomGenerator.nextInt(600);
+		int y = randomGenerator.nextInt(200);
+
+		toAdd.add(new Enemy(x, y, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Random));
+		//D.BUG("Preset3");
+	}
+
+	/**
+	 * Method to spawn an enemy using a yet to be determined movement method
+	 */
+	private void Preset4(){
+		//D.BUG("Preset4");
+	}
+
+	/**
+	 * Method to spawn an enemy using a yet to be determined movement method
+	 */
+	private void Preset5(){
+		// D.BUG("Preset5");
+	}
+
+	/**
+	 * Method to spawn an enemy using a yet to be determined movement method
+	 */
+	private void Preset6(){
+		//D.BUG("Preset6");
+	}
+
+	public void initializePlayers(List<FruitType> selectedFruits){
+
+		if(!playersInitialized){
+			for(int i = 0; i < selectedFruits.size(); i++){
+				this.addEntity(new Player(selectedFruits.get(i), i+1));
+			}
+			playersInitialized = true;
+		}
+		else{
+			D.BUG("ERROR in initializePlayers method in Engine.class. Players have already been initialized.");
+		}
+	}
 
 
-@Override
-public int getID() {
-	return Globals.GAME_ENGINE_STATE_ID;
-}
+ 	@Override
+	public int getID() {
+ 		return Globals.GAME_ENGINE_STATE_ID;
+	}
+
+
+
+	@Override
+	public void disposeObjects() {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
 

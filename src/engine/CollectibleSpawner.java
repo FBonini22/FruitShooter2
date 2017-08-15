@@ -8,7 +8,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
-import Utilities.D;
 import entities.Collectible;
 import entities.CollectibleType;
 import gameStates.Engine;
@@ -33,6 +32,7 @@ public class CollectibleSpawner{
 	
 	//THIS LIST IS HARD-CODED.
 	//Order of elements must be identical to CollectibleType enum
+	@SuppressWarnings("serial")
 	private final List<Integer> frequencyValues = new ArrayList<Integer>(){{
 		add(HEALTH_FREQUENCY);
 		add(POWERUP_FREQUENCY);
@@ -46,7 +46,7 @@ public class CollectibleSpawner{
 	public void init(GameContainer gc) throws SlickException{
 		
 		//Initialize the timeSinceLastSpawns list
-		for(CollectibleType t : CollectibleType.values()){
+		for(@SuppressWarnings("unused") CollectibleType t : CollectibleType.values()){
 			timeSinceLastSpawns.add(0);
 		}
 	}
