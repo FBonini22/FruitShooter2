@@ -10,7 +10,7 @@ public class Globals {
 	
 	//GAME VARIABLES
 	public static final String GAME_TITLE = "Fruit Shooter";
-	public static final String GAME_VERSION = "1.0a";
+	public static final String GAME_VERSION = "1.0 OFFICIAL";
 	
 	//DIMENSIONAL GLOBALS
 	

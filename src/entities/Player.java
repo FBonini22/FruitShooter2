@@ -280,6 +280,8 @@ public class Player extends Entity{
 		checkHealth();
 	}
 	
+	
+	
 	//COOLDOWNS
 	/**
 	 * Method to manage all player cooldowns. Call during update method.
@@ -318,6 +320,8 @@ public class Player extends Entity{
 			}
 		}
 	}
+	
+	
 	
 	//GRAPHICAL AND HUD
 	private void drawHealthBar(Graphics g){
@@ -617,17 +621,24 @@ public class Player extends Entity{
 		return isDead;
 	}
 
+	/**
+	 * Method to handle player death.
+	 */
 	private void onDie(){
-		isDead = true;
-		
-		
+		isDead = true;	
 	}
 	
+	/**
+	 * 
+	 * @return Returns TRUE for player is dead. FALSE for alive.
+	 */
 	public boolean onDieCheck(){
 		return isDead;
 	}
 	
-	
+	/**
+	 * Method that checks the player's health. Adjusts isDead variable accordingly
+	 */
 	private void checkHealth(){
 		
 		if(!Globals.INVINCIBLE){

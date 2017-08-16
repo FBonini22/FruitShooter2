@@ -53,13 +53,14 @@ public class Engine extends GameStateTemplate{
 	private Random randomGenerator = new Random();								//A general use random number generator that can be accesed by any method in engine
 	
 	private boolean spawner = false;											//Boolean that determines if enemies will spawn
-	private boolean worldClipSet = false;						//Boolean for whether the WorldClip has been initialized
+	private boolean worldClipSet = false;										//Boolean for whether the WorldClip has been initialized
 	private boolean playersInitialized = false;
 
 
 	private boolean isDead = false;
 	private boolean bossType = false;											//False is for boss type 1, true is for boss type 2
 	
+	//Timers and delays
 	private int time = 0;														//Variable to keep track of total game time
 	private int interval = 0;													//Timer used to keep track of the delay within the preset spawner methods
 	private int randInterval = 0;												//Timer used to keep track of the delay within the random spawn methods
@@ -74,10 +75,7 @@ public class Engine extends GameStateTemplate{
 	private int spawnChoice = 0;												//Variable to determine what type of enemy movement will occur
 	private int count = 0;														//determine what to spawn in presets
 	
-	//TESTING
-	//private Player p1 = new Player(FruitType.Banana, 1);
-	
-	// TODO New background and cleaner implementation 
+
 	private Image Background;
 
 	
@@ -327,6 +325,9 @@ public class Engine extends GameStateTemplate{
 		interval += delta;
 		
 	}
+
+	
+	
 	
 	/**
 	 * Method for checking the game progress. Checks whether player can progress to the next wave or boss.
@@ -447,6 +448,8 @@ public class Engine extends GameStateTemplate{
 		
 		toAdd.add(B);
 	}
+	
+	
 	
 	
 	//METHODS FOR ENTITY HANDLING
@@ -644,6 +647,11 @@ public class Engine extends GameStateTemplate{
 		toAdd.add(new Enemy(0, 0, EnemyType.Squirrel, Globals.GRUNT_WIDTH, Globals.GRUNT_HEIGHT, EnemyMovement.Parabola));
 	}
 
+	/**
+	 * Method for initializing players. Must use this method before switching to 
+	 * the game engine state.
+	 * @param selectedFruits A list of selected fruits whose indices plus 1 corresponds to the respective player
+	 */
 	public void initializePlayers(List<FruitType> selectedFruits){
 
 		if(!playersInitialized){
@@ -664,11 +672,9 @@ public class Engine extends GameStateTemplate{
 	}
 
 
-
 	@Override
 	public void disposeObjects() {
-		// TODO Auto-generated method stub
-		
+		//NOT USED
 	}
 }
 
